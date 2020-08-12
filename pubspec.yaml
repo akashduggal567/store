@@ -39,9 +39,10 @@ dependencies:
   dropdown_search: ^0.4.3
   smooth_star_rating: ^1.1.1
 #  firebase_core: ^0.4.4
+  firebase_messaging: ^6.0.16
   firebase_auth: ^0.15.4
-  google_sign_in: ^4.5.1
-  flutter_webview_plugin: ^0.3.11
+  location: ^3.0.2
+  provider: ^4.3.1
   shared_preferences: ^0.5.7+3
   rflutter_alert: ^1.0.3
   flutter_holo_date_picker: ^0.1.3+3
@@ -50,6 +51,10 @@ dependencies:
   carousel_slider: ^1.4.1
   flutter_multi_carousel: ^1.0.0
   carousel_pro: ^1.0.0
+  badges: ^1.1.1
+  cached_network_image: ^2.2.0+1
+  animations: ^1.1.2
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
@@ -84,6 +89,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/
+    - lib/data/products.json
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

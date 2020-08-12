@@ -24,6 +24,7 @@ import 'package:store/ui/views/login/login_view.dart';
 import 'package:store/ui/views/onboarding/onBoarding_view.dart';
 import 'package:store/ui/views/splashScreen/splashScreen_view.dart';
 
+import 'data/products_parser.dart';
 import 'helpers/constants.dart';
 
 void main() {

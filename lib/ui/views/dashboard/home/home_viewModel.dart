@@ -6,7 +6,7 @@ import 'package:store/app/router.gr.dart';
 class HomeViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
   void navigateToProductsListView() async{
-    await _navigationService.navigateTo(Routes.productsListViewRoute);
+    await _navigationService.replaceWith(Routes.productsListViewRoute);
   }
 
 }

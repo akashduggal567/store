@@ -46,6 +46,7 @@ class _SearchViewState extends State<SearchView> {
                 ),
               ),
               Container(
+                color: Colors.black,
                 height: MediaQuery.of(context).size.height,
               )
             ],

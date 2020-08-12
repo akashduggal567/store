@@ -15,7 +15,10 @@ import 'package:store/ui/views/dashboard/dashboard_view.dart';
 import 'package:store/ui/views/addresses/addresses_view.dart';
 import 'package:store/ui/views/product_list/productsList_view.dart';
 import 'package:store/ui/views/product_details/productDetails_view.dart';
+import 'package:store/models/product.dart';
 import 'package:store/ui/views/cart/cart_view.dart';
+import 'package:store/ui/views/wishlist/wishlist_view.dart';
+import 'package:store/ui/views/buy/buy_view.dart';
 
 abstract class Routes {
   static const onBoardingViewRoute = '/on-boarding-view-route';
@@ -27,6 +30,8 @@ abstract class Routes {
   static const productsListViewRoute = '/products-list-view-route';
   static const productDetailsView = '/product-details-view';
   static const cartViewRoute = '/cart-view-route';
+  static const wishListViewRoute = '/wish-list-view-route';
+  static const buyViewRoute = '/buy-view-route';
   static const all = {
     onBoardingViewRoute,
     loginViewRoute,
@@ -37,6 +42,8 @@ abstract class Routes {
     productsListViewRoute,
     productDetailsView,
     cartViewRoute,
+    wishListViewRoute,
+    buyViewRoute,
   };
 }
 
@@ -94,13 +101,29 @@ class Router extends RouterBase {
           settings: settings,
         );
       case Routes.productDetailsView:
+        if (hasInvalidArgs<ProductDetailsViewArguments>(args,
+            isRequired: true)) {
+          return misTypedArgsRoute<ProductDetailsViewArguments>(args);
+        }
+        final typedArgs = args as ProductDetailsViewArguments;
         return MaterialPageRoute<dynamic>(
-          builder: (context) => ProductDetailsView(),
+          builder: (context) =>
+              ProductDetailsView(productDetails: typedArgs.productDetails),
           settings: settings,
         );
       case Routes.cartViewRoute:
         return MaterialPageRoute<dynamic>(
           builder: (context) => CartView(),
+          settings: settings,
+        );
+      case Routes.wishListViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => WishListView(),
+          settings: settings,
+        );
+      case Routes.buyViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => BuyView(),
           settings: settings,
         );
       default:
@@ -118,4 +141,10 @@ class OtpViewArguments {
   final String phoneNumber;
   final String verificationId;
   OtpViewArguments({@required this.phoneNumber, @required this.verificationId});
+}
+
+//ProductDetailsView arguments holder class
+class ProductDetailsViewArguments {
+  final Product productDetails;
+  ProductDetailsViewArguments({@required this.productDetails});
 }

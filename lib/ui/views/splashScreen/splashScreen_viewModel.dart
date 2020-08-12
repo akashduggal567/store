@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
+import 'package:store/services/push_notification_service.dart';
 import 'package:store/ui/views/dashboard/dashboard_view.dart';
 
 class SplashScreenViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
+  final PushNotificationService _pushNotificationService = locator<PushNotificationService>();
 
 
   String _title = "DJ Vicinity";
@@ -26,6 +28,7 @@ class SplashScreenViewModel extends BaseViewModel {
   }
 
   Future handleStartUpLogic() async{
+    await _pushNotificationService.initialise();
     var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
 
     if(hasLoggedInUser){

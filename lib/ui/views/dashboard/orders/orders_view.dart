@@ -14,6 +14,7 @@ class _OrdersViewState extends State<OrdersView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<OrdersViewModel>.nonReactive(
         builder: (context, model, child)=> Container(
+          color: Colors.black,
           child: ListView(
             children: <Widget>[
               _buildOrderHistoryCard(),

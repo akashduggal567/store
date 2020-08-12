@@ -1,6 +1,10 @@
+import 'package:animations/animations.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
+import 'package:store/models/user_location.dart';
 import 'package:store/ui/views/dashboard/profie/profile_view.dart';
 import 'package:store/ui/views/dashboard/search/search_view.dart';
 import 'dashboard_viewModel.dart';
@@ -15,28 +19,14 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
 
   bool _allowExit = false;
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle = TextStyle(
-      fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white70);
-  List<Widget> _widgetOptions = <Widget>[
 
-//    OrderHistory(),
-
-    HomeView(),
-    SearchView(),
-    OrdersView(),
-    ProfileView(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<DashboardViewModel>.nonReactive(
+//    var userLocation =  Provider<UserLocation>(context);
+    return ViewModelBuilder<DashboardViewModel>.reactive(
+        disposeViewModel: false,
+        onModelReady: (model)=> model.getCartCount() ,
         builder: (context, model, child)=>WillPopScope(
           onWillPop:() {
             return Future.value(_allowExit);
@@ -46,18 +36,25 @@ class _DashboardViewState extends State<DashboardView> {
               appBar: new AppBar(
                 iconTheme: new IconThemeData(color: Color(0xff00ADB5)),
                 backgroundColor: Colors.black,
-                title: Text("DStore"),
+                title: Text("Home"),
                 actions: <Widget>[
                   IconButton(
                     icon: const Icon(
                       Icons.favorite_border,
                     ),
                     tooltip: 'Show Snackbar',
-                    onPressed: () {},
+                    onPressed: () {
+                      model.navigateToWishlist();
+                    },
                   ),
                   IconButton(
-                    icon: const Icon(
-                      Icons.shopping_cart,
+                    icon: Badge(
+                      badgeContent: Text(model.cartCount),
+                      animationType: BadgeAnimationType.slide,
+                      badgeColor: Constants.offWhiteColor,
+                      child: Icon(
+                        Icons.shopping_cart,
+                      ),
                     ),
                     tooltip: 'Show Snackbar',
                     onPressed: () {
@@ -67,11 +64,19 @@ class _DashboardViewState extends State<DashboardView> {
 
                 ],
               ),
-              body: Container(
-                color: Colors.black,
-                child: _widgetOptions.elementAt(_selectedIndex),
-              ),
-
+              body: PageTransitionSwitcher(
+                  duration: const Duration(milliseconds: 1500),
+                  reverse: model.reverse,
+                  transitionBuilder: (Widget child, Animation<double> animation, Animation<double> secondaryAnimation,){
+                    return SharedAxisTransition(
+                      child: child,
+                      animation: animation,
+                      fillColor: Colors.black,
+                      secondaryAnimation: secondaryAnimation,
+                      transitionType: SharedAxisTransitionType.horizontal,
+                    );
+                  },
+                  child: getViewForIndex(model.currentIndex)),
               bottomNavigationBar: BottomNavigationBar(
                 elevation: 0,
                 backgroundColor: Color(0xff222831),
@@ -94,11 +99,12 @@ class _DashboardViewState extends State<DashboardView> {
                     title: Text('Profile'),
                   ),
                 ],
-                currentIndex: _selectedIndex,
+                currentIndex: model.currentIndex,
 //          selectedItemColor: Colors.amber[800],
                 selectedItemColor: Color(0xff00ADB5),
                 unselectedItemColor: Colors.white54,
-                onTap: _onItemTapped,
+//                onTap: _onItemTapped,
+                onTap: model.setIndex,
               ),
               drawer: Drawer(
                 // Add a ListView to the drawer. This ensures the user can scroll
@@ -288,6 +294,23 @@ class _DashboardViewState extends State<DashboardView> {
           ),
         ),
         viewModelBuilder: ()=> DashboardViewModel());
+  }
+
+  Widget getViewForIndex(int index){
+    switch(index){
+      case 0:
+        return Container(
+            color: Colors.black,
+            child: HomeView());
+      case 1:
+        return SearchView();
+      case 2:
+        return OrdersView();
+      case 3:
+        return ProfileView();
+      default:
+        return Container(color: Colors.black,child: HomeView());
+    }
   }
 }
 

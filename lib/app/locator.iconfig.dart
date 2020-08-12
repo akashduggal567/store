@@ -12,6 +12,9 @@ import 'package:store/services/custom_dialog_service.dart';
 import 'package:store/services/third_party_services_module.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/services/local_storage_service.dart';
+import 'package:store/services/location_service.dart';
+import 'package:store/services/push_notification_service.dart';
+import 'package:store/services/wishlist_service.dart';
 import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
@@ -24,13 +27,24 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerLazySingleton<DialogService>(
       () => thirdPartyServicesModule.dialogService);
   g.registerLazySingleton<LocalStorageService>(() => LocalStorageService());
+  g.registerLazySingleton<LocationService>(
+      () => thirdPartyServicesModule.locationService);
   g.registerLazySingleton<NavigationService>(
       () => thirdPartyServicesModule.navigationService);
+  g.registerLazySingleton<PushNotificationService>(
+      () => PushNotificationService());
+  g.registerLazySingleton<SnackbarService>(
+      () => thirdPartyServicesModule.snackbarService);
+  g.registerLazySingleton<WishListService>(() => WishListService());
 }
 
 class _$ThirdPartyServicesModule extends ThirdPartyServicesModule {
   @override
   DialogService get dialogService => DialogService();
   @override
+  LocationService get locationService => LocationService();
+  @override
   NavigationService get navigationService => NavigationService();
+  @override
+  SnackbarService get snackbarService => SnackbarService();
 }
