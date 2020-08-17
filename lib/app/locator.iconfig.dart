@@ -11,6 +11,7 @@ import 'package:store/services/counter_service.dart';
 import 'package:store/services/custom_dialog_service.dart';
 import 'package:store/services/third_party_services_module.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:store/ui/views/dashboard/home/home_viewModel.dart';
 import 'package:store/services/local_storage_service.dart';
 import 'package:store/services/location_service.dart';
 import 'package:store/services/push_notification_service.dart';
@@ -36,6 +37,9 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerLazySingleton<SnackbarService>(
       () => thirdPartyServicesModule.snackbarService);
   g.registerLazySingleton<WishListService>(() => WishListService());
+
+  //Eager singletons must be registered in the right order
+  g.registerSingleton<HomeViewModel>(HomeViewModel());
 }
 
 class _$ThirdPartyServicesModule extends ThirdPartyServicesModule {
