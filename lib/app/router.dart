@@ -9,6 +9,7 @@ import 'package:store/ui/views/onboarding/onBoarding_view.dart';
 import 'package:store/ui/views/product_details/productDetails_view.dart';
 import 'package:store/ui/views/product_list/productsList_view.dart';
 import 'package:store/ui/views/splashScreen/splashScreen_view.dart';
+import 'package:store/ui/views/subcategory_details/subcategory_view.dart';
 import 'package:store/ui/views/wishlist/wishlist_view.dart';
 
 
@@ -25,4 +26,5 @@ class $Router {
   CartView cartViewRoute;
   WishListView wishListViewRoute;
   BuyView buyViewRoute;
+  SubCategoryView subCategoryView;
 }

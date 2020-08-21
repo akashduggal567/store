@@ -87,6 +87,7 @@ Widget _OtpInputWidget(OtpViewModel model,phoneNumber){
         Center(
           child: Container(
 //            color: Colors.blue,
+
             width: double.infinity,
             child: Center(
               child: Container(

@@ -1,6 +1,9 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/app/locator.dart';
@@ -29,216 +32,286 @@ class HomeMobileLayout extends StatefulWidget {
   HomeViewModel model;
   HomeMobileLayout({
     this.model
-});
+  });
   @override
   _HomeMobileLayoutState createState() => _HomeMobileLayoutState();
 }
 
 class _HomeMobileLayoutState extends State<HomeMobileLayout> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  static int refreshNum = 10; // num
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
+  GlobalKey<LiquidPullToRefreshState>();
+  Future<void> _handleRefresh() {
+      return widget.model.refreshCategories();
+//    final Completer<void> completer = Completer<void>();
+//    Timer(const Duration(seconds: 3), () {
+//      completer.complete();
+//    });
+//    setState(() {
+//      refreshNum = new Random().nextInt(100);
+//    });
+//    return completer.future.then<void>((_) {
+//      _scaffoldKey.currentState?.showSnackBar(SnackBar(
+//          content: const Text('Refresh complete'),
+//          action: SnackBarAction(
+//              label: 'RETRY',
+//              onPressed: () {
+//                _refreshIndicatorKey.currentState.show();
+//              })));
+//    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-//              color: Colors.black,
-//              margin: EdgeInsets.only(top: 10),
-      child: Column(
-        key: PageStorageKey("storage-key"),
-        mainAxisSize:  MainAxisSize.min ,
-        children: <Widget>[
-          Container(
-              height: 180,
-              color: Color(0xff222831),
-              child: Carousel(
-                images: [
-                  AssetImage('assets/images/sample_banner_1.jpg'),
-                  AssetImage('assets/images/sample_banner_2.jpg'),
-                  AssetImage('assets/images/sample_banner_3.png'),
-                ],
-                dotSize: 4.0,
-                dotSpacing: 15.0,
-                dotColor: Color(0xffEEEEEE),
-                dotIncreasedColor: Color(0xff0AD5B1),
-                autoplayDuration: Duration(seconds: 4),
-                indicatorBgPadding: 5.0,
-                autoplay: false,
-                dotBgColor: Color(0xff222831).withOpacity(0.8),
-                borderRadius: true,
-              )),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            height: 40,
-            color: Color(0xff222831),
-            child: Center(
-                child: Text(
-                  "For Offers or Something",
-                  style: TextStyle(color: Colors.white54),
+    return Container(
+      child: RefreshIndicator(
+        onRefresh: _handleRefresh,
+        child: ListView(
+          physics: AlwaysScrollableScrollPhysics(),
+          key: PageStorageKey('storage-key'),
+          children: <Widget>[
+            Container(
+                height: 180,
+                child: Carousel(
+                  images: [
+                    AssetImage('assets/images/sample_banner_1.jpg'),
+                    AssetImage('assets/images/sample_banner_2.jpg'),
+                    AssetImage('assets/images/sample_banner_3.png'),
+                  ],
+                  dotSize: 4.0,
+                  dotSpacing: 15.0,
+                  dotColor: Color(0xffEEEEEE),
+                  dotIncreasedColor: Color(0xff0AD5B1),
+                  autoplayDuration: Duration(seconds: 4),
+                  indicatorBgPadding: 5.0,
+                  autoplay: false,
+                  dotBgColor: Color(0xff222831).withOpacity(0.8),
+                  borderRadius: false,
                 )),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                height: 30,
-                child: Text(
-                  "Categories ",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 40,
+              color: Color(0xff222831),
+              child: Center(
+                  child: Text(
+                    "For Offers or Something",
+                    style: TextStyle(color: Colors.white54),
+                  )),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  height: 30,
+                  child: Text(
+                    "Categories ",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
-              ),
-              Container(
-                height: 30,
-                child: Text(
-                  "See All",
-                  style: TextStyle(color: Color(0xff00ADB5), fontSize: 16),
+                InkWell(
+                  onTap: (){
+                    widget.model.navigateToProductsListView();
+                  },
+                  child: Container(
+                    height: 30,
+                    child: Text(
+                      "See All",
+                      style: TextStyle(color: Color(0xff00ADB5), fontSize: 16),
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 4,
-          ),
-
-          Flexible(
-            fit: FlexFit.loose,
-            child: Container(
-              child: FutureBuilder(
-                future: widget.model.categories,
-                builder: (context,snapshot){
-                  if(snapshot.hasError){
-                    return Text("Error ${snapshot.error}");
-                  }
-                  if(snapshot.hasData){
-                    return GridView.builder(
-                      key: PageStorageKey("storage-key"),
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                        itemCount: snapshot.data.length<6 ? snapshot.data.length: 6,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          crossAxisCount: 3,
-                            childAspectRatio: MediaQuery.of(context).size.width *
+              ],
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Container(
+              child: widget.model.isBusy && widget.model.categories.length ==0 ?
+              GridView.builder(
+                shrinkWrap: true,
+                itemCount: 6,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 3,
+                  childAspectRatio: MediaQuery.of(context).size.width *
                       2.4 /
                       MediaQuery.of(context).size.height *
                       0.9,
-                        ),
-                        itemBuilder: (BuildContext context,int index){
-                          return _buildCategoryTile(snapshot, index);
-                        });
-                  }
-
-                  return GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: 6,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        crossAxisCount: 3,
-                        childAspectRatio: MediaQuery.of(context).size.width *
-                            2.4 /
-                            MediaQuery.of(context).size.height *
-                            0.9,
-                      ),
-                      itemBuilder: (BuildContext context,int index){
-                        return Shimmer.fromColors(
-                          baseColor: Colors.black,
-                          highlightColor: Constants.lightBlackColor,
-                          enabled: true,
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
+                ),
+                itemBuilder: (BuildContext context,int index){
+                  return Shimmer.fromColors(
+                    baseColor: Colors.black,
+                    highlightColor: Constants.lightBlackColor,
+                    enabled: true,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
 //                          color: Color(0xff393E46),
-                                color: Color(0xff222831),
-                                border: Border.all(color: Colors.grey, width: 0)),
-                          ),
-                        );
-                      });
-                },
-              ),
+                          color: Color(0xff222831),
+                          border: Border.all(color: Colors.grey, width: 0)),
+                    ),
+                  );
+                })  :
+              GridView.builder(
+                  key: PageStorageKey("storage-key"),
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: widget.model.categories.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount: 3,
+                    childAspectRatio: MediaQuery.of(context).size.width *
+                        2.4 /
+                        MediaQuery.of(context).size.height *
+                        0.9,
+                  ),
+                  itemBuilder: (BuildContext context,int index){
+                    return _buildCategoryTile(widget.model,widget.model.categories, index);
+                  })
+
+//              FutureBuilder(
+//                future: widget.model.categories,
+//                builder: (context,snapshot){
+//                  if(snapshot.hasError){
+//                    return Text("Error ${snapshot.error}");
+//                  }
+//                  if(snapshot.hasData){
+//                    return GridView.builder(
+//                        key: PageStorageKey("storage-key"),
+//                        physics: NeverScrollableScrollPhysics(),
+//                        shrinkWrap: true,
+//                        itemCount: snapshot.data.length<6 ? snapshot.data.length: 6,
+//                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                          crossAxisSpacing: 10,
+//                          mainAxisSpacing: 10,
+//                          crossAxisCount: 3,
+//                          childAspectRatio: MediaQuery.of(context).size.width *
+//                              2.4 /
+//                              MediaQuery.of(context).size.height *
+//                              0.9,
+//                        ),
+//                        itemBuilder: (BuildContext context,int index){
+//                          return _buildCategoryTile(snapshot, index);
+//                        });
+//                  }
+//
+//                  return GridView.builder(
+//                      shrinkWrap: true,
+//                      itemCount: 6,
+//                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                        crossAxisSpacing: 10,
+//                        mainAxisSpacing: 10,
+//                        crossAxisCount: 3,
+//                        childAspectRatio: MediaQuery.of(context).size.width *
+//                            2.4 /
+//                            MediaQuery.of(context).size.height *
+//                            0.9,
+//                      ),
+//                      itemBuilder: (BuildContext context,int index){
+//                        return Shimmer.fromColors(
+//                          baseColor: Colors.black,
+//                          highlightColor: Constants.lightBlackColor,
+//                          enabled: true,
+//                          child: Container(
+//                            padding: const EdgeInsets.all(8),
+//                            decoration: BoxDecoration(
+////                          color: Color(0xff393E46),
+//                                color: Color(0xff222831),
+//                                border: Border.all(color: Colors.grey, width: 0)),
+//                          ),
+//                        );
+//                      });
+//                },
+//              ),
             ),
-          ),
-
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                height: 30,
-                child: Text(
-                  "Previously Bought ",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  height: 30,
+                  child: Text(
+                    "Previously Bought ",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
-              ),
-              Container(
-                height: 30,
-                child: Text(
-                  "See All",
-                  style: TextStyle(color: Color(0xff00ADB5), fontSize: 16),
+                Container(
+                  height: 30,
+                  child: Text(
+                    "See All",
+                    style: TextStyle(color: Color(0xff00ADB5), fontSize: 16),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-              height: 160,
-              width: double.infinity,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: mycard(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: mycard(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: mycard(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: mycard(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: mycard(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: mycard(),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
+              ],
+            ),
+            Container(
+                height: 160,
+                width: 100,
+//                    color: Color(0xff222831),
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mycard(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mycard(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mycard(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mycard(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mycard(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: mycard(),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
 
 
-                ],
-              )),
-          SizedBox(
-            height: 10,
-          ),
-        ],
+                  ],
+                )),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -412,31 +485,36 @@ class myTabcard extends StatelessWidget {
   }
 }
 
-Widget _buildCategoryTile(snapshot,index){
-  return Container(
-    padding: const EdgeInsets.all(8),
-    decoration: BoxDecoration(
+Widget _buildCategoryTile(HomeViewModel model,snapshot,index){
+  return InkWell(
+    onTap: (){
+      model.navigateToSubCategory(snapshot[index].toString());
+    },
+    child: Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
 //                          color: Color(0xff393E46),
-        color: Color(0xff222831),
-        border: Border.all(color: Colors.grey, width: 0)),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(
-          Icons.face,
-          size: 35,
-          color: Color(0xff00ADB5),
+          color: Color(0xff222831),
+          border: Border.all(color: Colors.grey, width: 0)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.face,
+            size: 35,
+            color: Color(0xff00ADB5),
 //                                  color: Colors.white60,
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        Text(
-          snapshot.data[index].toString(),
-          style: TextStyle(color: Color(0xffEEEEEE)),
-        ),
-      ],
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          Text(
+            snapshot[index].toString(),
+            style: TextStyle(color: Color(0xffEEEEEE)),
+          ),
+        ],
+      ),
     ),
   );
 }

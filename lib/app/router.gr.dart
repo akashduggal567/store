@@ -19,6 +19,7 @@ import 'package:store/models/product.dart';
 import 'package:store/ui/views/cart/cart_view.dart';
 import 'package:store/ui/views/wishlist/wishlist_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
+import 'package:store/ui/views/subcategory_details/subcategory_view.dart';
 
 abstract class Routes {
   static const onBoardingViewRoute = '/on-boarding-view-route';
@@ -32,6 +33,7 @@ abstract class Routes {
   static const cartViewRoute = '/cart-view-route';
   static const wishListViewRoute = '/wish-list-view-route';
   static const buyViewRoute = '/buy-view-route';
+  static const subCategoryView = '/sub-category-view';
   static const all = {
     onBoardingViewRoute,
     loginViewRoute,
@@ -44,6 +46,7 @@ abstract class Routes {
     cartViewRoute,
     wishListViewRoute,
     buyViewRoute,
+    subCategoryView,
   };
 }
 
@@ -126,6 +129,16 @@ class Router extends RouterBase {
           builder: (context) => BuyView(),
           settings: settings,
         );
+      case Routes.subCategoryView:
+        if (hasInvalidArgs<SubCategoryViewArguments>(args, isRequired: true)) {
+          return misTypedArgsRoute<SubCategoryViewArguments>(args);
+        }
+        final typedArgs = args as SubCategoryViewArguments;
+        return MaterialPageRoute<dynamic>(
+          builder: (context) =>
+              SubCategoryView(categoryTitle: typedArgs.categoryTitle),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
@@ -147,4 +160,10 @@ class OtpViewArguments {
 class ProductDetailsViewArguments {
   final Product productDetails;
   ProductDetailsViewArguments({@required this.productDetails});
+}
+
+//SubCategoryView arguments holder class
+class SubCategoryViewArguments {
+  final String categoryTitle;
+  SubCategoryViewArguments({@required this.categoryTitle});
 }
