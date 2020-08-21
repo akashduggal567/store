@@ -20,6 +20,7 @@ import 'package:store/ui/views/cart/cart_view.dart';
 import 'package:store/ui/views/wishlist/wishlist_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
 import 'package:store/ui/views/subcategory_details/subcategory_view.dart';
+import 'package:store/ui/views/map/map_view.dart';
 
 abstract class Routes {
   static const onBoardingViewRoute = '/on-boarding-view-route';
@@ -34,6 +35,7 @@ abstract class Routes {
   static const wishListViewRoute = '/wish-list-view-route';
   static const buyViewRoute = '/buy-view-route';
   static const subCategoryView = '/sub-category-view';
+  static const mapViewRoute = '/map-view-route';
   static const all = {
     onBoardingViewRoute,
     loginViewRoute,
@@ -47,6 +49,7 @@ abstract class Routes {
     wishListViewRoute,
     buyViewRoute,
     subCategoryView,
+    mapViewRoute,
   };
 }
 
@@ -137,6 +140,11 @@ class Router extends RouterBase {
         return MaterialPageRoute<dynamic>(
           builder: (context) =>
               SubCategoryView(categoryTitle: typedArgs.categoryTitle),
+          settings: settings,
+        );
+      case Routes.mapViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => MapView(),
           settings: settings,
         );
       default:
