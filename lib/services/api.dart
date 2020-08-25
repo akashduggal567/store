@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 class ApiService{
 
 //  static const endpoint = 'http://10.0.2.2:2004';
-  static const endpoint = 'https://e4a962607746.ngrok.io';
+  static const endpoint = 'https://5522afd42333.ngrok.io';
 
   var client = new http.Client();
 

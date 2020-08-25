@@ -5,12 +5,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
+import 'package:store/app/router.gr.dart';
+import 'package:store/services/api.dart';
 
 class MapViewModel extends BaseViewModel {
   Set<Marker> _allMarkers =  HashSet<Marker>();
   get allMarkers => _allMarkers;
 
   DialogService _dialogService = locator<DialogService>();
+  ApiService _apiService = locator<ApiService>();
+  NavigationService _navigationService = locator<NavigationService>();
 
   void setMarker(){
     _allMarkers.add(
@@ -51,6 +55,21 @@ class MapViewModel extends BaseViewModel {
 
   deg2rad(deg) {
     return deg * (pi / 180);
+  }
+
+  void navigateToEditAddressView({lang,long}) async{
+    if(lang==null || long==null){
+      _dialogService.showDialog(
+        title: "Location Error",
+        buttonTitle: "OK",
+        description:  "Please select a location for delivery",
+      );
+    }else{
+      await _navigationService.navigateTo(Routes.editAddressViewRoute,
+          arguments: EditAddressViewArguments(langitude: lang ,longitude: long)
+      );
+    }
+
   }
 
 }

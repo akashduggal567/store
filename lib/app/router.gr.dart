@@ -21,6 +21,7 @@ import 'package:store/ui/views/wishlist/wishlist_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
 import 'package:store/ui/views/subcategory_details/subcategory_view.dart';
 import 'package:store/ui/views/map/map_view.dart';
+import 'package:store/ui/views/addresses/editAddress/editAddress_view.dart';
 
 abstract class Routes {
   static const onBoardingViewRoute = '/on-boarding-view-route';
@@ -36,6 +37,7 @@ abstract class Routes {
   static const buyViewRoute = '/buy-view-route';
   static const subCategoryView = '/sub-category-view';
   static const mapViewRoute = '/map-view-route';
+  static const editAddressViewRoute = '/edit-address-view-route';
   static const all = {
     onBoardingViewRoute,
     loginViewRoute,
@@ -50,6 +52,7 @@ abstract class Routes {
     buyViewRoute,
     subCategoryView,
     mapViewRoute,
+    editAddressViewRoute,
   };
 }
 
@@ -147,6 +150,17 @@ class Router extends RouterBase {
           builder: (context) => MapView(),
           settings: settings,
         );
+      case Routes.editAddressViewRoute:
+        if (hasInvalidArgs<EditAddressViewArguments>(args)) {
+          return misTypedArgsRoute<EditAddressViewArguments>(args);
+        }
+        final typedArgs =
+            args as EditAddressViewArguments ?? EditAddressViewArguments();
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => EditAddressView(
+              langitude: typedArgs.langitude, longitude: typedArgs.longitude),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
@@ -174,4 +188,11 @@ class ProductDetailsViewArguments {
 class SubCategoryViewArguments {
   final String categoryTitle;
   SubCategoryViewArguments({@required this.categoryTitle});
+}
+
+//EditAddressView arguments holder class
+class EditAddressViewArguments {
+  final double langitude;
+  final double longitude;
+  EditAddressViewArguments({this.langitude, this.longitude});
 }

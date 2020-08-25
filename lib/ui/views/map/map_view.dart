@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:stacked/stacked.dart';
+import 'package:store/helpers/constants.dart';
 import 'package:store/ui/views/map/map_viewModel.dart';
 import 'dart:math';
 
@@ -24,6 +25,7 @@ class _MapViewState extends State<MapView> {
   BitmapDescriptor homeMarkerIcon;
   var afterDragNewLat;
   var afterDrafNewLong;
+  var _locationData;
 
 
   @override
@@ -58,12 +60,12 @@ class _MapViewState extends State<MapView> {
         radius: 2000,
         strokeWidth: 2,
         fillColor: Colors.blue[100].withOpacity(0.3)));
-    _circles.add(Circle(
-        circleId: CircleId("1"),
-        center: LatLng(30.8950813, 75.9081479),
-        radius: 80,
-        strokeWidth: 2,
-        fillColor: Colors.blue[100].withOpacity(0.3)));
+//    _circles.add(Circle(
+//        circleId: CircleId("1"),
+//        center: LatLng(30.8950813, 75.9081479),
+//        radius: 80,
+//        strokeWidth: 2,
+//        fillColor: Colors.blue[100].withOpacity(0.3)));
   }
 
   @override
@@ -72,102 +74,137 @@ class _MapViewState extends State<MapView> {
         builder: (context, model, child) => Scaffold(
               appBar: AppBar(),
               floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.my_location),
-                onPressed: () async {
-                  getCurrentLocation();
-                  var _locationData = await Location().getLocation();
-                  print(_locationData);
-                  setState(() {
+                child: Icon(Icons.navigate_next,),
+                mini: false,
+                backgroundColor: Constants.tealColor,
+                onPressed: (){
+                    var lang = afterDragNewLat!=null?afterDragNewLat: _locationData!=null ?_locationData.latitude : null;
+                    var long = afterDrafNewLong!=null? afterDrafNewLong: _locationData!=null ? _locationData.longitude : null ;
+                    model.navigateToEditAddressView(lang:lang ,long:long);
+                },
+              ),
+              body: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  GoogleMap(
+                    mapType: MapType.normal,
+                    zoomGesturesEnabled: true,
+                    zoomControlsEnabled: false,
+                    markers: Set.of(_allMarkers),
+                    circles: _circles,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(30.8950813, 75.9081479),
+                      zoom: 13.9,
+                    ),
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller = controller;
+                      print("created");
+                      setState(() {
+                        _allMarkers.add(Marker(
+                            markerId: MarkerId("0"),
+                            draggable: false,
+                            infoWindow: InfoWindow(
+                              title: "Duggal General Store",
+                              onTap: () {
+                                print("marker tapped");
+                              },
+                            ),
+                            position: LatLng(30.8950813, 75.9081479),
+                            zIndex: 2,
+                            flat: true,
+                            anchor: Offset(0.5, 0.5),
+                            icon: sourceIcon));
+                      });
 
-                    _allMarkers = HashSet<Marker>();
-                    _allMarkers.add(Marker(
-                        markerId: MarkerId("0"),
-                        draggable: false,
-                        infoWindow: InfoWindow(
-                          title: "Duggal General Store",
-                          onTap: () {
-                            print("marker tapped");
-                          },
+                    },
+                  ),
+                  Container(
+                    width: 180,
+                    margin: EdgeInsets.only(bottom: 20),
+                    alignment: Alignment.bottomCenter,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      color: Constants.tealColor,
+                      child: Container(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Icon(Icons.my_location,color: Constants.offWhiteColor,),
+                            Text("Current Location",style: TextStyle(color: Colors.white),),
+                          ],
                         ),
-                        position: LatLng(30.8950813, 75.9081479),
-                        zIndex: 2,
-                        flat: true,
-                        anchor: Offset(0.5, 0.5),
-                        icon: sourceIcon));
-                    _allMarkers.add(Marker(
-                      markerId: MarkerId(afterDrafNewLong != null ? afterDragNewLat.toString()+afterDrafNewLong.toString() : _locationData.latitude.toString()+_locationData.longitude.toString()),
-                      draggable: true,
-                      icon: homeMarkerIcon,
-                      onDragEnd: ((value) {
+                      ),
+                      onPressed: ()async {
+                        getCurrentLocation();
+                        _locationData = await Location().getLocation();
+                        print(_locationData);
                         setState(() {
-                          afterDragNewLat = value.latitude;
-                          afterDrafNewLong = value.longitude;
+                          _allMarkers = HashSet<Marker>();
+                          _allMarkers.add(Marker(
+                              markerId: MarkerId("0"),
+                              draggable: false,
+                              infoWindow: InfoWindow(
+                                title: "Duggal General Store",
+                                onTap: () {
+                                  print("marker tapped");
+                                },
+                              ),
+                              position: LatLng(30.8950813, 75.9081479),
+                              zIndex: 2,
+                              flat: true,
+                              anchor: Offset(0.5, 0.5),
+                              icon: sourceIcon));
+                          _allMarkers.add(Marker(
+                            markerId: MarkerId(afterDrafNewLong != null ? afterDragNewLat.toString()+afterDrafNewLong.toString() : _locationData.latitude.toString()+_locationData.longitude.toString()),
+                            draggable: true,
+                            icon: homeMarkerIcon,
+                            onDragEnd: ((value) {
+                              setState(() {
+                                afterDragNewLat = value.latitude;
+                                afterDrafNewLong = value.longitude;
+                              });
+                              model
+                                  .validateLocation(value.latitude, value.longitude)
+                                  .then((isValidLocation) {
+                                if (isValidLocation) {
+                                  print("value" + value.toString());
+                                  _controller.animateCamera(
+                                      CameraUpdate.newCameraPosition(CameraPosition(
+                                        target: LatLng(value.latitude, value.longitude),
+                                        zoom: 16.0,
+//                                    bearing: 45.0,
+//                                    tilt: 45.0
+                                      )));
+                                } else {
+                                  print("invalid return");
+                                }
+                              });
+                              print(value.latitude);
+                              print(value.longitude);
+                            }),
+                            position: LatLng(
+                                _locationData.latitude, _locationData.longitude),
+                          ));
                         });
-                        model
-                            .validateLocation(value.latitude, value.longitude)
-                            .then((isValidLocation) {
-                          if (isValidLocation) {
-                            print("value" + value.toString());
-                            _controller.animateCamera(
-                                CameraUpdate.newCameraPosition(CameraPosition(
-                              target: LatLng(value.latitude, value.longitude),
-                              zoom: 16.0,
+                        print(_allMarkers);
+                        _controller.animateCamera(
+                            CameraUpdate.newCameraPosition(CameraPosition(
+                              target:
+                              LatLng(_locationData.latitude, _locationData.longitude),
+                              zoom: 17.0,
 //                                    bearing: 45.0,
 //                                    tilt: 45.0
                             )));
-                          } else {
-                            print("invalid return");
-                          }
-                        });
-                        print(value.latitude);
-                        print(value.longitude);
-                      }),
-                      position: LatLng(
-                          _locationData.latitude, _locationData.longitude),
-                    ));
-                  });
-                  print(_allMarkers);
-                  _controller.animateCamera(
-                      CameraUpdate.newCameraPosition(CameraPosition(
-                    target:
-                        LatLng(_locationData.latitude, _locationData.longitude),
-                    zoom: 17.0,
-//                                    bearing: 45.0,
-//                                    tilt: 45.0
-                  )));
-                },
-              ),
-              body: GoogleMap(
-                mapType: MapType.normal,
-                zoomGesturesEnabled: true,
-                zoomControlsEnabled: false,
-                markers: Set.of(_allMarkers),
-                circles: _circles,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(30.8950813, 75.9081479),
-                  zoom: 13.9,
-                ),
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                  print("created");
-                  setState(() {
-                    _allMarkers.add(Marker(
-                        markerId: MarkerId("0"),
-                        draggable: false,
-                        infoWindow: InfoWindow(
-                            title: "Duggal General Store",
-                            onTap: () {
-                              print("marker tapped");
-                            },
-                        ),
-                        position: LatLng(30.8950813, 75.9081479),
-                        zIndex: 2,
-                        flat: true,
-                        anchor: Offset(0.5, 0.5),
-                        icon: sourceIcon));
-                  });
 
-                },
+                        afterDragNewLat=null;
+                        afterDrafNewLong=null;
+                        },
+                    ),
+                  )
+                ],
               ),
             ),
         viewModelBuilder: () => MapViewModel());
