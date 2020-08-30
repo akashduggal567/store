@@ -65,7 +65,7 @@ class MapViewModel extends BaseViewModel {
         description:  "Please select a location for delivery",
       );
     }else{
-      await _navigationService.navigateTo(Routes.editAddressViewRoute,
+      await _navigationService.replaceWith(Routes.editAddressViewRoute,
           arguments: EditAddressViewArguments(langitude: lang ,longitude: long)
       );
     }

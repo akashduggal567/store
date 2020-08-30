@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
@@ -15,6 +16,7 @@ class _AddressesViewState extends State<AddressesView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddressesViewModel>.reactive(
+        onModelReady: (model) => model.initialiseAllAddresses(),
         builder: (context, model, child)=> Scaffold(
           key: scaffoldKey,
           appBar: AppBar(
@@ -22,9 +24,10 @@ class _AddressesViewState extends State<AddressesView> {
             title: Text("Addresses"),
             backgroundColor: Colors.black,
           ),
-          bottomNavigationBar: myBottomNavBar(),
           backgroundColor: Colors.black,
           body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: Column(
               children: <Widget>[
                 Padding(
@@ -70,9 +73,11 @@ class _AddressesViewState extends State<AddressesView> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Container(
+                  child: model.isBusy && model.addresses.length == 0
+                      ? Center(child: Text("Loading...",style: TextStyle(color: Colors.white),)):model.addresses.length==0 ?
+                      Center(child: Text("No addresses found",style: TextStyle(color: Constants.offWhiteColor),)) :Container(
                     child: ListView.builder(
-                      itemCount: 4,
+                      itemCount: model.addresses.length,
                       itemBuilder: (BuildContext context, int index){
                         return _buildAddressCard(model: model,index: index,);
                       },
@@ -125,16 +130,20 @@ class _buildAddressCard extends StatelessWidget{
               ),
               InkWell(
                 onTap: (){
-                  model.selectedIndex.clear();
-                  model.setSelectedIndex(index);
+                  model.setAddressAsDefault(model.addresses[index].id,index);
+//
                 },
-                child: Container(
+                child: model.isBusy && model.selectedIndex[0]==index || model.addresses.length == 1&&model.isBusy?CupertinoActivityIndicator():Container(
                   child: Theme(
                       data: ThemeData(
                           unselectedWidgetColor: Constants.offWhiteColor),
                       child: Container(
 //                    color: Colors.red,
-                        child: model.selectedIndex[0]== index? Text(
+                        child: model.selectedIndex.length==0? Text(
+                          "Set it as Default",
+                          style: TextStyle(
+                              color: Constants.offWhiteColor),
+                        ) :model.defaultIndex == index? Text(
                           "Default",
                           style: TextStyle(
                               color: Constants.lightDarkTealColor),
@@ -166,30 +175,38 @@ class _buildAddressCard extends StatelessWidget{
                             CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "Address Category",
+                                model.addresses[index].addressType,
                                 style: TextStyle(
                                     color: Constants.offWhiteColor,
                                     fontSize: 18),
                               ),
                               Text(
-                                "Flat address ",
+                                model.addresses[index].primaryAddress,
                                 style: TextStyle(
                                     color: Constants.offWhiteColor),
                               ),
                               Text(
-                                "Locality",
+                                model.addresses[index].secondaryAddress,
                                 style: TextStyle(
                                     color: Constants.offWhiteColor),
                               ),
                               Text(
-                                "City , State",
+                                model.addresses[index].pincode +" , " +model.addresses[index].city,
                                 style: TextStyle(
                                     color: Constants.offWhiteColor),
                               ),
-                              Text(
-                                "Pincode, Country",
-                                style: TextStyle(
-                                    color: Constants.offWhiteColor),
+                              Row(
+                                children: <Widget>[
+                                  Icon(Icons.phone_android,color: Constants.offWhiteColor,size: 20,),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                      "+91"+model.addresses[index].mobileNumber,
+                                    style: TextStyle(
+                                        color: Constants.offWhiteColor),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -205,10 +222,18 @@ class _buildAddressCard extends StatelessWidget{
                             MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
-                              Icon(
-                                Icons.delete,
-                                color: Constants.offWhiteColor
-                                    .withOpacity(0.7),
+                              Container(
+//                                color: Colors.blue,
+                                child: InkWell(
+                                  onTap: (){
+                                    model.deleteUserAddressById(model.addresses[index].id,index);
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Constants.offWhiteColor
+                                        .withOpacity(0.7),
+                                  ),
+                                ),
                               ),
                               Icon(
                                 Icons.mode_edit,

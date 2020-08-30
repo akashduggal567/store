@@ -10,37 +10,30 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   User({
+    this.id,
     this.firebaseId,
     this.mobileNumber,
-
   });
 
+  String id;
   String firebaseId;
   String mobileNumber;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    firebaseId: json["firebase_id"] == null ? null : json["firebase_id"],
+    id: json["_id"] == null ? null : json["_id"],
+    firebaseId: json["firebaseId"] == null ? null : json["firebaseId"],
     mobileNumber: json["mobileNumber"] == null ? null : json["mobileNumber"],
-
   );
 
   Map<String, dynamic> toJson() => {
-    "firebase_id": firebaseId == null ? null : firebaseId,
+    "_id": id == null ? null : id,
+    "firebaseId": firebaseId == null ? null : firebaseId,
     "mobileNumber": mobileNumber == null ? null : mobileNumber,
-
   };
 }
 
-
-
 //{
-//"firebase_id" : "1",
-//"firstName": "Akash",
-//"lastName" : "Duggal",
-//"gender" : "Male",
-//"dateOfBirth" : "15/04/1998",
-//"mobileNumber": "8570897777",
-//"location": "Ludhiana",
-//"djInterests" : ["dkn"],
-//"languageInterests": ["fdk"]
+//"_id": "adasdadd",
+//"firebaseId": "dadsa",
+//"mobileNumber": "12323"
 //}

@@ -25,7 +25,8 @@ class DashboardViewModel extends IndexTrackingViewModel {
   }
 
   void naviagteToAddresses() async{
-    await _navigationService.navigateTo(Routes.addressesViewRoute);
+
+    await _navigationService.navigateTo(Routes.addressesViewRoute,);
   }
 
   void signOutUser() async {

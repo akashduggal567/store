@@ -27,7 +27,6 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerLazySingleton<CustomDialogService>(() => CustomDialogService());
   g.registerLazySingleton<DialogService>(
       () => thirdPartyServicesModule.dialogService);
-  g.registerLazySingleton<LocalStorageService>(() => LocalStorageService());
   g.registerLazySingleton<LocationService>(
       () => thirdPartyServicesModule.locationService);
   g.registerLazySingleton<NavigationService>(
@@ -40,6 +39,7 @@ void $initGetIt(GetIt g, {String environment}) {
 
   //Eager singletons must be registered in the right order
   g.registerSingleton<HomeViewModel>(HomeViewModel());
+  g.registerSingleton<LocalStorageService>(LocalStorageService());
 }
 
 class _$ThirdPartyServicesModule extends ThirdPartyServicesModule {
