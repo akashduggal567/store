@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route_annotations.dart';
+import 'package:store/ui/views/addresses/addAddress/addAddress_view.dart';
 import 'package:store/ui/views/addresses/addresses_view.dart';
 import 'package:store/ui/views/addresses/editAddress/editAddress_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
@@ -30,5 +31,6 @@ class $Router {
   BuyView buyViewRoute;
   SubCategoryView subCategoryView;
   MapView mapViewRoute;
+  AddAddressView addAddressViewRoute;
   EditAddressView editAddressViewRoute;
 }

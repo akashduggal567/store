@@ -12,6 +12,9 @@ class MapViewModel extends BaseViewModel {
   Set<Marker> _allMarkers =  HashSet<Marker>();
   get allMarkers => _allMarkers;
 
+  bool _isAddressCoordValid = false;
+  get isAddressCoordValid => _isAddressCoordValid;
+
   DialogService _dialogService = locator<DialogService>();
   ApiService _apiService = locator<ApiService>();
   NavigationService _navigationService = locator<NavigationService>();
@@ -38,7 +41,8 @@ class MapViewModel extends BaseViewModel {
     description:  "We are sorry but the location selected is out of our delivery area."
         " \nPlease select different location. \n\nWe will expand shortly!",
     );
-    return distance <= 2.0000000000;
+    _isAddressCoordValid = distance <= 2.0000000000;
+    return _isAddressCoordValid;
   }
 
   double getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -64,12 +68,17 @@ class MapViewModel extends BaseViewModel {
         buttonTitle: "OK",
         description:  "Please select a location for delivery",
       );
-    }else{
-      await _navigationService.replaceWith(Routes.editAddressViewRoute,
-          arguments: EditAddressViewArguments(langitude: lang ,longitude: long)
+    }else if(isAddressCoordValid ){
+      await _navigationService.replaceWith(Routes.addAddressViewRoute,
+          arguments: AddAddressViewArguments(langitude: lang ,longitude: long)
       );
     }
 
+  }
+
+  void setAddressAsInvalid() {
+    _isAddressCoordValid = false;
+    notifyListeners();
   }
 
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
@@ -111,5 +112,10 @@ class AddressesViewModel extends BaseViewModel {
         description: deleteAddressResponse.result.toString()
       );
     }
+  }
+
+  void openEditAddressView(Address address) async{
+    await _navigationService.navigateTo(Routes.editAddressViewRoute,
+        arguments: EditAddressViewArguments(address: address));
   }
 }

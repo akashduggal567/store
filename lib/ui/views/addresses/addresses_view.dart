@@ -17,82 +17,91 @@ class _AddressesViewState extends State<AddressesView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddressesViewModel>.reactive(
         onModelReady: (model) => model.initialiseAllAddresses(),
-        builder: (context, model, child)=> Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            iconTheme: new IconThemeData(color: Color(0xff00ADB5)),
-            title: Text("Addresses"),
-            backgroundColor: Colors.black,
-          ),
-          backgroundColor: Colors.black,
-          body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding:
-                  EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-                  child: Container(
-                    width: 190,
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(22.0)),
-                      height: 35,
-                      disabledColor:
-                      Constants.tealColor.withOpacity(0.7),
-                      color: Constants.lightTealColor,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Icon(Icons.add),
-                          Text('Add new Address',
-                              style: new TextStyle(
-                                  fontSize: 16.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400
-                              )),
-                        ],
-                      ),
+        builder: (context, model, child) => Scaffold(
+              key: scaffoldKey,
+              appBar: AppBar(
+                iconTheme: new IconThemeData(color: Color(0xff00ADB5)),
+                title: Text("Addresses"),
+                backgroundColor: Colors.black,
+              ),
+              backgroundColor: Colors.black,
+              body: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                      child: Container(
+                        width: 190,
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22.0)),
+                          height: 35,
+                          disabledColor: Constants.tealColor.withOpacity(0.7),
+                          color: Constants.lightTealColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Icon(Icons.add),
+                              Text('Add new Address',
+                                  style: new TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400)),
+                            ],
+                          ),
 //                                onPressed: model.isPhoneValid
 //                                    ? (){print("valid");}
 //                                    : null,
-                      onPressed: (){
+                          onPressed: () {
 //                        scaffoldKey.currentState.showBottomSheet(
 //                                (context) => Container(
 //                                  height: 100,
 //                              color: Constants.lightBlackColor,
 //                            ));
 //                        print("pressed");
-                      model.navigateToMapView();
-                      },
-
+                            model.navigateToMapView();
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: model.isBusy && model.addresses.length == 0
-                      ? Center(child: Text("Loading...",style: TextStyle(color: Colors.white),)):model.addresses.length==0 ?
-                      Center(child: Text("No addresses found",style: TextStyle(color: Constants.offWhiteColor),)) :Container(
-                    child: ListView.builder(
-                      itemCount: model.addresses.length,
-                      itemBuilder: (BuildContext context, int index){
-                        return _buildAddressCard(model: model,index: index,);
-                      },
+                    Expanded(
+                      flex: 1,
+                      child: model.isBusy && model.addresses.length == 0
+                          ? Center(
+                              child: Text(
+                              "Loading...",
+                              style: TextStyle(color: Colors.white),
+                            ))
+                          : model.addresses.length == 0
+                              ? Center(
+                                  child: Text(
+                                  "No addresses found",
+                                  style:
+                                      TextStyle(color: Constants.offWhiteColor),
+                                ))
+                              : Container(
+                                  child: ListView.builder(
+                                    itemCount: model.addresses.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return _buildAddressCard(
+                                        model: model,
+                                        index: index,
+                                      );
+                                    },
+                                  ),
+                                ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        viewModelBuilder: ()=> AddressesViewModel());
+        viewModelBuilder: () => AddressesViewModel());
   }
-
-
 }
+
 class openScrollableSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -102,17 +111,12 @@ class openScrollableSheet extends StatelessWidget {
       persistentContentHeight: 220,
     );
   }
-
 }
 
-
-class _buildAddressCard extends StatelessWidget{
+class _buildAddressCard extends StatelessWidget {
   AddressesViewModel model;
   int index;
-  _buildAddressCard({
-    this.model,
-    this.index
-  });
+  _buildAddressCard({this.model, this.index});
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -129,31 +133,43 @@ class _buildAddressCard extends StatelessWidget{
                 height: 4,
               ),
               InkWell(
-                onTap: (){
-                  model.setAddressAsDefault(model.addresses[index].id,index);
+                onTap: () {
+                  model.setAddressAsDefault(model.addresses[index].id, index);
 //
                 },
-                child: model.isBusy && model.selectedIndex[0]==index || model.addresses.length == 1&&model.isBusy?CupertinoActivityIndicator():Container(
-                  child: Theme(
-                      data: ThemeData(
-                          unselectedWidgetColor: Constants.offWhiteColor),
-                      child: Container(
+                child: model.isBusy && model.selectedIndex[0] == index ||
+                        model.addresses.length == 1 && model.isBusy
+                    ? Theme(
+                        data: ThemeData(
+                            cupertinoOverrideTheme: CupertinoThemeData(
+                                brightness: Brightness.dark)),
+                        child: CupertinoActivityIndicator())
+                    : Container(
+                        child: Theme(
+                            data: ThemeData(
+                                unselectedWidgetColor: Constants.offWhiteColor),
+                            child: Container(
 //                    color: Colors.red,
-                        child: model.selectedIndex.length==0? Text(
-                          "Set it as Default",
-                          style: TextStyle(
-                              color: Constants.offWhiteColor),
-                        ) :model.defaultIndex == index? Text(
-                          "Default",
-                          style: TextStyle(
-                              color: Constants.lightDarkTealColor),
-                        ) : Text(
-                          "Set it as Default",
-                          style: TextStyle(
-                              color: Constants.offWhiteColor),
-                        ),
-                      )),
-                ),
+                              child: model.selectedIndex.length == 0
+                                  ? Text(
+                                      "Set it as Default",
+                                      style: TextStyle(
+                                          color: Constants.offWhiteColor),
+                                    )
+                                  : model.defaultIndex == index
+                                      ? Text(
+                                          "Default",
+                                          style: TextStyle(
+                                              color:
+                                                  Constants.lightDarkTealColor),
+                                        )
+                                      : Text(
+                                          "Set it as Default",
+                                          style: TextStyle(
+                                              color: Constants.offWhiteColor),
+                                        ),
+                            )),
+                      ),
               ),
               Divider(
                 color: Constants.offWhiteColor,
@@ -162,71 +178,108 @@ class _buildAddressCard extends StatelessWidget{
                 child: Container(
 //                          color: Colors.pinkAccent,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(
-                        width: 30,
-                      ),
                       Expanded(
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceAround,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                model.addresses[index].addressType,
-                                style: TextStyle(
-                                    color: Constants.offWhiteColor,
-                                    fontSize: 18),
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Flexible(
+                              child: Container(
+//                                color: Colors.blue,
+                                height: 140,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      model.addresses[index].addressType,
+                                      style: TextStyle(
+                                          color: Constants.offWhiteColor,
+                                          fontSize: 20),
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.alphabetic,
+                                      children: <Widget>[
+                                        Text(
+                                          model.addresses[index].fullName,
+                                          style: TextStyle(
+                                              color: Constants.offWhiteColor,
+                                              fontSize: 18),
+                                        ),
+                                        SizedBox(
+                                          width: 18,
+                                        ),
+                                        Text(
+                                          "+91" + model.addresses[index].mobileNumber,
+                                          style: TextStyle(
+                                              color: Constants.offWhiteColor,
+                                            fontSize: 14
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(
+                                          model.addresses[index].primaryAddress,
+                                          style: TextStyle(
+                                              color: Constants.offWhiteColor),
+                                        ),
+                                        Text(
+                                          model.addresses[index].secondaryAddress,
+                                          style: TextStyle(
+                                              color: Constants.offWhiteColor,
+                                              fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                    model.addresses[index].landmark == ''? Text(
+                                      "no landmark",
+                                      style: TextStyle(
+                                          color: Constants.offWhiteColor,
+                                          fontSize: 12),
+                                    ) :Text(
+                                      model.addresses[index].landmark,
+                                      style: TextStyle(
+                                          color: Constants.offWhiteColor,
+                                          fontSize: 14),
+                                    ),
+                                    Text(
+                                      model.addresses[index].pincode +
+                                          " , " +
+                                          model.addresses[index].city,
+                                      style:
+                                      TextStyle(color: Constants.offWhiteColor),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Text(
-                                model.addresses[index].primaryAddress,
-                                style: TextStyle(
-                                    color: Constants.offWhiteColor),
-                              ),
-                              Text(
-                                model.addresses[index].secondaryAddress,
-                                style: TextStyle(
-                                    color: Constants.offWhiteColor),
-                              ),
-                              Text(
-                                model.addresses[index].pincode +" , " +model.addresses[index].city,
-                                style: TextStyle(
-                                    color: Constants.offWhiteColor),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(Icons.phone_android,color: Constants.offWhiteColor,size: 20,),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                      "+91"+model.addresses[index].mobileNumber,
-                                    style: TextStyle(
-                                        color: Constants.offWhiteColor),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           width: 30,
+//                          color: Colors.red,
                           height: double.infinity,
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
                               Container(
 //                                color: Colors.blue,
                                 child: InkWell(
-                                  onTap: (){
-                                    model.deleteUserAddressById(model.addresses[index].id,index);
+                                  onTap: () {
+                                    model.deleteUserAddressById(
+                                        model.addresses[index].id, index);
                                   },
                                   child: Icon(
                                     Icons.delete,
@@ -235,10 +288,16 @@ class _buildAddressCard extends StatelessWidget{
                                   ),
                                 ),
                               ),
-                              Icon(
-                                Icons.mode_edit,
-                                color: Constants.offWhiteColor
-                                    .withOpacity(0.7),
+                              InkWell(
+                                onTap: () {
+                                  model.openEditAddressView(
+                                      model.addresses[index]);
+                                },
+                                child: Icon(
+                                  Icons.mode_edit,
+                                  color:
+                                      Constants.offWhiteColor.withOpacity(0.7),
+                                ),
                               )
                             ],
                           ),
@@ -254,7 +313,6 @@ class _buildAddressCard extends StatelessWidget{
       ),
     );
   }
-
 }
 
 class myBottomNavBar extends StatelessWidget {
@@ -267,9 +325,7 @@ class myBottomNavBar extends StatelessWidget {
     return Container(
       height: 40,
       decoration:
-      BoxDecoration(
-          color: Constants.darkBlackColor,
-          border: Border.all()),
+          BoxDecoration(color: Constants.darkBlackColor, border: Border.all()),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -36,9 +36,9 @@ class Address {
   String city;
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
-    id: json["_id"] == null ? null : json["_id"],
-    latitude: json["latitude"] == null ? null : json["latitude"],
-    longitude: json["longitude"] == null ? null : json["longitude"],
+    id: json["_id"],
+    latitude: json["latitude"],
+    longitude: json["longitude"],
     addressType: json["addressType"] == null ? null : json["addressType"],
     fullName: json["fullName"] == null ? null : json["fullName"],
     primaryAddress: json["primaryAddress"] == null ? null : json["primaryAddress"],
@@ -50,9 +50,9 @@ class Address {
   );
 
   Map<String, dynamic> toJson() => {
-    "_id": id == null ? null : id,
-    "latitude": latitude == null ? null : latitude,
-    "longitude": longitude == null ? null : longitude,
+    "_id": id,
+    "latitude": latitude,
+    "longitude": longitude,
     "addressType": addressType == null ? null : addressType,
     "fullName": fullName == null ? null : fullName,
     "primaryAddress": primaryAddress == null ? null : primaryAddress,

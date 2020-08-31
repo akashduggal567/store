@@ -159,6 +159,14 @@ class ApiService{
     return ApiResponse(response);
   }
 
+  Future<ApiResponse> updateAddressDetails({@required addressId, @required updatedFields}) async{
+    Dio dio = new Dio();
+    dio.options.headers["user-id"] = "5f4b98d0e4e31f2514c045c8";
+    Response response = await dio.put('$addressendpoint/api/address/$addressId',data: updatedFields);
+    print("updateAddressDetails  api" + ApiResponse(response).result.toString());
+    return ApiResponse(response);
+  }
+
 
 
 

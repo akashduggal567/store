@@ -27,7 +27,6 @@ class _MapViewState extends State<MapView> {
   var afterDrafNewLong;
   var _locationData;
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -38,10 +37,11 @@ class _MapViewState extends State<MapView> {
 
   void _setMarkersIcons() async {
     sourceIcon = BitmapDescriptor.fromBytes(
-        await _getBytesFromAsset('assets/images/shop_marker_bitmap.png', 100));
+        await _getBytesFromAsset('assets/images/shop_marker_bitmap.png', 200));
     homeMarkerIcon = BitmapDescriptor.fromBytes(
-        await _getBytesFromAsset('assets/images/home_marker_bitmap.png', 100));
+        await _getBytesFromAsset('assets/images/home_marker_bitmap.png', 200));
   }
+
   /// Return a image as bytes with the desidered width
   Future<Uint8List> _getBytesFromAsset(String path, int width) async {
     final ByteData data = await rootBundle.load(path);
@@ -73,20 +73,28 @@ class _MapViewState extends State<MapView> {
     return ViewModelBuilder<MapViewModel>.reactive(
         builder: (context, model, child) => Scaffold(
               appBar: AppBar(),
-              floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.navigate_next,),
+              floatingActionButton: model.isAddressCoordValid? FloatingActionButton(
+                child: Icon(
+                  Icons.navigate_next,
+                ),
                 mini: false,
                 backgroundColor: Constants.tealColor,
-                onPressed: (){
-                    var lang = afterDragNewLat!=null?afterDragNewLat: _locationData!=null ?_locationData.latitude : null;
-                    var long = afterDrafNewLong!=null? afterDrafNewLong: _locationData!=null ? _locationData.longitude : null ;
-                    model.navigateToEditAddressView(lang:lang ,long:long);
+                onPressed: () {
+                  var lang = afterDragNewLat != null
+                      ? afterDragNewLat
+                      : _locationData != null ? _locationData.latitude : null;
+                  var long = afterDrafNewLong != null
+                      ? afterDrafNewLong
+                      : _locationData != null ? _locationData.longitude : null;
+                  model.navigateToEditAddressView(lang: lang, long: long);
                 },
-              ),
+              ): Container(),
               body: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
                   GoogleMap(
+//                    myLocationButtonEnabled: true,
+                    myLocationEnabled: true,
                     mapType: MapType.normal,
                     zoomGesturesEnabled: true,
                     zoomControlsEnabled: false,
@@ -115,7 +123,6 @@ class _MapViewState extends State<MapView> {
                             anchor: Offset(0.5, 0.5),
                             icon: sourceIcon));
                       });
-
                     },
                   ),
                   Container(
@@ -124,7 +131,7 @@ class _MapViewState extends State<MapView> {
                     alignment: Alignment.bottomCenter,
                     child: RaisedButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
+                        borderRadius: BorderRadius.circular(18.0),
                       ),
                       color: Constants.tealColor,
                       child: Container(
@@ -132,12 +139,18 @@ class _MapViewState extends State<MapView> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Icon(Icons.my_location,color: Constants.offWhiteColor,),
-                            Text("Current Location",style: TextStyle(color: Colors.white),),
+                            Icon(
+                              Icons.my_location,
+                              color: Constants.offWhiteColor,
+                            ),
+                            Text(
+                              "Current Location",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
-                      onPressed: ()async {
+                      onPressed: () async {
                         getCurrentLocation();
                         _locationData = await Location().getLocation();
                         print(_locationData);
@@ -158,7 +171,11 @@ class _MapViewState extends State<MapView> {
                               anchor: Offset(0.5, 0.5),
                               icon: sourceIcon));
                           _allMarkers.add(Marker(
-                            markerId: MarkerId(afterDrafNewLong != null ? afterDragNewLat.toString()+afterDrafNewLong.toString() : _locationData.latitude.toString()+_locationData.longitude.toString()),
+                            markerId: MarkerId(afterDrafNewLong != null
+                                ? afterDragNewLat.toString() +
+                                    afterDrafNewLong.toString()
+                                : _locationData.latitude.toString() +
+                                    _locationData.longitude.toString()),
                             draggable: true,
                             icon: homeMarkerIcon,
                             onDragEnd: ((value) {
@@ -167,41 +184,47 @@ class _MapViewState extends State<MapView> {
                                 afterDrafNewLong = value.longitude;
                               });
                               model
-                                  .validateLocation(value.latitude, value.longitude)
+                                  .validateLocation(
+                                      value.latitude, value.longitude)
                                   .then((isValidLocation) {
                                 if (isValidLocation) {
                                   print("value" + value.toString());
                                   _controller.animateCamera(
-                                      CameraUpdate.newCameraPosition(CameraPosition(
-                                        target: LatLng(value.latitude, value.longitude),
-                                        zoom: 16.0,
+                                      CameraUpdate.newCameraPosition(
+                                          CameraPosition(
+                                    target:
+                                        LatLng(value.latitude, value.longitude),
+                                    zoom: 16.0,
 //                                    bearing: 45.0,
 //                                    tilt: 45.0
-                                      )));
+                                  )));
                                 } else {
+                                  model.setAddressAsInvalid();
                                   print("invalid return");
                                 }
                               });
                               print(value.latitude);
                               print(value.longitude);
                             }),
-                            position: LatLng(
-                                _locationData.latitude, _locationData.longitude),
+                            position: LatLng(_locationData.latitude,
+                                _locationData.longitude),
                           ));
                         });
-                        print(_allMarkers);
+                        model.validateLocation(
+                            _locationData.latitude, _locationData.longitude);
+
                         _controller.animateCamera(
                             CameraUpdate.newCameraPosition(CameraPosition(
-                              target:
-                              LatLng(_locationData.latitude, _locationData.longitude),
-                              zoom: 17.0,
+                          target: LatLng(
+                              _locationData.latitude, _locationData.longitude),
+                          zoom: 17.0,
 //                                    bearing: 45.0,
 //                                    tilt: 45.0
-                            )));
+                        )));
 
-                        afterDragNewLat=null;
-                        afterDrafNewLong=null;
-                        },
+                        afterDragNewLat = null;
+                        afterDrafNewLong = null;
+                      },
                     ),
                   )
                 ],

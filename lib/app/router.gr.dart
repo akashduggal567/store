@@ -21,7 +21,9 @@ import 'package:store/ui/views/wishlist/wishlist_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
 import 'package:store/ui/views/subcategory_details/subcategory_view.dart';
 import 'package:store/ui/views/map/map_view.dart';
+import 'package:store/ui/views/addresses/addAddress/addAddress_view.dart';
 import 'package:store/ui/views/addresses/editAddress/editAddress_view.dart';
+import 'package:store/models/address.dart';
 
 abstract class Routes {
   static const onBoardingViewRoute = '/on-boarding-view-route';
@@ -37,6 +39,7 @@ abstract class Routes {
   static const buyViewRoute = '/buy-view-route';
   static const subCategoryView = '/sub-category-view';
   static const mapViewRoute = '/map-view-route';
+  static const addAddressViewRoute = '/add-address-view-route';
   static const editAddressViewRoute = '/edit-address-view-route';
   static const all = {
     onBoardingViewRoute,
@@ -52,6 +55,7 @@ abstract class Routes {
     buyViewRoute,
     subCategoryView,
     mapViewRoute,
+    addAddressViewRoute,
     editAddressViewRoute,
   };
 }
@@ -150,15 +154,24 @@ class Router extends RouterBase {
           builder: (context) => MapView(),
           settings: settings,
         );
-      case Routes.editAddressViewRoute:
-        if (hasInvalidArgs<EditAddressViewArguments>(args)) {
-          return misTypedArgsRoute<EditAddressViewArguments>(args);
+      case Routes.addAddressViewRoute:
+        if (hasInvalidArgs<AddAddressViewArguments>(args)) {
+          return misTypedArgsRoute<AddAddressViewArguments>(args);
         }
         final typedArgs =
-            args as EditAddressViewArguments ?? EditAddressViewArguments();
+            args as AddAddressViewArguments ?? AddAddressViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) => EditAddressView(
+          builder: (context) => AddAddressView(
               langitude: typedArgs.langitude, longitude: typedArgs.longitude),
+          settings: settings,
+        );
+      case Routes.editAddressViewRoute:
+        if (hasInvalidArgs<EditAddressViewArguments>(args, isRequired: true)) {
+          return misTypedArgsRoute<EditAddressViewArguments>(args);
+        }
+        final typedArgs = args as EditAddressViewArguments;
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => EditAddressView(address: typedArgs.address),
           settings: settings,
         );
       default:
@@ -190,9 +203,15 @@ class SubCategoryViewArguments {
   SubCategoryViewArguments({@required this.categoryTitle});
 }
 
-//EditAddressView arguments holder class
-class EditAddressViewArguments {
+//AddAddressView arguments holder class
+class AddAddressViewArguments {
   final double langitude;
   final double longitude;
-  EditAddressViewArguments({this.langitude, this.longitude});
+  AddAddressViewArguments({this.langitude, this.longitude});
+}
+
+//EditAddressView arguments holder class
+class EditAddressViewArguments {
+  final Address address;
+  EditAddressViewArguments({@required this.address});
 }
