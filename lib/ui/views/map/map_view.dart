@@ -93,12 +93,13 @@ class _MapViewState extends State<MapView> {
                 alignment: Alignment.center,
                 children: <Widget>[
                   GoogleMap(
-//                    myLocationButtonEnabled: true,
-                    myLocationEnabled: true,
                     mapType: MapType.normal,
                     zoomGesturesEnabled: true,
-                    zoomControlsEnabled: false,
+                    zoomControlsEnabled: true,
                     markers: Set.of(_allMarkers),
+                    compassEnabled: false,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
                     circles: _circles,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(30.8950813, 75.9081479),
@@ -151,9 +152,9 @@ class _MapViewState extends State<MapView> {
                         ),
                       ),
                       onPressed: () async {
-                        getCurrentLocation();
                         _locationData = await Location().getLocation();
                         print(_locationData);
+
                         setState(() {
                           _allMarkers = HashSet<Marker>();
                           _allMarkers.add(Marker(
@@ -233,25 +234,4 @@ class _MapViewState extends State<MapView> {
         viewModelBuilder: () => MapViewModel());
   }
 
-  void getCurrentLocation() async {
-    var location = await Location().getLocation();
-    var distance = await getDistanceFromLatLonInKm(
-        30.8950813, 75.9081479, 30.9081994, 75.8907956841681);
-    print("location" + distance.toString());
-  }
-
-  String getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    var R = 6371; // Radius of the earth in km
-    var dLat = deg2rad(lat2 - lat1); // deg2rad below
-    var dLon = deg2rad(lon2 - lon1);
-    var a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
-    var c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    var d = R * c; // Distance in km
-    return double.parse((d).toStringAsFixed(1)).toString();
-  }
-
-  deg2rad(deg) {
-    return deg * (pi / 180);
-  }
 }

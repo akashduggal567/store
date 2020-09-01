@@ -15,9 +15,13 @@ import 'local_storage_service.dart';
 @lazySingleton
 class ApiService{
 
-  static const addressendpoint = 'http://10.0.2.2:2005';
-  static const userendpoint = 'http://10.0.2.2:2003';
-  static const endpoint = 'http://10.0.2.2:2004';
+//  static const addressendpoint = 'http://10.0.2.2:2005';
+//  static const userendpoint = 'http://10.0.2.2:2003';
+//  static const endpoint = 'http://10.0.2.2:2004';
+
+  static const addressendpoint = 'http://localhost:2005';
+  static const userendpoint = 'http://localhost:2003';
+  static const endpoint = 'http://localhost:2004';
   DialogService _dialogService = locator<DialogService>();
 
   var client = new http.Client();
