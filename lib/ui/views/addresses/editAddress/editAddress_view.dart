@@ -314,7 +314,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                     decoration: InputDecoration(
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.orange,
+                                            color: Constants.tealColor,
                                             width: 2.0),
                                       ),
                                       enabledBorder: OutlineInputBorder(
@@ -338,7 +338,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                               value.trim();
                                         });
                                         FocusScope.of(context).requestFocus(
-                                            _productTitleFocusNode);
+                                            _mainAddressFocusNode);
                                       }
                                     },
                                     onChanged: (value) {
@@ -369,7 +369,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                     decoration: InputDecoration(
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.orange,
+                                            color: Constants.tealColor,
                                             width: 2.0),
                                       ),
                                       enabledBorder: OutlineInputBorder(
@@ -393,6 +393,8 @@ class _EditAddressViewState extends State<EditAddressView> {
                                           mainAddressController.text =
                                               value.trim();
                                         });
+                                        FocusScope.of(context).requestFocus(
+                                            _streetAddressFocusNode);
                                       }
                                     },
                                     onChanged: (value) {
@@ -423,7 +425,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                     decoration: InputDecoration(
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.orange,
+                                            color: Constants.tealColor,
                                             width: 2.0),
                                       ),
                                       enabledBorder: OutlineInputBorder(
@@ -447,6 +449,8 @@ class _EditAddressViewState extends State<EditAddressView> {
                                           streetAddressController.text =
                                               value.trim();
                                         });
+                                        FocusScope.of(context).requestFocus(
+                                            _mainAddressFocusNode);
                                       }
                                     },
                                     onChanged: (value) {
@@ -480,7 +484,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                           decoration: InputDecoration(
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.orange,
+                                                  color: Constants.tealColor,
                                                   width: 2.0),
                                             ),
                                             enabledBorder: OutlineInputBorder(
@@ -503,6 +507,8 @@ class _EditAddressViewState extends State<EditAddressView> {
                                                 landmarkController.text =
                                                     value.trim();
                                               });
+                                              FocusScope.of(context).requestFocus(
+                                                  _mobileNumberFocusNode);
                                             }
                                           },
                                           onChanged: (value) {
@@ -539,7 +545,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                           decoration: InputDecoration(
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.orange,
+                                                  color: Constants.tealColor,
                                                   width: 2.0),
                                             ),
                                             enabledBorder: OutlineInputBorder(
@@ -563,7 +569,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                                     value.trim();
                                               });
                                               FocusScope.of(context).requestFocus(
-                                                  _productTitleFocusNode);
+                                                  _pinCodeFocusNode);
                                             }
                                           },
                                           onChanged: (value) {
@@ -597,7 +603,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                           decoration: InputDecoration(
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.orange,
+                                                  color: Constants.tealColor,
                                                   width: 2.0),
                                             ),
                                             enabledBorder: OutlineInputBorder(
@@ -674,7 +680,7 @@ class _EditAddressViewState extends State<EditAddressView> {
                                             contentPadding: new EdgeInsets.symmetric(vertical: 22.0, horizontal: 10.0),
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.orange,
+                                                  color: Constants.tealColor,
                                                   width: 2.0),
                                             ),
                                             enabledBorder: OutlineInputBorder(
@@ -697,8 +703,6 @@ class _EditAddressViewState extends State<EditAddressView> {
                                                 pinCodeController.text =
                                                     value.trim();
                                               });
-                                              FocusScope.of(context).requestFocus(
-                                                  _productTitleFocusNode);
                                             }
                                           },
                                           onChanged: (value) {
@@ -713,11 +717,11 @@ class _EditAddressViewState extends State<EditAddressView> {
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Container(
-                                  color: Colors.orange,
+
                                   height: 40,
                                   width: 40,
                                   child: RaisedButton(
-                                    color: Colors.blue[900],
+                                    color: Constants.tealColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                       BorderRadius.circular(4.0),

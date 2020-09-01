@@ -99,7 +99,7 @@ class _MapViewState extends State<MapView> {
                     markers: Set.of(_allMarkers),
                     compassEnabled: false,
                     myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
+                    myLocationButtonEnabled: false,
                     circles: _circles,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(30.8950813, 75.9081479),

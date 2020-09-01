@@ -124,7 +124,7 @@ class _buildAddressCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Card(
         child: Container(
-          height: 180,
+        height: 180,
           color: Constants.darkBlackColor,
           width: double.infinity,
           child: Column(
@@ -223,20 +223,10 @@ class _buildAddressCard extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          model.addresses[index].primaryAddress,
-                                          style: TextStyle(
-                                              color: Constants.offWhiteColor),
-                                        ),
-                                        Text(
-                                          model.addresses[index].secondaryAddress,
-                                          style: TextStyle(
-                                              color: Constants.offWhiteColor,
-                                              fontSize: 14),
-                                        ),
-                                      ],
+                                    Text(
+                                      model.addresses[index].primaryAddress+" "+ model.addresses[index].secondaryAddress,
+                                      style: TextStyle(
+                                          color: Constants.offWhiteColor),
                                     ),
                                     model.addresses[index].landmark == ''? Text(
                                       "no landmark",
@@ -244,7 +234,7 @@ class _buildAddressCard extends StatelessWidget {
                                           color: Constants.offWhiteColor,
                                           fontSize: 12),
                                     ) :Text(
-                                      model.addresses[index].landmark,
+                                      "Landmark : " + model.addresses[index].landmark,
                                       style: TextStyle(
                                           color: Constants.offWhiteColor,
                                           fontSize: 14),
