@@ -62,7 +62,10 @@ dependencies:
   expandable_bottom_sheet: ^0.2.1+1
   google_maps_flutter: ^0.5.30
   progress_dialog: ^1.2.4
-
+  web_socket_channel: ^1.1.0
+  flutter_local_notifications: ^1.4.4+4
+  rxdart: ^0.24.1
+  razorpay_flutter: ^1.2.2
 
 
   # The following adds the Cupertino Icons font to your application.

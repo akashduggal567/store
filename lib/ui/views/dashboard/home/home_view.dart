@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -8,8 +7,11 @@ import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/helpers/constants.dart';
+import 'package:store/services/local_notification_service.dart';
 import 'package:store/ui/views/onboarding/onBoarding_viewModel.dart';
 
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../custom_icon_icons.dart';
 import 'home_viewModel.dart';
 
@@ -42,6 +44,8 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
   static int refreshNum = 10; // num
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
   GlobalKey<LiquidPullToRefreshState>();
+  LocalNotificationService _localNotificationService = locator<LocalNotificationService>();
+
   Future<void> _handleRefresh() {
       return widget.model.refreshCategories();
 //    final Completer<void> completer = Completer<void>();
@@ -61,7 +65,31 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
 //              })));
 //    });
   }
+  WebSocketChannel channel;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+//    IO.Socket socket = IO.io('http://http://10.0.2.2:1000', <String, dynamic>{
+//      'transports': ['websocket'],
+//      'extraHeaders': {'foo': 'bar'} // optional
+//    });
+//    socket.on('connect', (_) {
+//      print('connect');
+//      socket.emit('msg', 'test');
+//    });
+//    socket.on('event', (data) => print(data));
+//    socket.on('disconnect', (_) => print('disconnect'));
+//    socket.on('fromServer', (_) => print(_));
+//    print("Voila");
+    channel = IOWebSocketChannel.connect("ws://10.0.2.2:3000");
+//    channel.sink.add("oh teri");
+    channel.stream.listen((event) {
+      print(event);
+      _localNotificationService.showNotification();
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -92,14 +120,20 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
             SizedBox(
               height: 10,
             ),
-            Container(
-              height: 40,
-              color: Color(0xff222831),
-              child: Center(
-                  child: Text(
-                    "For Offers or Something",
-                    style: TextStyle(color: Colors.white54),
-                  )),
+            InkWell(
+              onTap: () => {
+                print("clicked!!"),
+                widget.model.showNotification()
+              },
+              child: Container(
+                height: 40,
+                color: Color(0xff222831),
+                child: Center(
+                    child: Text(
+                      "For Offers or Something",
+                      style: TextStyle(color: Colors.white54),
+                    )),
+              ),
             ),
             SizedBox(
               height: 10,

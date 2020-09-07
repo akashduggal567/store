@@ -28,6 +28,7 @@ import 'data/products_parser.dart';
 import 'helpers/constants.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   runApp(MyApp());
 }

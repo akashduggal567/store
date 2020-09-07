@@ -1,11 +1,63 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
 import 'package:store/ui/views/buy/buy_viewModel.dart';
 
-class BuyView extends StatelessWidget {
+class BuyView extends StatefulWidget {
+  @override
+  _BuyViewState createState() => _BuyViewState();
+}
+
+class _BuyViewState extends State<BuyView> {
+  Razorpay razorpay;
+  var options = {
+    'key': 'rzp_test_zyFEEKwvRXqFH3',
+    'amount': 100,
+    'name': 'Acme Corp.',
+    'description': 'Fine T-Shirt',
+    'prefill': {
+      'contact': '8888888888',
+      'email': 'test@razorpay.com'
+    },
+    'external':{
+      'wallets': ['paytm']
+    }
+  };
+
+  @override
+  void initState() {
+    // TODO: implement initState
+     razorpay = Razorpay();
+
+     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+     razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    razorpay.clear();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Do something when payment succeeds
+    print("Payment successfull");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    print("Payment error");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+    print("Payment Wallet Successful");
+  }
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<BuyViewModel>.nonReactive(
@@ -233,11 +285,16 @@ class BuyView extends StatelessWidget {
                               width: 10,
                             ),
                             Expanded(
-                              child: Container(
-                                child: Text("Pay Later",
-                                    style: TextStyle(
-                                      color: Constants.offWhiteColor,
-                                    )),
+                              child: InkWell(
+                                onTap: (){
+                                  razorpay.open(options);
+                                },
+                                child: Container(
+                                  child: Text("Pay Later",
+                                      style: TextStyle(
+                                        color: Constants.offWhiteColor,
+                                      )),
+                                ),
                               ),
                             )
                           ],

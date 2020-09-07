@@ -4,11 +4,13 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/app/router.gr.dart';
 import 'package:store/services/api.dart';
+import 'package:store/services/local_notification_service.dart';
 
 @singleton
 class HomeViewModel extends FutureViewModel {
   NavigationService _navigationService = locator<NavigationService>();
   ApiService _apiService = locator<ApiService>();
+  LocalNotificationService _localNotificationService = locator<LocalNotificationService>();
 
   List _categories = [];
   get categories => _categories;
@@ -47,6 +49,10 @@ class HomeViewModel extends FutureViewModel {
   void navigateToSubCategory(categoryTitle) async{
     await _navigationService.navigateTo(Routes.subCategoryView,
         arguments: SubCategoryViewArguments(categoryTitle: categoryTitle ));
+  }
+
+  showNotification() {
+    _localNotificationService.showNotification();
   }
 
 }
