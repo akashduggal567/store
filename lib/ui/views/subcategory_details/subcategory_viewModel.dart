@@ -16,6 +16,10 @@ class SubCategoryViewModel extends BaseViewModel {
   List _subCategories = [];
   get subCategories => _subCategories;
 
+  List _subChildCategories = [];
+  get subChildCategories => _subChildCategories;
+
+
   void fetchSubcategories(categoryName) async{
 //    _subCategories = await  _apiService.fetchSubCategories(categoryName);
     notifyListeners();
@@ -28,14 +32,30 @@ class SubCategoryViewModel extends BaseViewModel {
     ApiResponse response = await  _apiService.fetchSubCategories(category.name);
     if(response.status == 'success'){
       _subCategories = await response.result.map((e) => SubCategory.fromJson(e)).toList();
+      _subChildCategories = _subCategories.where((element) => checkSubChildcategory(element) ? true: false).toList();
+      List _subChildCategoriesIds = _subChildCategories.map((e) => e.id).toList();
+      _subChildCategoriesIds.forEach((id) {
+        _subCategories.removeWhere((element) => element.id == id);
+      });
     }
-    print(subCategories);
+
     setBusy(false);
     notifyListeners();
   }
 
   void navigateToProductListView(tagsArray) async{
    await _navigationService.navigateTo(Routes.productsListViewRoute,arguments: ProductsListViewArguments(tagsArray: tagsArray) );
+  }
+
+  bool checkSubChildcategory(SubCategory element) {
+    List ids = _subCategories.map((e) => e.id).toList();
+    bool flag = false;
+    element.parentCategoryIds.forEach((tagId) {
+      if(ids.contains(tagId)){
+        flag =  true;
+      }
+    });
+    return flag;
   }
 
 }

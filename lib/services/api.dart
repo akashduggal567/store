@@ -52,7 +52,7 @@ class ApiService{
           queryParameters: {"categoryName": categoryName});
 
       Map responseBody = response.data;
-      print("fetchSubCategories api calling");
+      print("fetchSubCategories api calling" + responseBody.toString());
 //      return Future.delayed(Duration(seconds: 2)).then((e){
 //        return responseBody["result"];
 //      });
