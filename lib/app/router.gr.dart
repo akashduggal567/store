@@ -20,10 +20,12 @@ import 'package:store/ui/views/cart/cart_view.dart';
 import 'package:store/ui/views/wishlist/wishlist_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
 import 'package:store/ui/views/subcategory_details/subcategory_view.dart';
+import 'package:store/models/category.dart';
 import 'package:store/ui/views/map/map_view.dart';
 import 'package:store/ui/views/addresses/addAddress/addAddress_view.dart';
 import 'package:store/ui/views/addresses/editAddress/editAddress_view.dart';
 import 'package:store/models/address.dart';
+import 'package:store/ui/views/addresses/orderAddress/orderAddress_view.dart';
 
 abstract class Routes {
   static const onBoardingViewRoute = '/on-boarding-view-route';
@@ -41,6 +43,7 @@ abstract class Routes {
   static const mapViewRoute = '/map-view-route';
   static const addAddressViewRoute = '/add-address-view-route';
   static const editAddressViewRoute = '/edit-address-view-route';
+  static const orderAddressViewRoute = '/order-address-view-route';
   static const all = {
     onBoardingViewRoute,
     loginViewRoute,
@@ -57,6 +60,7 @@ abstract class Routes {
     mapViewRoute,
     addAddressViewRoute,
     editAddressViewRoute,
+    orderAddressViewRoute,
   };
 }
 
@@ -109,8 +113,14 @@ class Router extends RouterBase {
           settings: settings,
         );
       case Routes.productsListViewRoute:
+        if (hasInvalidArgs<ProductsListViewArguments>(args)) {
+          return misTypedArgsRoute<ProductsListViewArguments>(args);
+        }
+        final typedArgs =
+            args as ProductsListViewArguments ?? ProductsListViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) => ProductsListView(),
+          builder: (context) =>
+              ProductsListView(tagsArray: typedArgs.tagsArray),
           settings: settings,
         );
       case Routes.productDetailsView:
@@ -135,8 +145,13 @@ class Router extends RouterBase {
           settings: settings,
         );
       case Routes.buyViewRoute:
+        if (hasInvalidArgs<BuyViewArguments>(args)) {
+          return misTypedArgsRoute<BuyViewArguments>(args);
+        }
+        final typedArgs = args as BuyViewArguments ?? BuyViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) => BuyView(),
+          builder: (context) =>
+              BuyView(totalAmountPayable: typedArgs.totalAmountPayable),
           settings: settings,
         );
       case Routes.subCategoryView:
@@ -146,7 +161,7 @@ class Router extends RouterBase {
         final typedArgs = args as SubCategoryViewArguments;
         return MaterialPageRoute<dynamic>(
           builder: (context) =>
-              SubCategoryView(categoryTitle: typedArgs.categoryTitle),
+              SubCategoryView(categoryDetails: typedArgs.categoryDetails),
           settings: settings,
         );
       case Routes.mapViewRoute:
@@ -174,6 +189,17 @@ class Router extends RouterBase {
           builder: (context) => EditAddressView(address: typedArgs.address),
           settings: settings,
         );
+      case Routes.orderAddressViewRoute:
+        if (hasInvalidArgs<OrderAddressViewArguments>(args)) {
+          return misTypedArgsRoute<OrderAddressViewArguments>(args);
+        }
+        final typedArgs =
+            args as OrderAddressViewArguments ?? OrderAddressViewArguments();
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => OrderAddressView(
+              totalAmountPayable: typedArgs.totalAmountPayable),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
@@ -191,16 +217,28 @@ class OtpViewArguments {
   OtpViewArguments({@required this.phoneNumber, @required this.verificationId});
 }
 
+//ProductsListView arguments holder class
+class ProductsListViewArguments {
+  final List<dynamic> tagsArray;
+  ProductsListViewArguments({this.tagsArray});
+}
+
 //ProductDetailsView arguments holder class
 class ProductDetailsViewArguments {
   final Product productDetails;
   ProductDetailsViewArguments({@required this.productDetails});
 }
 
+//BuyView arguments holder class
+class BuyViewArguments {
+  final double totalAmountPayable;
+  BuyViewArguments({this.totalAmountPayable});
+}
+
 //SubCategoryView arguments holder class
 class SubCategoryViewArguments {
-  final String categoryTitle;
-  SubCategoryViewArguments({@required this.categoryTitle});
+  final Category categoryDetails;
+  SubCategoryViewArguments({@required this.categoryDetails});
 }
 
 //AddAddressView arguments holder class
@@ -214,4 +252,10 @@ class AddAddressViewArguments {
 class EditAddressViewArguments {
   final Address address;
   EditAddressViewArguments({@required this.address});
+}
+
+//OrderAddressView arguments holder class
+class OrderAddressViewArguments {
+  final double totalAmountPayable;
+  OrderAddressViewArguments({this.totalAmountPayable});
 }

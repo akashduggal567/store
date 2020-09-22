@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route_annotations.dart';
 import 'package:store/ui/views/addresses/addAddress/addAddress_view.dart';
 import 'package:store/ui/views/addresses/addresses_view.dart';
 import 'package:store/ui/views/addresses/editAddress/editAddress_view.dart';
+import 'package:store/ui/views/addresses/orderAddress/orderAddress_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
 import 'package:store/ui/views/cart/cart_view.dart';
 import 'package:store/ui/views/dashboard/dashboard_view.dart';
@@ -33,4 +34,5 @@ class $Router {
   MapView mapViewRoute;
   AddAddressView addAddressViewRoute;
   EditAddressView editAddressViewRoute;
+  OrderAddressView orderAddressViewRoute;
 }

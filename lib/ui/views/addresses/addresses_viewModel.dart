@@ -5,6 +5,7 @@ import 'package:store/app/locator.dart';
 import 'package:store/app/router.gr.dart';
 import 'package:store/models/address.dart';
 import 'package:store/services/api.dart';
+import 'package:store/services/local_storage_service.dart';
 
 class AddressesViewModel extends BaseViewModel {
   var _selectedIndex = [];
@@ -16,6 +17,7 @@ class AddressesViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
   ApiService _apiService = locator<ApiService>();
   DialogService _dialogService = locator<DialogService>();
+  LocalStorageService _localStorageService = locator<LocalStorageService>();
 
   bool checkDefaultAddress() {
     return false;
@@ -48,6 +50,10 @@ class AddressesViewModel extends BaseViewModel {
     var defaultAddressId =
         await _apiService.fetchDefaultAddressId("5f4b98d0e4e31f2514c045c8");
     print(defaultAddressId.result);
+    LocalStorageService.getInstance().then((value){
+      _localStorageService.userAddresses = _addresses;
+      _localStorageService.defaultAddressId = Address.fromJson(defaultAddressId.result[0]).id;
+    });
     //add validation of api response status
     if (defaultAddressId.result == null && _addresses.length!=0) {
       setAddressAsDefault(_addresses[0].id,0);
@@ -55,7 +61,7 @@ class AddressesViewModel extends BaseViewModel {
     }
     else{
       _addresses.asMap().forEach((index, address) {
-        if (address.id == Address.fromJson(defaultAddressId.result).id) {
+        if (address.id == Address.fromJson(defaultAddressId.result[0]).id) {   //converted to list response
           _selectedIndex.clear();
           _selectedIndex.add(index);
           setDefaultIndex(index);

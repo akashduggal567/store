@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/app/router.gr.dart';
+import 'package:store/helpers/ApiResponse.dart';
+import 'package:store/models/category.dart';
 import 'package:store/services/api.dart';
 import 'package:store/services/local_notification_service.dart';
 
@@ -21,7 +25,8 @@ class HomeViewModel extends FutureViewModel {
 
   Future<List> getCategories() async{
     print("get categories");
-    return await _apiService.fetchCategories();
+    var categoryResponse = await _apiService.fetchCategories();
+    print(categoryResponse);
   }
 
   Future refreshCategories() async{
@@ -29,7 +34,7 @@ class HomeViewModel extends FutureViewModel {
     _categories = [];
     notifyListeners();
     print("Categores" + _categories.toString());
-    _categories = await _apiService.fetchCategories();
+//    _categories = await _apiService.fetchCategories();
     print("Categores" + _categories.toString());
     setBusy(false);
     notifyListeners();
@@ -39,7 +44,13 @@ class HomeViewModel extends FutureViewModel {
   @override
   Future futureToRun() async{
     // TODO: implement futureToRun
-   _categories = await _apiService.fetchCategories();
+//   _categories = await _apiService.fetchCategories();
+    ApiResponse response = await _apiService.fetchCategories();
+    if(response.status == "success"){
+      var s = response.result.map((e) => Category.fromJson(e)).toList();
+      _categories = s;
+    }
+
   }
 
   refreshHandler() {
@@ -48,7 +59,7 @@ class HomeViewModel extends FutureViewModel {
 
   void navigateToSubCategory(categoryTitle) async{
     await _navigationService.navigateTo(Routes.subCategoryView,
-        arguments: SubCategoryViewArguments(categoryTitle: categoryTitle ));
+        arguments: SubCategoryViewArguments(categoryDetails: categoryTitle ));
   }
 
   showNotification() {

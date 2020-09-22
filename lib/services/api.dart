@@ -5,34 +5,40 @@ import 'package:injectable/injectable.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/helpers/ApiResponse.dart';
 import 'package:store/models/address.dart';
+import 'package:store/models/cartItem.dart';
 import 'package:store/models/user.dart';
 
 import 'local_storage_service.dart';
-@lazySingleton
+@singleton
 class ApiService{
 
   static const addressendpoint = 'http://10.0.2.2:2005';
   static const userendpoint = 'http://10.0.2.2:2003';
   static const endpoint = 'http://10.0.2.2:2004';
-
+  static const cartendpoint = 'http://10.0.2.2:2007';
+  
 //  static const addressendpoint = 'http://localhost:2005';
 //  static const userendpoint = 'http://localhost:2003';
 //  static const endpoint = 'http://localhost:2004';
+//  static const cartendpoint = 'http://localhost:2007';
+
   DialogService _dialogService = locator<DialogService>();
+  Future<LocalStorageService> _localStorageService = LocalStorageService.getInstance();
 
-  var client = new http.Client();
 
-  Future<List> fetchCategories() async{
+  Future<ApiResponse> fetchCategories() async{
     try {
       Response response = await Dio().get('$endpoint/api/product/category');
       Map responseBody = response.data;
       print("api calling");
       return Future.delayed(Duration(seconds: 5)).then((e){
-        return responseBody["result"];
+
+        return ApiResponse(response);
       });
 
     } catch (e) {
@@ -40,7 +46,7 @@ class ApiService{
     }
   }
 
-  Future<List> fetchSubCategories(categoryName) async{
+  Future<ApiResponse> fetchSubCategories(categoryName) async{
     try {
       Response response = await Dio().get('$endpoint/api/product/subcategory',
           queryParameters: {"categoryName": categoryName});
@@ -50,7 +56,7 @@ class ApiService{
 //      return Future.delayed(Duration(seconds: 2)).then((e){
 //        return responseBody["result"];
 //      });
-      return responseBody["result"];
+      return ApiResponse(response);
 
     } catch (e) {
       print(e);
@@ -156,7 +162,12 @@ class ApiService{
 
 
   Future<ApiResponse> fetchDefaultAddressId(userId) async{
-    Dio dio = new Dio();
+    BaseOptions options = new BaseOptions(
+        receiveDataWhenStatusError: true,
+        connectTimeout: 10*1000, // 60 seconds
+        receiveTimeout: 10*1000 // 60 seconds
+    );
+    Dio dio = new Dio(options);
     dio.options.headers["user-id"] = userId.toString();
     Response response = await dio.get('$userendpoint/api/user/$userId/defaultAddress');
     print("default address api" + ApiResponse(response).result.toString());
@@ -170,13 +181,46 @@ class ApiService{
     print("updateAddressDetails  api" + ApiResponse(response).result.toString());
     return ApiResponse(response);
   }
+  Future<ApiResponse> addToCart(CartItem cartItem) async{
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.put('$cartendpoint/api/cart/addItem',data: cartItem);
+      print("addToCart  api" + ApiResponse(response).toString());
+      return Future.delayed(Duration(seconds: 5)).then((value) => ApiResponse(response));
+//   return ApiResponse(response);
+    });
+
+
+  }
+
+  Future<ApiResponse> fetchProducts(tagsArray) async{
+    Dio dio = new Dio();
+//    dio.options.headers["user-id"] = "5f4b98d0e4e31f2514c045c8";
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.get('$endpoint/api/product/getByTag',queryParameters: {"tags" :tagsArray});
+      print("updateAddressDetails  api" + ApiResponse(response).result.toString());
+      return ApiResponse(response);
+    });
+
+
+  }
+
+  Future<ApiResponse> fetchUserCart() async {
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.get('$userendpoint/api/user/cart/cartItems');
+      print("fetchUserCart  api" );
+
+      return ApiResponse(response);
+    });
+
+  }
 
 
 
-
-
-
-//
 //  Future createUser(User userInfo) async {
 //    print(json.encode(userInfo.toJson()));
 //    var response = await client.post('$endpoint/api/user/create',headers: {

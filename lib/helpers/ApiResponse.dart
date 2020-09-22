@@ -1,7 +1,7 @@
 class ApiResponse {
    String status;
    String requestId;
-   Map result;
+   List result;
   ApiResponse(response){
     this.status = response.data["status"];
     this.requestId = response.data["requestId"];

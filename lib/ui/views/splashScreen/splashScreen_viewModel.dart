@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
+import 'package:store/services/cart_service.dart';
 import 'package:store/services/push_notification_service.dart';
 import 'package:store/ui/views/dashboard/dashboard_view.dart';
 
@@ -15,6 +16,7 @@ class SplashScreenViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
   final PushNotificationService _pushNotificationService = locator<PushNotificationService>();
+  final CartService _cartService = locator<CartService>();
 
 
   String _title = "DJ Vicinity";
@@ -28,7 +30,7 @@ class SplashScreenViewModel extends BaseViewModel {
   }
 
   Future handleStartUpLogic() async{
-    await _pushNotificationService.initialise();
+//    await _pushNotificationService.initialise();
     var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
 
     if(hasLoggedInUser){
@@ -40,7 +42,8 @@ class SplashScreenViewModel extends BaseViewModel {
       print(user.toJson());
       print(firebaseUser.displayName);
       print("phoneNumber "+firebaseUser.phoneNumber);
-      _navigationService.replaceWith(Routes.dashboardViewRoute,);
+      await _cartService.fetchUserCart();
+      await _navigationService.replaceWith(Routes.dashboardViewRoute,);
     }
     else{
       _navigationService.replaceWith(Routes.loginViewRoute);

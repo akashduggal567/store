@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
+import 'package:store/models/category.dart';
 import 'package:store/ui/views/subcategory_details/subcategory_viewModel.dart';
 
 class SubCategoryView extends StatelessWidget {
-  String categoryTitle;
+  Category categoryDetails;
   SubCategoryView({
-    @required this.categoryTitle,
+    @required this.categoryDetails,
   });
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SubCategoryViewModel>.reactive(
-        onModelReady: (model) => model.initialiseCategory(categoryTitle),
+        onModelReady: (model) => model.initialiseCategory(categoryDetails),
         builder: (context, model, child) => Scaffold(
               appBar: AppBar(
-                title: Text(categoryTitle),
+                title: Text(categoryDetails.name),
               ),
               backgroundColor: Colors.black,
               body: model.isBusy && model.subCategories.length == 0
@@ -38,19 +39,29 @@ class SubCategoryView extends StatelessWidget {
                                 child: ExpansionTile(
                                     leading: Icon(Icons.person),
                                     title: Text(
-                                      model.subCategories[index],
+                                      model.subCategories[index].name,
                                       style: TextStyle(
                                           color: Constants.offWhiteColor),
                                     ),
                                     children: <Widget>[
-                                      ListTile(
-                                        title: Container(
-                                          margin: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            "item 1",
-                                            style: TextStyle(
-                                                color: Colors.white70),
-                                            textAlign: TextAlign.left,
+                                      InkWell(
+                                        onTap: (){
+//                                          print(model.subCategories[index].parentCategoryIds);
+//                                          print(model.subCategories[index].where((i)=>i.parentCategoryIds==categoryDetails.id).toList());
+                                            print(categoryDetails.id);
+                                            print(model.subCategories[index].id);
+                                            print("clicked item of " + index.toString());
+                                          model.navigateToProductListView([categoryDetails.id,model.subCategories[index].id]);
+                                        },
+                                        child: ListTile(
+                                          title: Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              "item 1",
+                                              style: TextStyle(
+                                                  color: Colors.white70),
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
                                         ),
                                       ),

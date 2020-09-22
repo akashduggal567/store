@@ -27,5 +27,6 @@ class LocalNotificationService{
     await flutterLocalNotificationsPlugin.show(
         0, 'New Video is out', 'Flutter Local Notification', platform,
         payload: 'Nitish Kumar Singh is part time Youtuber');
+    print("show notification");
   }
 }

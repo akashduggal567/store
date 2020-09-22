@@ -8,15 +8,26 @@ import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
 import 'productsList_viewModel.dart';
 
-class ProductsListView extends StatelessWidget {
+class ProductsListView extends StatefulWidget {
   ScrollController scrollController;
-  ProductsListView() {
+  List tagsArray;
+  ProductsListView({
+    this.tagsArray
+   }) {
     this.scrollController = new ScrollController(initialScrollOffset: 0.0);
+
+
   }
+
+  @override
+  _ProductsListViewState createState() => _ProductsListViewState();
+}
+
+class _ProductsListViewState extends State<ProductsListView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductsListViewModel>.reactive(
-        onModelReady: (model) => model.fetchProducts(),
+        onModelReady: (model) => model.fetchProducts(widget.tagsArray),
         builder: (context, model, child) => model.isBusy
             ? Scaffold(
                 appBar: AppBar(
@@ -55,11 +66,11 @@ class ProductsListView extends StatelessWidget {
                   ),
                   backgroundColor: Colors.black,
                   body: Scrollbar(
-                    controller: scrollController,
+                    controller: widget.scrollController,
                     isAlwaysShown: false,
                     child: GridView.builder(
                       itemCount: model.productsList.length,
-                      controller: scrollController,
+                      controller: widget.scrollController,
                       padding: const EdgeInsets.all(20),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -88,19 +99,18 @@ class ProductsListView extends StatelessWidget {
                                               flex: 3,
                                               child: Hero(
                                                 transitionOnUserGestures: true,
-                                                tag: model.productsList[index]
-                                                    .productId,
+                                                tag: model.productsList[index].id,
                                                 child: Container(
 //                                                  margin:
 //                                                      EdgeInsets.only(top: 2),
-                                                  child: CachedNetworkImage(
-                                                    fit: BoxFit.fitHeight,
-                                                    imageUrl: model
-                                                        .productsList[index]
-                                                        .thumbnailUrl,
-//                                            placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
-//                                            errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
-                                                  ),
+//                                                  child: CachedNetworkImage(
+//                                                    fit: BoxFit.fitHeight,
+//                                                    imageUrl: model
+//                                                        .productsList[index]
+//                                                        .thumbnailUrl,
+////                                            placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
+////                                            errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+//                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -134,10 +144,11 @@ class ProductsListView extends StatelessWidget {
                                                                     .start,
                                                             children: <Widget>[
                                                               Text(
-                                                                model
-                                                                    .productsList[
-                                                                        index]
-                                                                    .brand,
+                                                            'config brand',
+//                                                                model
+//                                                                    .productsList[
+//                                                                        index]
+//                                                                    .brand,
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         15,
@@ -148,7 +159,7 @@ class ProductsListView extends StatelessWidget {
                                                                 model
                                                                     .productsList[
                                                                         index]
-                                                                    .name,
+                                                                    .title,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .ellipsis,
@@ -181,7 +192,7 @@ class ProductsListView extends StatelessWidget {
                                                                         model
                                                                             .productsList[
                                                                         index]
-                                                                            .retailPrice,
+                                                                            .salePrice,
                                                                         style: TextStyle(
                                                                             fontSize:
                                                                             15,
@@ -203,7 +214,7 @@ class ProductsListView extends StatelessWidget {
                                                                         model
                                                                             .productsList[
                                                                         index]
-                                                                            .mrp,
+                                                                            .retailPrice,
                                                                         style: TextStyle(
                                                                             fontSize:
                                                                             11,
@@ -326,7 +337,7 @@ class ProductsListView extends StatelessWidget {
                                         margin: EdgeInsets.only(left: 6),
                                         child: Text(
                                           model.productsList[index].discount +
-                                              " OFF",
+                                              "% OFF",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: MediaQuery.of(context).size.width/ MediaQuery.of(context).size.width * 14.0,

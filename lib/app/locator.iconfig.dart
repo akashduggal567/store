@@ -21,7 +21,6 @@ import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
   final thirdPartyServicesModule = _$ThirdPartyServicesModule();
-  g.registerLazySingleton<ApiService>(() => ApiService());
   g.registerLazySingleton<AuthenticationService>(() => AuthenticationService());
   g.registerLazySingleton<CartService>(() => CartService());
   g.registerLazySingleton<CounterService>(() => CounterService());
@@ -30,6 +29,7 @@ void $initGetIt(GetIt g, {String environment}) {
       () => thirdPartyServicesModule.dialogService);
   g.registerLazySingleton<LocalNotificationService>(
       () => LocalNotificationService());
+  g.registerLazySingleton<LocalStorageService>(() => LocalStorageService());
   g.registerLazySingleton<LocationService>(
       () => thirdPartyServicesModule.locationService);
   g.registerLazySingleton<NavigationService>(
@@ -41,8 +41,8 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerLazySingleton<WishListService>(() => WishListService());
 
   //Eager singletons must be registered in the right order
+  g.registerSingleton<ApiService>(ApiService());
   g.registerSingleton<HomeViewModel>(HomeViewModel());
-  g.registerSingleton<LocalStorageService>(LocalStorageService());
 }
 
 class _$ThirdPartyServicesModule extends ThirdPartyServicesModule {

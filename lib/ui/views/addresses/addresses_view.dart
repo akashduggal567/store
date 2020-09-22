@@ -13,6 +13,7 @@ class AddressesView extends StatefulWidget {
 
 class _AddressesViewState extends State<AddressesView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<AddressesViewModel>.reactive(
@@ -113,191 +114,223 @@ class openScrollableSheet extends StatelessWidget {
   }
 }
 
-class _buildAddressCard extends StatelessWidget {
+class _buildAddressCard extends StatefulWidget {
   AddressesViewModel model;
   int index;
   _buildAddressCard({this.model, this.index});
+
+  @override
+  __buildAddressCardState createState() => __buildAddressCardState();
+}
+
+class __buildAddressCardState extends State<_buildAddressCard> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Card(
-        child: Container(
-        height: 180,
-          color: Constants.darkBlackColor,
-          width: double.infinity,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 4,
-              ),
-              InkWell(
-                onTap: () {
-                  model.setAddressAsDefault(model.addresses[index].id, index);
+      child: InkWell(
+        onTap: () {
+          print(widget.model.addresses[widget.index].id);
+        },
+        child: Card(
+          child: Container(
+            height: 180,
+            color: Constants.darkBlackColor,
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 4,
+                ),
+                InkWell(
+                  onTap: () {
+                    widget.model.setAddressAsDefault(widget.model.addresses[widget.index].id, widget.index);
 //
-                },
-                child: model.isBusy && model.selectedIndex[0] == index ||
-                        model.addresses.length == 1 && model.isBusy
-                    ? Theme(
-                        data: ThemeData(
-                            cupertinoOverrideTheme: CupertinoThemeData(
-                                brightness: Brightness.dark)),
-                        child: CupertinoActivityIndicator())
-                    : Container(
-                        child: Theme(
-                            data: ThemeData(
-                                unselectedWidgetColor: Constants.offWhiteColor),
-                            child: Container(
+                  },
+                  child: widget.model.isBusy && widget.model.selectedIndex[0] == widget.index ||
+                          widget.model.addresses.length == 1 && widget.model.isBusy
+                      ? Theme(
+                          data: ThemeData(
+                              cupertinoOverrideTheme: CupertinoThemeData(
+                                  brightness: Brightness.dark)),
+                          child: CupertinoActivityIndicator())
+                      : Container(
+                          child: Theme(
+                              data: ThemeData(
+                                  unselectedWidgetColor:
+                                      Constants.offWhiteColor),
+                              child: Container(
 //                    color: Colors.red,
-                              child: model.selectedIndex.length == 0
-                                  ? Text(
-                                      "Set it as Default",
-                                      style: TextStyle(
-                                          color: Constants.offWhiteColor),
-                                    )
-                                  : model.defaultIndex == index
-                                      ? Text(
-                                          "Default",
-                                          style: TextStyle(
-                                              color:
-                                                  Constants.lightDarkTealColor),
-                                        )
-                                      : Text(
+                                child: widget.model.selectedIndex.length == 0
+                                    ? Text(
+                                        "Set it as Default",
+                                        style: TextStyle(
+                                            color: Constants.offWhiteColor),
+                                      )
+                                    : widget.model.defaultIndex == widget.index
+                                        ? Text(
+                                            "Default",
+                                            style: TextStyle(
+                                                color: Constants
+                                                    .lightDarkTealColor),
+                                          )
+                                        : Text(
                                           "Set it as Default",
                                           style: TextStyle(
-                                              color: Constants.offWhiteColor),
+                                              color: Constants
+                                                  .offWhiteColor),
                                         ),
-                            )),
-                      ),
-              ),
-              Divider(
-                color: Constants.offWhiteColor,
-              ),
-              Expanded(
-                child: Container(
-//                          color: Colors.pinkAccent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Flexible(
-                              child: Container(
-//                                color: Colors.blue,
-                                height: 140,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      model.addresses[index].addressType,
-                                      style: TextStyle(
-                                          color: Constants.offWhiteColor,
-                                          fontSize: 20),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                                      textBaseline: TextBaseline.alphabetic,
-                                      children: <Widget>[
-                                        Text(
-                                          model.addresses[index].fullName,
-                                          style: TextStyle(
-                                              color: Constants.offWhiteColor,
-                                              fontSize: 18),
-                                        ),
-                                        SizedBox(
-                                          width: 18,
-                                        ),
-                                        Text(
-                                          "+91" + model.addresses[index].mobileNumber,
-                                          style: TextStyle(
-                                              color: Constants.offWhiteColor,
-                                            fontSize: 14
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      model.addresses[index].primaryAddress+" "+ model.addresses[index].secondaryAddress,
-                                      style: TextStyle(
-                                          color: Constants.offWhiteColor),
-                                    ),
-                                    model.addresses[index].landmark == ''? Text(
-                                      "no landmark",
-                                      style: TextStyle(
-                                          color: Constants.offWhiteColor,
-                                          fontSize: 12),
-                                    ) :Text(
-                                      "Landmark : " + model.addresses[index].landmark,
-                                      style: TextStyle(
-                                          color: Constants.offWhiteColor,
-                                          fontSize: 14),
-                                    ),
-                                    Text(
-                                      model.addresses[index].pincode +
-                                          " , " +
-                                          model.addresses[index].city,
-                                      style:
-                                      TextStyle(color: Constants.offWhiteColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                              )),
                         ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 30,
-//                          color: Colors.red,
-                          height: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                ),
+                Divider(
+                  color: Constants.offWhiteColor,
+                ),
+                Expanded(
+                  child: Container(
+//                          color: Colors.pinkAccent,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Row(
                             children: <Widget>[
-                              Container(
+                              SizedBox(
+                                width: 30,
+                              ),
+                              Flexible(
+                                child: Container(
 //                                color: Colors.blue,
-                                child: InkWell(
-                                  onTap: () {
-                                    model.deleteUserAddressById(
-                                        model.addresses[index].id, index);
-                                  },
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Constants.offWhiteColor
-                                        .withOpacity(0.7),
+                                  height: 140,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        widget.model.addresses[widget.index].addressType,
+                                        style: TextStyle(
+                                            color: Constants.offWhiteColor,
+                                            fontSize: 20),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: <Widget>[
+                                          Text(
+                                            widget.model.addresses[widget.index].fullName,
+                                            style: TextStyle(
+                                                color: Constants.offWhiteColor,
+                                                fontSize: 18),
+                                          ),
+                                          SizedBox(
+                                            width: 18,
+                                          ),
+                                          Text(
+                                            "+91" +
+                                                widget.model.addresses[widget.index]
+                                                    .mobileNumber,
+                                            style: TextStyle(
+                                                color: Constants.offWhiteColor,
+                                                fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        widget.model.addresses[widget.index].primaryAddress +
+                                            " " +
+                                            widget.model.addresses[widget.index]
+                                                .secondaryAddress,
+                                        style: TextStyle(
+                                            color: Constants.offWhiteColor),
+                                      ),
+                                      widget.model.addresses[widget.index].landmark == ''
+                                          ? Text(
+                                              "no landmark",
+                                              style: TextStyle(
+                                                  color:
+                                                      Constants.offWhiteColor,
+                                                  fontSize: 12),
+                                            )
+                                          : Text(
+                                              "Landmark : " +
+                                                  widget.model.addresses[widget.index]
+                                                      .landmark,
+                                              style: TextStyle(
+                                                  color:
+                                                      Constants.offWhiteColor,
+                                                  fontSize: 14),
+                                            ),
+                                      Text(
+                                        widget.model.addresses[widget.index].pincode +
+                                            " , " +
+                                            widget.model.addresses[widget.index].city,
+                                        style: TextStyle(
+                                            color: Constants.offWhiteColor),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {
-                                  model.openEditAddressView(
-                                      model.addresses[index]);
-                                },
-                                child: Icon(
-                                  Icons.mode_edit,
-                                  color:
-                                      Constants.offWhiteColor.withOpacity(0.7),
-                                ),
-                              )
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 30,
+//                          color: Colors.red,
+                            height: double.infinity,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Container(
+//                                color: Colors.blue,
+                                  child: InkWell(
+                                    onTap: () {
+                                      widget.model.deleteUserAddressById(
+                                          widget.model.addresses[widget.index].id, widget.index);
+                                    },
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Constants.offWhiteColor
+                                          .withOpacity(0.7),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    widget.model.openEditAddressView(
+                                        widget.model.addresses[widget.index]);
+                                  },
+                                  child: Icon(
+                                    Icons.mode_edit,
+                                    color: Constants.offWhiteColor
+                                        .withOpacity(0.7),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

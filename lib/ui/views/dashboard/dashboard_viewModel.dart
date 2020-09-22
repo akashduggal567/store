@@ -13,12 +13,12 @@ class DashboardViewModel extends IndexTrackingViewModel {
 
 
   static CartService _cartService = locator<CartService>();
-  String _cartCount = "";
+  String _cartCount = _cartService.totalItemCount.value.toString();
   get cartCount => _cartCount;
 
   String getCartCount(){
-    _cartCount = _cartService.cartItemsList.length.toString();
-    print("cart Count on dashboard "+ _cartCount);
+    _cartCount = _cartService.totalItemCount.value.toString();
+    print("cart Count on dashboard "+ _cartService.totalItemCount.value.toString());
     notifyListeners();
 //    return _cartService.cartItemsList.length.toString();
 

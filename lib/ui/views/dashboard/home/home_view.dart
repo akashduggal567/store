@@ -522,7 +522,8 @@ class myTabcard extends StatelessWidget {
 Widget _buildCategoryTile(HomeViewModel model,snapshot,index){
   return InkWell(
     onTap: (){
-      model.navigateToSubCategory(snapshot[index].toString());
+
+      model.navigateToSubCategory(snapshot[index]);
     },
     child: Container(
       padding: const EdgeInsets.all(8),
@@ -544,7 +545,7 @@ Widget _buildCategoryTile(HomeViewModel model,snapshot,index){
             height: 4,
           ),
           Text(
-            snapshot[index].toString(),
+            snapshot[index].name.toString(),
             style: TextStyle(color: Color(0xffEEEEEE)),
           ),
         ],

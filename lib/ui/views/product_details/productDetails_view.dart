@@ -52,15 +52,16 @@ class ProductDetailsView extends StatelessWidget {
                   child: ListView(
                     children: <Widget>[
                       Hero(
-                        tag: productDetails.productId,
+                        tag: productDetails.id,
                         child: Container(
                             height: 400,
-                            child: CachedNetworkImage(
-                                fit: BoxFit.fill,
-                                imageUrl: productDetails.thumbnailUrl,
-                                placeholder: (context, url) => CupertinoActivityIndicator(radius: 30,),
-                                errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
-                            )),
+//                            child: CachedNetworkImage(
+//                                fit: BoxFit.fill,
+////                                imageUrl: productDetails.thumbnailUrl,
+//                                placeholder: (context, url) => CupertinoActivityIndicator(radius: 30,),
+//                                errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+//                            )
+                        ),
                       ),
                       SizedBox(
                         height: 8,
@@ -89,7 +90,8 @@ class ProductDetailsView extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            productDetails.brand,
+//                                            productDetails.brand,
+                                          "config brand",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 18,
@@ -100,7 +102,7 @@ class ProductDetailsView extends StatelessWidget {
                                           ),
                                           Flexible(
                                             child: Text(
-                                              productDetails.name,
+                                              productDetails.title,
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w400,
@@ -121,7 +123,7 @@ class ProductDetailsView extends StatelessWidget {
                                             MainAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            productDetails.retailPrice,
+                                            productDetails.salePrice,
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Color(0xffEEEEEE)),
@@ -130,7 +132,7 @@ class ProductDetailsView extends StatelessWidget {
                                             width: 14,
                                           ),
                                           Text(
-                                            productDetails.mrp,
+                                            productDetails.retailPrice,
                                             style: TextStyle(
                                                 fontSize: 11,
                                                 decoration: TextDecoration
@@ -143,7 +145,7 @@ class ProductDetailsView extends StatelessWidget {
                                           ),
                                           Container(
                                             child: Text(
-                                              productDetails.discount + " OFF",
+                                              productDetails.discount + "%OFF",
                                               style: TextStyle(
                                                   fontSize: 12,
                                                   color: Color(0xffEEEEEE)),
@@ -156,34 +158,34 @@ class ProductDetailsView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                color: Constants.lightBlackColor
-                                    .withOpacity(0.4),
-                                margin: EdgeInsets.only(right: 8),
-                                padding: EdgeInsets.all(4.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.add,
-                                      color: Color(0xff00ADB5),
-                                    ),
-                                    Text(
-                                      "1",
-                                      style:
-                                          TextStyle(color: Color(0xffEEEEEE)),
-                                    ),
-                                    Icon(
-                                      Icons.remove,
-                                      color: Color(0xff00ADB5),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+//                            Flexible(
+//                              flex: 1,
+//                              child: Container(
+//                                color: Constants.lightBlackColor
+//                                    .withOpacity(0.4),
+//                                margin: EdgeInsets.only(right: 8),
+//                                padding: EdgeInsets.all(4.0),
+//                                child: Row(
+//                                  mainAxisAlignment:
+//                                      MainAxisAlignment.spaceBetween,
+//                                  children: <Widget>[
+//                                    Icon(
+//                                      Icons.add,
+//                                      color: Color(0xff00ADB5),
+//                                    ),
+//                                    Text(
+//                                      "1",
+//                                      style:
+//                                          TextStyle(color: Color(0xffEEEEEE)),
+//                                    ),
+//                                    Icon(
+//                                      Icons.remove,
+//                                      color: Color(0xff00ADB5),
+//                                    ),
+//                                  ],
+//                                ),
+//                              ),
+//                            ),
                           ],
                         ),
                       ),
@@ -232,7 +234,8 @@ class ProductDetailsView extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Text(
-                                  productDetails.description,
+//                                  productDetails.description,
+                                "config descripttion",
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: 14,

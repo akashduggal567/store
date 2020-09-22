@@ -27,9 +27,9 @@ import 'package:store/ui/views/splashScreen/splashScreen_view.dart';
 import 'data/products_parser.dart';
 import 'helpers/constants.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
+  await setupLocator();
   runApp(MyApp());
 }
 
@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 //      home: StreamExampleView(),
       theme: ThemeData(
+          primaryTextTheme: TextTheme(bodyText2: TextStyle(color: Colors.white)),
           primaryColor: Colors.black,
           unselectedWidgetColor: Constants.tealColor,
           scaffoldBackgroundColor: Colors.black,

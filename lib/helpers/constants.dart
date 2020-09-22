@@ -8,4 +8,6 @@ class Constants{
  static const Color lightTealColor =Color(0xff8DD4D6);
  static const Color lightDarkTealColor =Color(0xff8AFBFF);
 
+ static const String DEVICE_TOKEN='device-token';
+
 }

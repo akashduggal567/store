@@ -7,25 +7,19 @@ import 'package:store/helpers/constants.dart';
 import 'package:store/ui/views/buy/buy_viewModel.dart';
 
 class BuyView extends StatefulWidget {
+  double totalAmountPayable;
+
+  BuyView({
+    this.totalAmountPayable
+  });
+
   @override
   _BuyViewState createState() => _BuyViewState();
 }
 
 class _BuyViewState extends State<BuyView> {
   Razorpay razorpay;
-  var options = {
-    'key': 'rzp_test_zyFEEKwvRXqFH3',
-    'amount': 100,
-    'name': 'Acme Corp.',
-    'description': 'Fine T-Shirt',
-    'prefill': {
-      'contact': '8888888888',
-      'email': 'test@razorpay.com'
-    },
-    'external':{
-      'wallets': ['paytm']
-    }
-  };
+  var options;
 
   @override
   void initState() {
@@ -35,6 +29,18 @@ class _BuyViewState extends State<BuyView> {
      razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
      razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
      razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+     options= {
+       'key': 'rzp_test_zyFEEKwvRXqFH3',
+       'amount': widget.totalAmountPayable*100,
+       'name': 'Duggal Store',
+       'prefill': {
+         'contact': '8888888888',
+         'email': 'test@razorpay.com'
+       },
+       'external':{
+         'wallets': ['paytm']
+       }
+     };
   }
 
   @override
@@ -46,7 +52,7 @@ class _BuyViewState extends State<BuyView> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     // Do something when payment succeeds
-    print("Payment successfull");
+    print("Payment successfull" + response.signature.toString());
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -56,7 +62,7 @@ class _BuyViewState extends State<BuyView> {
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     // Do something when an external wallet was selected
-    print("Payment Wallet Successful");
+    print("Payment Wallet Successful"+ response.walletName.toString());
   }
   @override
   Widget build(BuildContext context) {
@@ -90,148 +96,148 @@ class _BuyViewState extends State<BuyView> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      color: Constants.lightBlackColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.credit_card,
-                                  color: Colors.black,
-                                )),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Container(
-                                child: Text("Debit Card",
-                                    style: TextStyle(
-                                      color: Constants.offWhiteColor,
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      color: Constants.lightBlackColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              backgroundImage:
-                              AssetImage("assets/images/paytm-logo.png"),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Container(
-                                child: Text("Paytm",
-                                    style: TextStyle(
-                                      color: Constants.offWhiteColor,
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      color: Constants.lightBlackColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage('assets/images/bhim-logo.png'),
-                                        fit: BoxFit.scaleDown
-                                    )
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Container(
-                                child: Text("Bhim UPI",
-                                    style: TextStyle(
-                                      color: Constants.offWhiteColor,
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      color: Constants.lightBlackColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage('assets/images/gpay-logo.png'),
-                                        fit: BoxFit.scaleDown
-                                    )
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Container(
-                                child: Text("Google Pay",
-                                    style: TextStyle(
-                                      color: Constants.offWhiteColor,
-                                    )),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+//                    Container(
+//                      width: double.infinity,
+//                      height: 60,
+//                      color: Constants.lightBlackColor,
+//                      child: Padding(
+//                        padding: const EdgeInsets.all(8.0),
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          children: <Widget>[
+//                            CircleAvatar(
+//                                backgroundColor: Colors.white,
+//                                child: Icon(
+//                                  Icons.credit_card,
+//                                  color: Colors.black,
+//                                )),
+//                            SizedBox(
+//                              width: 10,
+//                            ),
+//                            Expanded(
+//                              child: Container(
+//                                child: Text("Debit Card",
+//                                    style: TextStyle(
+//                                      color: Constants.offWhiteColor,
+//                                    )),
+//                              ),
+//                            )
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                    Container(
+//                      width: double.infinity,
+//                      height: 60,
+//                      color: Constants.lightBlackColor,
+//                      child: Padding(
+//                        padding: const EdgeInsets.all(8.0),
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          children: <Widget>[
+//                            CircleAvatar(
+//                              backgroundColor: Colors.white,
+//                              backgroundImage:
+//                              AssetImage("assets/images/paytm-logo.png"),
+//                            ),
+//                            SizedBox(
+//                              width: 10,
+//                            ),
+//                            Expanded(
+//                              child: Container(
+//                                child: Text("Paytm",
+//                                    style: TextStyle(
+//                                      color: Constants.offWhiteColor,
+//                                    )),
+//                              ),
+//                            )
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                    Container(
+//                      width: double.infinity,
+//                      height: 60,
+//                      color: Constants.lightBlackColor,
+//                      child: Padding(
+//                        padding: const EdgeInsets.all(8.0),
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          children: <Widget>[
+//                            CircleAvatar(
+//                              backgroundColor: Colors.white,
+//                              child: Container(
+//                                decoration: BoxDecoration(
+//                                    image: DecorationImage(
+//                                        image: AssetImage('assets/images/bhim-logo.png'),
+//                                        fit: BoxFit.scaleDown
+//                                    )
+//                                ),
+//                              ),
+//                            ),
+//                            SizedBox(
+//                              width: 10,
+//                            ),
+//                            Expanded(
+//                              child: Container(
+//                                child: Text("Bhim UPI",
+//                                    style: TextStyle(
+//                                      color: Constants.offWhiteColor,
+//                                    )),
+//                              ),
+//                            )
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                    Container(
+//                      width: double.infinity,
+//                      height: 60,
+//                      color: Constants.lightBlackColor,
+//                      child: Padding(
+//                        padding: const EdgeInsets.all(8.0),
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          children: <Widget>[
+//                            CircleAvatar(
+//                              backgroundColor: Colors.white,
+//                              child: Container(
+//                                decoration: BoxDecoration(
+//                                    image: DecorationImage(
+//                                        image: AssetImage('assets/images/gpay-logo.png'),
+//                                        fit: BoxFit.scaleDown
+//                                    )
+//                                ),
+//                              ),
+//                            ),
+//                            SizedBox(
+//                              width: 10,
+//                            ),
+//                            Expanded(
+//                              child: Container(
+//                                child: Text("Google Pay",
+//                                    style: TextStyle(
+//                                      color: Constants.offWhiteColor,
+//                                    )),
+//                              ),
+//                            )
+//                          ],
+//                        ),
+//                      ),
+//                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -290,7 +296,7 @@ class _BuyViewState extends State<BuyView> {
                                   razorpay.open(options);
                                 },
                                 child: Container(
-                                  child: Text("Pay Later",
+                                  child: Text("Razor Pay",
                                       style: TextStyle(
                                         color: Constants.offWhiteColor,
                                       )),
