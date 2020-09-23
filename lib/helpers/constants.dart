@@ -9,5 +9,9 @@ class Constants{
  static const Color lightDarkTealColor =Color(0xff8AFBFF);
 
  static const String DEVICE_TOKEN='device-token';
+ static const List<Map> SORT_OPTIONS = [
+  {'title': 'Price - High to Low', "value": '-sale_price'},
+  {'title': 'Price - Low to High', "value": 'sale_price'},
+ ];
 
 }

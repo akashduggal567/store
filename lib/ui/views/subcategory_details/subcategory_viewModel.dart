@@ -9,6 +9,8 @@ import 'package:store/models/category.dart';
 import 'package:store/models/subcategory.dart';
 import 'package:store/services/api.dart';
 
+import '../product_list/productsList_view.dart';
+
 class SubCategoryViewModel extends BaseViewModel {
   ApiService _apiService = locator<ApiService>();
   NavigationService _navigationService = locator<NavigationService>();
@@ -44,7 +46,7 @@ class SubCategoryViewModel extends BaseViewModel {
   }
 
   void navigateToProductListView(tagsArray) async{
-   await _navigationService.navigateTo(Routes.productsListViewRoute,arguments: ProductsListViewArguments(tagsArray: tagsArray) );
+   await _navigationService.replaceWithTransition(ProductsListView(tagsArray:tagsArray ,),transition: 'rightToLeft' );
   }
 
   bool checkSubChildcategory(SubCategory element) {

@@ -194,12 +194,12 @@ class ApiService{
 
   }
 
-  Future<ApiResponse> fetchProducts(tagsArray) async{
+  Future<ApiResponse> fetchProducts({@required tagsArray, page=1,limit=10}) async{
     Dio dio = new Dio();
 //    dio.options.headers["user-id"] = "5f4b98d0e4e31f2514c045c8";
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio.get('$endpoint/api/product/getByTag',queryParameters: {"tags" :tagsArray});
+      Response response = await dio.get('$endpoint/api/product/getByTag',queryParameters: {"tags" :tagsArray, "page": page, 'limit':limit});
       print("updateAddressDetails  api" + ApiResponse(response).result.toString());
       return ApiResponse(response);
     });
