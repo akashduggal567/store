@@ -63,6 +63,27 @@ class _ProductsListViewState extends State<ProductsListView> {
                     title: Text("Men"),
                     backgroundColor: Colors.black,
                     iconTheme: new IconThemeData(color: Constants.tealColor),
+                    actions: <Widget>[
+                      GestureDetector(
+                        onTapDown: (TapDownDetails details){
+                          double left = details.globalPosition.dx;
+                          double top =  details.globalPosition.dy;
+                          showMenu(
+                              context: context,
+                              position:  RelativeRect.fromLTRB(left, top+12, 0, 0),
+                              items:[
+                                PopupMenuItem<String>(
+                                    child: const Text('Price - High to Low'), value: 'Doge'),
+                                PopupMenuItem<String>(
+                                    child: const Text('Price - Low to High'), value: 'Lion'),
+                              ], );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 8),
+                          child: Icon(Icons.sort, color: Colors.white,),
+                        ),
+                      )
+                    ],
                   ),
                   backgroundColor: Colors.black,
                   body: Scrollbar(
