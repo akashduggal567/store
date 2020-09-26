@@ -5,6 +5,7 @@ import 'package:observable_ish/observable_ish.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
+import 'package:store/app/setup_snackbar_ui.dart';
 import 'package:store/helpers/ApiResponse.dart';
 import 'package:store/helpers/constants.dart';
 import 'package:store/models/cartItem.dart';
@@ -80,19 +81,17 @@ class CartService with ReactiveServiceMixin {
   }
 
   void addToCart(Product product) {
-    print("Product" + product.toJson().toString());
     _apiService
         .addToCart(CartItem(productId: product.id.toString(), cartQuantity: 1))
         .then((value) => null);
     _cartItems.add(product);
     calcualteBillattributes();
     _snackbarService.showCustomSnackBar(
-        message: "Added to cart successfully",
-        barBlur: 0,
+        variant: SnackbarType.blackAndWhite,
+        message: 'Added to cart successfully',
+        title:  product.title,
         duration: Duration(seconds: 3),
-        margin: EdgeInsets.all(8),
-        backgroundColor: Colors.black,
-        borderColor: Colors.white);
+    );
   }
 
   Future<bool> increaseCartItemCount(Product productDetails) async{

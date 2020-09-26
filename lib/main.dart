@@ -6,12 +6,14 @@ import 'package:store/ui/views/login/login_view.dart';
 import 'package:store/ui/views/onboarding/onBoarding_view.dart';
 import 'package:store/ui/views/splashScreen/splashScreen_view.dart';
 
+import 'app/setup_snackbar_ui.dart';
 import 'data/products_parser.dart';
 import 'helpers/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupLocator();
+  await setupSnackbarUi();
   runApp(MyApp());
 }
 
@@ -38,10 +40,10 @@ class MyApp extends StatelessWidget {
               color: Colors.black,
               actionsIconTheme: IconThemeData(color: Constants.tealColor),
               iconTheme: IconThemeData(color: Constants.tealColor))),
-//      initialRoute: Routes.splashScreenViewRoute,
-      home: SplashScreenView(),
-      onGenerateRoute: Router().onGenerateRoute,
-      navigatorKey: locator<NavigationService>().navigatorKey,
+    //      initialRoute: Routes.splashScreenViewRoute,
+          home: SplashScreenView(),
+          onGenerateRoute: Router().onGenerateRoute,
+          navigatorKey: locator<NavigationService>().navigatorKey,
     );
   }
 }

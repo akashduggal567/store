@@ -36,7 +36,7 @@ class ApiService{
       Response response = await Dio().get('$endpoint/api/product/category');
       Map responseBody = response.data;
       print("api calling");
-      return Future.delayed(Duration(seconds: 5)).then((e){
+      return Future.delayed(Duration(seconds: 0)).then((e){
 
         return ApiResponse(response);
       });
@@ -194,12 +194,12 @@ class ApiService{
 
   }
 
-  Future<ApiResponse> fetchProducts({@required tagsArray, page=1,limit=10}) async{
+  Future<ApiResponse> fetchProducts({@required tagsArray,sortBy,sortOrder, page=1,limit=10}) async{
     Dio dio = new Dio();
 //    dio.options.headers["user-id"] = "5f4b98d0e4e31f2514c045c8";
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio.get('$endpoint/api/product/getByTag',queryParameters: {"tags" :tagsArray, "page": page, 'limit':limit});
+      Response response = await dio.get('$endpoint/api/product/getByTag',queryParameters: {"tags" :tagsArray,"sortBy":sortBy,"sortOrder": sortOrder, "page": page, 'limit':limit});
       print("updateAddressDetails  api" + ApiResponse(response).result.toString());
       return ApiResponse(response);
     });

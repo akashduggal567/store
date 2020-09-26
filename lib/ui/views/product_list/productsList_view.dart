@@ -31,7 +31,7 @@ class _ProductsListViewState extends State<ProductsListView> {
     return ViewModelBuilder<ProductsListViewModel>.reactive(
         onModelReady: (model) => {
           model.updateTagsArray(widget.tagsArray),
-          model.fetchProducts(widget.tagsArray)},
+          model.fetchProducts(widget.tagsArray, null,null)},
         builder: (context, model, child) => model.isBusy
             ? Scaffold(
                 appBar: AppBar(
@@ -63,6 +63,62 @@ class _ProductsListViewState extends State<ProductsListView> {
                   return Future.value(false);
                 },
                 child: Scaffold(
+                    bottomNavigationBar: Container(
+                      height: 40,
+                      color: Constants.lightBlackColor,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+//                margin: EdgeInsets.all(4),
+                              height: double.infinity,
+                              width: 100,
+                              child: RaisedButton(
+                                elevation: 0,
+                                color: Constants.lightBlackColor,
+                                onPressed: () {
+//                                model.navigateToSelectAddressView();
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(Icons.filter_list, color: Constants.offWhiteColor,),
+                                    SizedBox(width: 10,),
+                                    Text('Filter',
+                                        style:
+                                        TextStyle(fontSize: 18, color: Color(0xffEEEEEE))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: double.infinity,
+                              width: 100,
+                              child: RaisedButton(
+                                elevation: 0,
+                                color: Constants.lightBlackColor,
+                                onPressed: () {
+                                  model.openSortBottomSheet();
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(Icons.sort, color: Constants.offWhiteColor,),
+                                    SizedBox(width: 10,),
+                                    Text('Sort',
+                                        style:
+                                        TextStyle(fontSize: 18, color: Color(0xffEEEEEE))),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   appBar: AppBar(
                     title: Text("Men"),
                     backgroundColor: Colors.black,

@@ -10,8 +10,10 @@ class Constants{
 
  static const String DEVICE_TOKEN='device-token';
  static const List<Map> SORT_OPTIONS = [
-  {'title': 'Price - High to Low', "value": '-sale_price'},
-  {'title': 'Price - Low to High', "value": 'sale_price'},
+  {'title': 'Price - High to Low', "sortBy": "sale_price", "sortOrder": 'DESC'},
+  {'title': 'Price - Low to High',  "sortBy": "sale_price", "sortOrder": 'ASC'},
+  {'title': 'Discount - Low to High',  "sortBy": "discount", "sortOrder": 'ASC'},
+  {'title': 'Discount - High to Low', "sortBy": "discount", "sortOrder": 'DESC'},
  ];
 
 }
