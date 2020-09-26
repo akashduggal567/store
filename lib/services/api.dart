@@ -187,12 +187,26 @@ class ApiService{
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.put('$cartendpoint/api/cart/addItem',data: cartItem);
       print("addToCart  api" + ApiResponse(response).toString());
-      return Future.delayed(Duration(seconds: 5)).then((value) => ApiResponse(response));
+      return Future.delayed(Duration(seconds: 0)).then((value) => ApiResponse(response));
 //   return ApiResponse(response);
     });
 
 
   }
+
+  Future<ApiResponse> removeItemfromCart(CartItem cartItem) async{
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.delete('$cartendpoint/api/cart/removeItem',data: cartItem);
+      print("removeItemfromCart  api" + ApiResponse(response).toString());
+      return Future.delayed(Duration(seconds: 0)).then((value) => ApiResponse(response));
+//   return ApiResponse(response);
+    });
+
+
+  }
+
 
   Future<ApiResponse> fetchProducts({@required tagsArray,sortBy,sortOrder, page=1,limit=10}) async{
     Dio dio = new Dio();
@@ -212,8 +226,6 @@ class ApiService{
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.get('$userendpoint/api/user/cart/cartItems');
-      print("fetchUserCart  api" );
-
       return ApiResponse(response);
     });
 

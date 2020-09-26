@@ -38,10 +38,13 @@ class CartViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void removeCartItem(index) {
-    _cartService.removeCartItem(index);
-    calcualteBillattributes();
-    notifyListeners();
+  void removeCartItem(index , Product product) async{
+   await _cartService.removeCartItem(index,product);
+   _cartItems = _cartService.cartItemsList;
+   notifyListeners();
+   calcualteBillattributes();
+   calculateTotalItemCount();
+
   }
 
   void addToWishList(String s){
@@ -64,7 +67,7 @@ class CartViewModel extends BaseViewModel {
     List mrp =  _cartItems.map((item){
       return item.cartQuantity;
     }).toList();
-    print("inxrease" + _cartService.totalItemCount.value.toString());
+
     _cartTotalItemCount = _cartService.totalItemCount.value;
     notifyListeners();
   }
@@ -97,6 +100,7 @@ class CartViewModel extends BaseViewModel {
       return item.cartQuantity;
     }).toList();
     _cartTotalItemCount = mrp.fold(0, (previousValue, element) => previousValue+element);
+    notifyListeners();
   }
 
 }

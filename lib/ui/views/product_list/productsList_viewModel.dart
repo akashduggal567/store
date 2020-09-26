@@ -35,7 +35,7 @@ class ProductsListViewModel extends BaseViewModel {
   String _sortBy;
   String _sortOrder;
 
-  Future fetchProducts(tagsArray, sortBy,sortOrder) async {
+  Future fetchProducts(tagsArray, sortBy, sortOrder) async {
     setBusy(true);
     ApiResponse response;
     _tagsArray = tagsArray;
@@ -52,23 +52,32 @@ class ProductsListViewModel extends BaseViewModel {
 //
 //
 //    }
-    if(sortBy==null){
-      response = await _apiService.fetchProducts(tagsArray: tagsArray,page: 1,limit: 10);
-    }else{
-      response = await _apiService.fetchProducts(tagsArray: tagsArray,sortBy: sortBy, sortOrder: sortOrder, page: 1,limit: 10);
+    if (sortBy == null) {
+      response = await _apiService.fetchProducts(
+          tagsArray: tagsArray, page: 1, limit: 10);
+    } else {
+      response = await _apiService.fetchProducts(
+          tagsArray: tagsArray,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          page: 1,
+          limit: 10);
     }
-    if(response.status == "success"){
-      var s = response.result[0]['docs'].map((e) => Product.fromJson(e)).toList().cast<Product>();
+    if (response.status == "success") {
+      var s = response.result[0]['docs']
+          .map((e) => Product.fromJson(e))
+          .toList()
+          .cast<Product>();
 
       _productsList = s;
 
       setBusy(false);
     }
-
   }
 
-  void navigateToProductDetailsView({@required productDetails}) async{
-    await _navigationService.navigateTo(Routes.productDetailsView,arguments: ProductDetailsViewArguments(productDetails: productDetails));
+  void navigateToProductDetailsView({@required productDetails}) async {
+    await _navigationService.navigateTo(Routes.productDetailsView,
+        arguments: ProductDetailsViewArguments(productDetails: productDetails));
   }
 
   void addItemToCart(Product product) {
@@ -76,7 +85,7 @@ class ProductsListViewModel extends BaseViewModel {
     _cartService.addToCart(product);
   }
 
-  void navigateToDashboard() async{
+  void navigateToDashboard() async {
     await _navigationService.replaceWith(Routes.dashboardViewRoute);
   }
 
@@ -92,7 +101,7 @@ class ProductsListViewModel extends BaseViewModel {
     print(requestMoreData && pageToRequest > _currentPage);
     if (requestMoreData && pageToRequest > _currentPage) {
       _currentPage = pageToRequest;
-      print("CURRENT PAGE --->" + _currentPage.toString() );
+      print("CURRENT PAGE --->" + _currentPage.toString());
 
       // TODO: Show loading indicator, Request more data and hide loading indicator
       fetchMoreProducts(_tagsArray);
@@ -104,25 +113,31 @@ class ProductsListViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void fetchMoreProducts(List tagsArray) async{
+  void fetchMoreProducts(List tagsArray) async {
 //    setBusy(true);
     _isLoadingMore = true;
     notifyListeners();
-    ApiResponse response = await _apiService.fetchProducts(tagsArray: tagsArray,sortBy: _sortBy,sortOrder: _sortOrder, page: _currentPage+1, limit: ItemRequestThreshold);
-    if(response.status == "success"){
-      List<Product> s = response.result[0]['docs'].map((e) => Product.fromJson(e)).toList().cast<Product>();
+    ApiResponse response = await _apiService.fetchProducts(
+        tagsArray: tagsArray,
+        sortBy: _sortBy,
+        sortOrder: _sortOrder,
+        page: _currentPage + 1,
+        limit: ItemRequestThreshold);
+    if (response.status == "success") {
+      List<Product> s = response.result[0]['docs']
+          .map((e) => Product.fromJson(e))
+          .toList()
+          .cast<Product>();
       print(s);
       s.forEach((element) {
         _productsList.add(element);
       });
       _isLoadingMore = false;
       notifyListeners();
-
     }
-
   }
 
-  void openSortBottomSheet() async{
+  void openSortBottomSheet() async {
     await Get.bottomSheet(Container(
       height: 160,
       color: Constants.darkBlackColor,
@@ -133,34 +148,43 @@ class ProductsListViewModel extends BaseViewModel {
   }
 
   getSortChildren() {
-    List<Widget> children = [Container(child: Text("Sort By"),)];
+    List<Widget> children = [
+      Container(
+        margin: EdgeInsets.only(left: 4),
+        child: Text("Sort By", style: TextStyle(color: Constants.offWhiteColor.withOpacity(0.8)),),
+      )
+    ];
     Constants.SORT_OPTIONS.forEach((sortOption) {
       children.add(Expanded(
           child: Container(
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: (){
-                  print(sortOption['value']);
-                  _productsList = [];  notifyListeners();
-                  _sortBy = sortOption['sortBy'];
-                  _sortOrder = sortOption['sortOrder'];
-                  _currentPage = 0;
-                  fetchProducts(_tagsArray, _sortBy,_sortOrder);
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+              onTap: () {
+                print(sortOption['value']);
+                _productsList = [];
+                notifyListeners();
+                _sortBy = sortOption['sortBy'];
+                _sortOrder = sortOption['sortOrder'];
+                _currentPage = 0;
+                fetchProducts(_tagsArray, _sortBy, _sortOrder);
 //              _apiService.fetchProducts(tagsArray:_tagsArray, sortBy: sortOption['sortBy'], sortOrder:sortOption['sortOrder'] );
-                  Get.back();
-                  notifyListeners();
-                },
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.only(left: 8),
-        child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(sortOption['title'], style: TextStyle(color: Constants.offWhiteColor),),
+                Get.back();
+                notifyListeners();
+              },
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(left: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    sortOption['title'],
+                    style: TextStyle(color: Constants.offWhiteColor),
+                  ),
+                ),
+              )),
         ),
-      )),
-            ),
-          )));
+      )));
     });
 
     return children;

@@ -1416,7 +1416,7 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                model.removeCartItem(index);
+                                model.removeCartItem(index,model.cartItemsList[index]);
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
