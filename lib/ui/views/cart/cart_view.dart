@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,7 +31,25 @@ class CartView extends StatelessWidget {
                 ? Center(
               child:  Padding(
                 padding: const EdgeInsets.all(0.0),
-                child: SvgPicture.asset('assets/images/empty_cart_illustration.svg'),          //https://www.vecteezy.com/editor/random
+                child: Container(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: FadeIn(
+                          duration: Duration(seconds: 2),
+                            child: Container(
+                               child: SvgPicture.asset('assets/images/empty_cart_illustration.svg'))),    //https://www.vecteezy.com/editor/random
+                      ),
+                      Expanded(
+                        child: FadeIn(
+                          duration: Duration(seconds: 2),
+                          child: Text("No Items in cart",style: TextStyle(color: Colors.white),),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               )
             )
                 : LoadingOverlay(
