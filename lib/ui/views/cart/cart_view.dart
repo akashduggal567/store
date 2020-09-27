@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
@@ -27,10 +28,10 @@ class CartView extends StatelessWidget {
             backgroundColor: Colors.black,
             body: model.cartItemsList.length == 0
                 ? Center(
-              child: Text(
-                "YOUR CART IS EMPTY",
-                style: TextStyle(color: Constants.offWhiteColor),
-              ),
+              child:  Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: SvgPicture.asset('assets/images/empty_cart_illustration.svg'),          //https://www.vecteezy.com/editor/random
+              )
             )
                 : LoadingOverlay(
             isLoading: model.isBusy,
@@ -110,7 +111,7 @@ class CartView extends StatelessWidget {
                                                       color: Constants
                                                           .offWhiteColor,
                                                       fontWeight:
-                                                      FontWeight.w300),
+                                                      FontWeight.w400),
                                                   textAlign: TextAlign.right,
                                                 ),
                                               ),
@@ -140,12 +141,12 @@ class CartView extends StatelessWidget {
                                               child: Container(
 //                                    color: Constants.lightBlackColor,
                                                 child: Text(
-                                                  model.totalCartAmount.toString(),
+                                                  "₹ " +  model.totalCartAmount.toString(),
                                                   style: TextStyle(
                                                       color: Constants
                                                           .offWhiteColor,
                                                       fontWeight:
-                                                      FontWeight.w300),
+                                                      FontWeight.w400),
                                                   textAlign: TextAlign.right,
                                                 ),
                                               ),
@@ -180,7 +181,7 @@ class CartView extends StatelessWidget {
                                                       color:
                                                       Constants.tealColor,
                                                       fontWeight:
-                                                      FontWeight.w300),
+                                                      FontWeight.w400),
                                                   textAlign: TextAlign.right,
                                                 ),
                                               ),
@@ -210,12 +211,12 @@ class CartView extends StatelessWidget {
                                               child: Container(
 //                                    color: Constants.lightBlackColor,
                                                 child: Text(
-                                                  "- " + model.totalDiscountAmount.toString(),
+                                                  "- " + "₹ " + model.totalDiscountAmount.toString(),
                                                   style: TextStyle(
                                                       color:
                                                       Constants.tealColor,
                                                       fontWeight:
-                                                      FontWeight.w300),
+                                                      FontWeight.w400),
                                                   textAlign: TextAlign.right,
                                                 ),
                                               ),
@@ -245,12 +246,12 @@ class CartView extends StatelessWidget {
                                               child: Container(
 //                                    color: Constants.lightBlackColor,
                                                 child: Text(
-                                                  "0",
+                                                  "FREE",
                                                   style: TextStyle(
                                                       color: Constants
                                                           .offWhiteColor,
                                                       fontWeight:
-                                                      FontWeight.w300),
+                                                      FontWeight.w400),
                                                   textAlign: TextAlign.right,
                                                 ),
                                               ),
@@ -1222,7 +1223,7 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                 MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   Expanded(
-                                    flex: 3,
+                                    flex: 4,
                                     child: Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: Container(
@@ -1311,52 +1312,8 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                       mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                       children: <Widget>[
-//                                        Container(
-//                                          margin: const EdgeInsets.only(
-//                                              left: 4),
-//                                          child: Row(
-//                                            mainAxisAlignment:
-//                                            MainAxisAlignment
-//                                                .spaceAround,
-//                                            crossAxisAlignment:
-//                                            CrossAxisAlignment.baseline,
-//                                            textBaseline:
-//                                            TextBaseline.alphabetic,
-//                                            children: <Widget>[
-//                                              Text(
-//                                                "Size",
-//                                                style: TextStyle(
-//                                                    color: Constants
-//                                                        .offWhiteColor),
-//                                              ),
-//                                              DropdownButton<String>(
-//                                                hint: Text(
-//                                                  "100ml",
-//                                                  style: TextStyle(
-//                                                    color: Colors.white70,
-//                                                  ),
-//                                                ),
-//                                                items: <String>[
-//                                                  '100ml',
-//                                                  '200ml',
-//                                                  '250ml',
-//                                                ].map((String value) {
-//                                                  return new DropdownMenuItem<
-//                                                      String>(
-//                                                    value: value,
-//                                                    child: new Text(
-//                                                      value,
-//                                                    ),
-//                                                  );
-//                                                }).toList(),
-//                                                onChanged: (_) {
-//
-//                                                },
-//                                              ),
-//                                            ],
-//                                          ),
-//                                        ),
                                         Container(
+//                                          color: Colors.red,
                                           margin: const EdgeInsets.only(
                                               left: 4),
                                           child: Row(

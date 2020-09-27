@@ -8,6 +8,7 @@ import 'package:store/helpers/ApiResponse.dart';
 import 'package:store/models/category.dart';
 import 'package:store/models/subcategory.dart';
 import 'package:store/services/api.dart';
+import 'package:store/ui/views/dashboard/dashboard_view.dart';
 
 import '../product_list/productsList_view.dart';
 
@@ -46,7 +47,7 @@ class SubCategoryViewModel extends BaseViewModel {
   }
 
   void navigateToProductListView(tagsArray) async{
-   await _navigationService.replaceWithTransition(ProductsListView(tagsArray:tagsArray ,),transition: 'rightToLeft' );
+   await _navigationService.navigateWithTransition(ProductsListView(tagsArray:tagsArray ,),transition: 'rightToLeft' );
   }
 
   bool checkSubChildcategory(SubCategory element) {
@@ -58,6 +59,10 @@ class SubCategoryViewModel extends BaseViewModel {
       }
     });
     return flag;
+  }
+
+  void navigateToDashboard() async{
+    await _navigationService.replaceWithTransition(DashboardView(), transition: 'leftToRight');
   }
 
 }

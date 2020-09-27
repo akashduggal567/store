@@ -42,7 +42,7 @@ class SplashScreenViewModel extends BaseViewModel {
       print(user.toJson());
       print(firebaseUser.displayName);
       print("phoneNumber "+firebaseUser.phoneNumber);
-      await _cartService.fetchUserCart();
+//      await _cartService.fetchUserCart();
       await _navigationService.replaceWith(Routes.dashboardViewRoute,);
     }
     else{

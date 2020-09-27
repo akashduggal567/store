@@ -14,12 +14,16 @@ import 'package:store/helpers/constants.dart';
 import 'package:store/models/product.dart';
 import 'package:store/services/api.dart';
 import 'package:store/services/cart_service.dart';
+import 'package:store/ui/views/cart/cart_view.dart';
 
 class ProductsListViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
   ApiService _apiService = locator<ApiService>();
-  CartService _cartService = locator<CartService>();
-
+  static CartService _cartService = locator<CartService>();
+//
+  String _cartCount = _cartService.totalItemCount.value.toString();
+  get cartCount => _cartCount;
+//
   bool _isLoadingMore = false;
   get isLoadingMore => _isLoadingMore;
 
@@ -34,6 +38,8 @@ class ProductsListViewModel extends BaseViewModel {
 
   String _sortBy;
   String _sortOrder;
+
+
 
   Future fetchProducts(tagsArray, sortBy, sortOrder) async {
     setBusy(true);
@@ -83,6 +89,8 @@ class ProductsListViewModel extends BaseViewModel {
   void addItemToCart(Product product) {
 //      print('addtocart' + product.toJson().toString());
     _cartService.addToCart(product);
+    _cartCount = _cartService.totalItemCount.value.toString();
+    notifyListeners();
   }
 
   void navigateToDashboard() async {
@@ -94,14 +102,9 @@ class ProductsListViewModel extends BaseViewModel {
     var requestMoreData =
         itemPosition % ItemRequestThreshold == 0 && itemPosition != 0;
     var pageToRequest = itemPosition ~/ ItemRequestThreshold;
-    print("REQUEST MORE DATA" + requestMoreData.toString());
-    print("PageToRequest" + pageToRequest.toString());
-    print("Condition");
-    print("Current Page before" + _currentPage.toString());
-    print(requestMoreData && pageToRequest > _currentPage);
+
     if (requestMoreData && pageToRequest > _currentPage) {
       _currentPage = pageToRequest;
-      print("CURRENT PAGE --->" + _currentPage.toString());
 
       // TODO: Show loading indicator, Request more data and hide loading indicator
       fetchMoreProducts(_tagsArray);
@@ -150,8 +153,20 @@ class ProductsListViewModel extends BaseViewModel {
   getSortChildren() {
     List<Widget> children = [
       Container(
-        margin: EdgeInsets.only(left: 4),
-        child: Text("Sort By", style: TextStyle(color: Constants.offWhiteColor.withOpacity(0.8)),),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border(
+            top:  BorderSide(width: 0.1, color: Colors.white),
+//            left:  BorderSide(width: 0.3, color: Colors.white),
+//            right:  BorderSide(width: 0.3, color: Colors.white),
+            bottom: BorderSide(width: 0.04, color: Colors.white),
+          )
+        ),
+//        margin: EdgeInsets.only(left: 4),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Center(child: Text("Sort By", style: TextStyle(color: Constants.offWhiteColor.withOpacity(0.8),fontSize: 18.0),)),
+        ),
       )
     ];
     Constants.SORT_OPTIONS.forEach((sortOption) {
@@ -174,12 +189,23 @@ class ProductsListViewModel extends BaseViewModel {
               },
               child: Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(left: 8),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    sortOption['title'],
-                    style: TextStyle(color: Constants.offWhiteColor),
+//                margin: EdgeInsets.only(left: 8),
+                decoration: BoxDecoration(
+                    border: Border(
+//                      top:  BorderSide(width: 0.1, color: Colors.white),
+//            left:  BorderSide(width: 0.3, color: Colors.white),
+//            right:  BorderSide(width: 0.3, color: Colors.white),
+                      bottom: BorderSide(width: 0.04, color: Colors.white),
+                    ),),
+                child: Container(
+                  height: double.infinity,
+//                  color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      sortOption['title'],
+                      style: TextStyle(color: Constants.offWhiteColor),
+                    ),
                   ),
                 ),
               )),
@@ -188,5 +214,9 @@ class ProductsListViewModel extends BaseViewModel {
     });
 
     return children;
+  }
+
+  void navigateToCart() async{
+    await _navigationService.navigateWithTransition(CartView(), transition: 'rightToLeft');
   }
 }

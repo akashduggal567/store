@@ -2,10 +2,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/helpers/ApiResponse.dart';
@@ -199,7 +195,7 @@ class ApiService{
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.delete('$cartendpoint/api/cart/removeItem',data: cartItem);
-      print("removeItemfromCart  api" + ApiResponse(response).toString());
+      print("removeItemfromCart  api : " + ApiResponse(response).toString());
       return Future.delayed(Duration(seconds: 0)).then((value) => ApiResponse(response));
 //   return ApiResponse(response);
     });

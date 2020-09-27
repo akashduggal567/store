@@ -16,27 +16,33 @@ class SubCategoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<SubCategoryViewModel>.reactive(
         onModelReady: (model) => model.initialiseCategory(categoryDetails),
-        builder: (context, model, child) => Scaffold(
-              appBar: AppBar(
-                title: Text(categoryDetails.name),
-              ),
-              backgroundColor: Colors.black,
-              body: model.isBusy && model.subCategories.length == 0
-                  ? Center(child: Text("Loading...",style: TextStyle(color: Colors.white),))
-                  : model.subCategories.length == 0
-                      ? Center(
-                          child: Text(
-                            "Coming Soon...",
-                            style: TextStyle(color: Colors.white),
+        builder: (context, model, child) => WillPopScope(
+          onWillPop:() {
+            model.navigateToDashboard();
+            return Future.value(false);
+          },
+          child: Scaffold(
+                appBar: AppBar(
+                  title: Text(categoryDetails.name),
+                ),
+                backgroundColor: Colors.black,
+                body: model.isBusy && model.subCategories.length == 0
+                    ? Center(child: Text("Loading...",style: TextStyle(color: Colors.white),))
+                    : model.subCategories.length == 0
+                        ? Center(
+                            child: Text(
+                              "Coming Soon...",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: model.subCategories.length,
+                            itemBuilder: (context, index) {
+                              return expansionTile(model: model,index: index,categoryDetails: categoryDetails,);
+                            },
                           ),
-                        )
-                      : ListView.builder(
-                          itemCount: model.subCategories.length,
-                          itemBuilder: (context, index) {
-                            return expansionTile(model: model,index: index,categoryDetails: categoryDetails,);
-                          },
-                        ),
-            ),
+              ),
+        ),
         viewModelBuilder: () => SubCategoryViewModel());
   }
 }

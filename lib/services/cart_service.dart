@@ -81,24 +81,38 @@ class CartService with ReactiveServiceMixin {
   }
 
   void removeCartItem(int index, Product product) async{
-    return await _apiService
+    await _apiService
         .removeItemfromCart(
             CartItem(productId: product.id.toString(), cartQuantity: 0))
         .then((value) {
       _cartItems.removeAt(index);
       notifyListeners();
-      print(_cartItems);
       calcualteBillattributes();
+      _totalCartItemsCount();
       notifyListeners();
+
     });
   }
 
   void addToCart(Product product) {
-    _apiService
-        .addToCart(CartItem(productId: product.id.toString(), cartQuantity: 1))
-        .then((value) => null);
-    _cartItems.add(product);
-    calcualteBillattributes();
+    List<Product> item =
+    _cartItems.where((element) => element.id == product.id).toList();
+    if(item.length>0){
+      print("already present in cart");
+      increaseCartItemCount(product);
+    }else{
+      _apiService
+          .addToCart(CartItem(productId: product.id.toString(), cartQuantity: 1))
+          .then((value) => null);
+      _cartItems.add(product);
+      calcualteBillattributes();
+    }
+
+    List<int> mrp = _cartItems.map((item) {
+      return item.cartQuantity.toInt();
+    }).toList();
+
+    _totalItemCount = RxValue(initial: mrp.reduce((a, b) => a + b));
     _snackbarService.showCustomSnackBar(
       variant: SnackbarType.blackAndWhite,
       message: 'Added to cart successfully',
@@ -180,6 +194,17 @@ class CartService with ReactiveServiceMixin {
     return Product.fromJson(result);
   }
 
+  void _totalCartItemsCount(){
+    List<int> mrp = _cartItems.map((item) {
+      return item.cartQuantity.toInt();
+    }).toList();
+    if(mrp.length>0){
+      _totalItemCount = RxValue(initial: mrp.reduce((a, b) => a + b));
+    }else{
+      _totalItemCount = RxValue(initial: 0);
+    }
 
-//  }
+    print("TOTAL CART ITEMS :"+ _totalItemCount.toString());
+    notifyListeners();
+  }
 }
