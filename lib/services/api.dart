@@ -211,7 +211,7 @@ class ApiService{
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.get('$endpoint/api/product/getByTag',queryParameters: {"tags" :tagsArray,"sortBy":sortBy,"sortOrder": sortOrder, "page": page, 'limit':limit});
       print("updateAddressDetails  api" + ApiResponse(response).result.toString());
-      return ApiResponse(response);
+      return Future.delayed(Duration(seconds: 2)).then((value) => ApiResponse(response));
     });
 
 

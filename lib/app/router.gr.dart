@@ -119,8 +119,10 @@ class Router extends RouterBase {
         final typedArgs =
             args as ProductsListViewArguments ?? ProductsListViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) =>
-              ProductsListView(tagsArray: typedArgs.tagsArray),
+          builder: (context) => ProductsListView(
+              tagsArray: typedArgs.tagsArray,
+              mainCategoryName: typedArgs.mainCategoryName,
+              childCategoryName: typedArgs.childCategoryName),
           settings: settings,
         );
       case Routes.productDetailsView:
@@ -220,7 +222,10 @@ class OtpViewArguments {
 //ProductsListView arguments holder class
 class ProductsListViewArguments {
   final List<dynamic> tagsArray;
-  ProductsListViewArguments({this.tagsArray});
+  final String mainCategoryName;
+  final String childCategoryName;
+  ProductsListViewArguments(
+      {this.tagsArray, this.mainCategoryName, this.childCategoryName});
 }
 
 //ProductDetailsView arguments holder class

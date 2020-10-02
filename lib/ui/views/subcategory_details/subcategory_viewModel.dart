@@ -46,8 +46,8 @@ class SubCategoryViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void navigateToProductListView(tagsArray) async{
-   await _navigationService.navigateWithTransition(ProductsListView(tagsArray:tagsArray ,),transition: 'rightToLeft' );
+  void navigateToProductListView(tagsArray, categoryName, subchildCategoryName) async{
+   await _navigationService.navigateWithTransition(ProductsListView(tagsArray:tagsArray,mainCategoryName:categoryName,childCategoryName:subchildCategoryName),transition: 'rightToLeft' );
   }
 
   bool checkSubChildcategory(SubCategory element) {

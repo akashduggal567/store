@@ -65,7 +65,7 @@ class expansionTile extends StatelessWidget {
         children.add(
           InkWell(
             onTap: (){
-              model.navigateToProductListView([categoryDetails.id,subCategory.id, subChildCategory.id],);
+              model.navigateToProductListView([categoryDetails.id,subCategory.id, subChildCategory.id],categoryDetails.name,subChildCategory.name);
             },
             child: ListTile(
               title: Container(
