@@ -50,16 +50,17 @@ class AddressesViewModel extends BaseViewModel {
     var defaultAddressId =
         await _apiService.fetchDefaultAddressId("5f4b98d0e4e31f2514c045c8");
     print(defaultAddressId.result);
-    LocalStorageService.getInstance().then((value){
-      _localStorageService.userAddresses = _addresses;
-      _localStorageService.defaultAddressId = Address.fromJson(defaultAddressId.result[0]).id;
-    });
+
     //add validation of api response status
     if (defaultAddressId.result == null && _addresses.length!=0) {
       setAddressAsDefault(_addresses[0].id,0);
       setDefaultIndex(0);
     }
     else{
+      LocalStorageService.getInstance().then((value){
+        _localStorageService.userAddresses = _addresses;
+        _localStorageService.defaultAddressId = Address.fromJson(defaultAddressId.result[0]).id;
+      });
       _addresses.asMap().forEach((index, address) {
         if (address.id == Address.fromJson(defaultAddressId.result[0]).id) {   //converted to list response
           _selectedIndex.clear();

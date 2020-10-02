@@ -32,21 +32,43 @@ class CartView extends StatelessWidget {
               child:  Padding(
                 padding: const EdgeInsets.all(0.0),
                 child: Container(
-                  child: Column(
+                  child: Stack(
                     children: [
-                      Expanded(
-                        flex: 6,
-                        child: FadeIn(
-                          duration: Duration(seconds: 2),
-                            child: Container(
-                               child: SvgPicture.asset('assets/images/empty_cart_illustration.svg'))),    //https://www.vecteezy.com/editor/random
+                      Column(
+                        children: [
+                          Expanded(
+//                        flex: 6,
+                            child: FadeIn(
+                                duration: Duration(seconds: 1),
+                                child: Container(
+                                    child: SvgPicture.asset('assets/images/empty_cart_illustration.svg'))),    //https://www.vecteezy.com/editor/random
+                          ),
+                        ],
                       ),
-                      Expanded(
+                      Align(
+                        alignment: Alignment.bottomCenter,
                         child: FadeIn(
                           duration: Duration(seconds: 2),
-                          child: Text("No Items in cart",style: TextStyle(color: Colors.white),),
+                          child: Container(
+                          margin: EdgeInsets.only(bottom: 100),
+                            height: 40,
+                            width: 200,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              elevation: 0,
+                              color: Constants.tealColor,
+                              onPressed: () {
+                                model.navigateToDashboard();
+                              },
+                              child: Text('Start Shopping',
+                                  style:
+                                  TextStyle(fontSize: 18, color: Color(0xffEEEEEE))),
+                            ),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -1152,7 +1174,7 @@ class CartView extends StatelessWidget {
               ),
             ),
                 ),
-            bottomNavigationBar: Container(
+            bottomNavigationBar: model.cartItemsList.length != 0 ? Container(
               height: 56,
               color: Constants.lightBlackColor,
               child: Row(
@@ -1198,7 +1220,7 @@ class CartView extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            ) : null,
           ),
         ),
         viewModelBuilder: ()=> CartViewModel());

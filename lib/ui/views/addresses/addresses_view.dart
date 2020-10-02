@@ -1,7 +1,9 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
 import 'addresses_viewModel.dart';
@@ -34,7 +36,7 @@ class _AddressesViewState extends State<AddressesView> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                       child: Container(
-                        width: 190,
+                        width: 160,
                         child: MaterialButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(22.0)),
@@ -45,7 +47,7 @@ class _AddressesViewState extends State<AddressesView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Icon(Icons.add),
-                              Text('Add new Address',
+                              Text('Add Address',
                                   style: new TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.black,
@@ -77,11 +79,11 @@ class _AddressesViewState extends State<AddressesView> {
                             ))
                           : model.addresses.length == 0
                               ? Center(
-                                  child: Text(
-                                  "No addresses found",
-                                  style:
-                                      TextStyle(color: Constants.offWhiteColor),
-                                ))
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: FadeIn(child: SvgPicture.asset('assets/images/undraw.svg',height: 350,)),
+                                  )
+                      )
                               : Container(
                                   child: ListView.builder(
                                     itemCount: model.addresses.length,

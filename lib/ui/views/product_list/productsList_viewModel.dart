@@ -27,6 +27,9 @@ class ProductsListViewModel extends BaseViewModel {
   bool _isLoadingMore = false;
   get isLoadingMore => _isLoadingMore;
 
+  int _totalProducts = 0;
+  get totalProducts => _totalProducts;
+
   static const int ItemRequestThreshold = 10;
   int _currentPage = 0;
 
@@ -39,6 +42,15 @@ class ProductsListViewModel extends BaseViewModel {
   String _sortBy;
   String _sortOrder;
 
+
+  int _itemBuildIndex = -1;
+  get itemBuildIndex => _itemBuildIndex;
+
+
+  set itemBuildIndex(int itemBuildIndex) {
+    _itemBuildIndex = itemBuildIndex;
+    notifyListeners();
+  }
 
 
   Future fetchProducts(tagsArray, sortBy, sortOrder) async {
@@ -75,6 +87,7 @@ class ProductsListViewModel extends BaseViewModel {
           .toList()
           .cast<Product>();
 
+      _totalProducts = response.result[0]['totalDocs'];
       _productsList = s;
 
       setBusy(false);
