@@ -13,15 +13,17 @@ import 'local_storage_service.dart';
 @singleton
 class ApiService{
 
-  static const addressendpoint = 'http://10.0.2.2:2005';
-  static const userendpoint = 'http://10.0.2.2:2003';
-  static const endpoint = 'http://10.0.2.2:2004';
-  static const cartendpoint = 'http://10.0.2.2:2007';
-  
-//  static const addressendpoint = 'http://localhost:2005';
-//  static const userendpoint = 'http://localhost:2003';
-//  static const endpoint = 'http://localhost:2004';
-//  static const cartendpoint = 'http://localhost:2007';
+//  static const addressendpoint = 'http://10.0.2.2:2005';
+//  static const userendpoint = 'http://10.0.2.2:2003';
+//  static const endpoint = 'http://10.0.2.2:2004';
+//  static const cartendpoint = 'http://10.0.2.2:2007';
+//  static const wishlistendpoint = 'http://10.0.2.2:2011';
+
+  static const addressendpoint = 'http://localhost:2005';
+  static const userendpoint = 'http://localhost:2003';
+  static const endpoint = 'http://localhost:2004';
+  static const cartendpoint = 'http://localhost:2007';
+  static const wishlistendpoint = 'http://localhost:2009';
 
   DialogService _dialogService = locator<DialogService>();
   Future<LocalStorageService> _localStorageService = LocalStorageService.getInstance();
@@ -186,8 +188,17 @@ class ApiService{
       return Future.delayed(Duration(seconds: 0)).then((value) => ApiResponse(response));
 //   return ApiResponse(response);
     });
+  }
 
-
+  Future<ApiResponse> addToWishlist(String productId) async{
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.put('$wishlistendpoint/api/wishlist/addItem',data: {'productId': productId} );
+      print("addToWishlist  api" + ApiResponse(response).toString());
+      return Future.delayed(Duration(seconds: 0)).then((value) => ApiResponse(response));
+//   return ApiResponse(response);
+    });
   }
 
   Future<ApiResponse> removeItemfromCart(CartItem cartItem) async{
@@ -226,6 +237,23 @@ class ApiService{
     });
 
   }
+
+  Future<ApiResponse> fetchUserWishlist() async {
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.get('$userendpoint/api/user/wishlist/wishlistItems');
+
+      return ApiResponse(response);
+    });
+
+  }
+
+
+
+
+
+
 
 
 

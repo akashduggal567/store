@@ -6,6 +6,7 @@ import 'package:store/app/router.gr.dart';
 import 'package:store/services/authentication_service.dart';
 import 'package:store/services/cart_service.dart';
 import 'package:store/services/location_service.dart';
+import 'package:store/ui/views/wishlist/wishlist_view.dart';
 
 class DashboardViewModel extends IndexTrackingViewModel {
   NavigationService _navigationService = locator<NavigationService>();
@@ -16,7 +17,8 @@ class DashboardViewModel extends IndexTrackingViewModel {
   String _cartCount = _cartService.totalItemCount.value.toString();
   get cartCount => _cartCount;
 
-  String getCartCount(){
+  Future<String> getCartCount() async{
+    await _cartService.fetchUserCart();
     _cartCount = _cartService.totalItemCount.value.toString();
     print("cart Count on dashboard "+ _cartService.totalItemCount.value.toString());
     notifyListeners();
@@ -38,7 +40,7 @@ class DashboardViewModel extends IndexTrackingViewModel {
   }
 
   void navigateToWishlist() async{
-    _navigationService.navigateTo(Routes.wishListViewRoute);
+    _navigationService.navigateWithTransition(WishListView(), transition: 'rightToLeft');
   }
 
 

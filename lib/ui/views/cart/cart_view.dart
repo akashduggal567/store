@@ -1445,7 +1445,7 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                 child: RaisedButton(
                                   color: Constants.darkBlackColor,
                                   onPressed: () {
-                                    model.addToWishList("W");
+                                    model.addToWishList(id: model.cartItemsList[index].id);
                                   },
                                   child: Text('Add to Wishlist',
                                       style: TextStyle(

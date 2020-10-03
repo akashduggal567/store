@@ -158,34 +158,19 @@ class ProductDetailsView extends StatelessWidget {
                                 ),
                               ),
                             ),
-//                            Flexible(
-//                              flex: 1,
-//                              child: Container(
-//                                color: Constants.lightBlackColor
-//                                    .withOpacity(0.4),
-//                                margin: EdgeInsets.only(right: 8),
-//                                padding: EdgeInsets.all(4.0),
-//                                child: Row(
-//                                  mainAxisAlignment:
-//                                      MainAxisAlignment.spaceBetween,
-//                                  children: <Widget>[
-//                                    Icon(
-//                                      Icons.add,
-//                                      color: Color(0xff00ADB5),
-//                                    ),
-//                                    Text(
-//                                      "1",
-//                                      style:
-//                                          TextStyle(color: Color(0xffEEEEEE)),
-//                                    ),
-//                                    Icon(
-//                                      Icons.remove,
-//                                      color: Color(0xff00ADB5),
-//                                    ),
-//                                  ],
-//                                ),
-//                              ),
-//                            ),
+                            productDetails.inventoryCount > productDetails.minInventoryCount? Container() :
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                margin: EdgeInsets.only(right: 8),
+                                padding: EdgeInsets.all(4.0),
+                                child:       Text(
+                                  'Few Left',
+                                  style:
+                                  TextStyle(fontSize: 14, color: Colors.red.withOpacity(0.9)),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),

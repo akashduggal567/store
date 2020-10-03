@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:observable_ish/list/list.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -47,8 +48,8 @@ class CartViewModel extends BaseViewModel {
 
   }
 
-  void addToWishList(String s){
-    _wishListService.addToWishList(s);
+  void addToWishList({@required id}){
+    _wishListService.addToWishList(id);
   }
 
   void navigateToDashboard() async{

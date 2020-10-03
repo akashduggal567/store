@@ -245,20 +245,20 @@ class _ProductsListViewState extends State<ProductsListView> {
                                           .addPostFrameCallback((duration) =>
                                               model.handleItemCreated(index));
                                     },
-                                    child: InkWell(
-                                      onTap: () {
-                                        model.navigateToProductDetailsView(
-                                            productDetails:
-                                                model.productsList[index]);
-                                      },
-                                      child: Stack(
-                                        children: <Widget>[
-                                          Container(
-                                            color: Color(0xff222831),
-                                            child: Column(
-                                              children: <Widget>[
-                                                Expanded(
-                                                  flex: 5,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          color: Constants.darkBlackColor,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Expanded(
+                                                flex: 5,
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    model.navigateToProductDetailsView(
+                                                        productDetails:
+                                                        model.productsList[index]);
+                                                  },
                                                   child: Container(
                                                     child: Column(
                                                       children: <Widget>[
@@ -397,80 +397,95 @@ class _ProductsListViewState extends State<ProductsListView> {
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Container(
-                                                    color: Color(0xff393E46),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: <Widget>[
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: InkWell(
-                                                              onTap: () {
-                                                                model.addItemToCart(
-                                                                    model.productsList[
-                                                                        index]);
-                                                              },
-                                                              child: Container(
-//                                            width: 120,
-                                                                child:
-                                                                    const RaisedButton(
-                                                                  disabledColor:
-                                                                      Color(
-                                                                          0xff00ADB5),
-                                                                  onPressed:
-                                                                      null,
-                                                                  child: Text(
-                                                                      'Add To Cart',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Color(0xffEEEEEE))),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Flexible(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Container(
-                                                              width: 80,
-                                                              child: Icon(
-                                                                Icons
-                                                                    .favorite_border,
-                                                                color: Color(
-                                                                    0xff00ADB5),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Positioned(
-//                                left: MediaQuery.of(context).size.width *0.29,
-                                            child: Container(
-                                              alignment: Alignment.topRight,
-                                              child: CustomPaint(
-                                                painter: CurvePainter(),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
                                                 child: Container(
-                                                  height: 160,
-                                                  width: 60,
+                                                  color: Color(0xff393E46),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: <Widget>[
+                                                      Expanded(
+                                                        flex: 2,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+//                                            width: 120,
+                                                            child:
+                                                            model.productsList[index].inventoryCount==0 ? RaisedButton(
+                                                              color: Constants.tealColor,
+                                                              disabledColor:
+                                                              Constants.darkBlackColor,
+                                                              onPressed: model.productsList[index].inventoryCount <= model.productsList[index].minInventoryCount ? null :(){
+//                                                                     model.addItemToCart(
+//                                                                        model.productsList[
+//                                                                        index]);
+                                                                print(model.productsList[index].inventoryCount < model.productsList[index].minInventoryCount);
+                                                              },
+                                                              child: Text(
+                                                                  'Out Of Stock',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      12,
+                                                                      color:
+                                                                      Color(0xffEEEEEE))),
+                                                            ) :  RaisedButton(
+                                                                   color: Constants.tealColor,
+                                                              disabledColor:
+                                                                  Constants.darkBlackColor,
+                                                              onPressed: (){
+                                                                     model.addItemToCart(
+                                                                        model.productsList[
+                                                                        index]);
+
+                                                              },
+                                                              child: Text(
+                                                                  'Add To Cart',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color:
+                                                                          Color(0xffEEEEEE))),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Flexible(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+                                                            width: 80,
+                                                            child: Icon(
+                                                              Icons
+                                                                  .favorite_border,
+                                                              color: Color(
+                                                                  0xff00ADB5),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+//                                left: MediaQuery.of(context).size.width *0.29,
+                                          child: Container(
+                                            alignment: Alignment.topRight,
+                                            child: CustomPaint(
+                                              painter: CurvePainter(),
+                                              child: Container(
+                                                height: 160,
+                                                width: 60,
 //                                      decoration: BoxDecoration(
 //                                        gradient: LinearGradient(
 //                                          begin: Alignment.topLeft,
@@ -481,40 +496,39 @@ class _ProductsListViewState extends State<ProductsListView> {
 //                                          ],
 //                                        ),
 //                                      ),
-                                                  padding:
-                                                      EdgeInsets.only(top: 10),
-                                                  child: Container(
+                                                padding:
+                                                    EdgeInsets.only(top: 10),
+                                                child: Container(
 //                                        color: Colors.red,
-                                                    margin: EdgeInsets.only(
-                                                        left: 6),
-                                                    child: Text(
-                                                      model.productsList[index]
-                                                              .discount +
-                                                          "% OFF",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width /
-                                                              MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              14.0,
-                                                          fontWeight:
-                                                              FontWeight.w900,
-                                                          color: Constants
-                                                              .offWhiteColor),
-                                                    ),
+                                                  margin: EdgeInsets.only(
+                                                      left: 6),
+                                                  child: Text(
+                                                    model.productsList[index]
+                                                            .discount +
+                                                        "% OFF",
+                                                    textAlign:
+                                                        TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            14.0,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Constants
+                                                            .offWhiteColor),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
@@ -831,6 +845,7 @@ class _ProductsListViewState extends State<ProductsListView> {
         viewModelBuilder: () => ProductsListViewModel());
   }
 }
+
 
 class CurvePainter extends CustomPainter {
   @override

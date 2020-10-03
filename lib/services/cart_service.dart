@@ -165,11 +165,15 @@ class CartService with ReactiveServiceMixin {
   }
 
   void fetchUserCart() async {
+    _cartItems.clear();
+
     ApiResponse response = await _apiService.fetchUserCart();
-    var a = response.result.map((e) => DetailedCartItem.fromJson(e)).toList();
-    void serialized =
-        a.map((e) => _cartItems.add(serializeForCart(e))).toList();
+    var fetchedCartItems = response.result.map((e) => DetailedCartItem.fromJson(e)).toList();
+
+    var serialized =
+       await fetchedCartItems.map((e) =>  _cartItems.add(serializeForCart(e))).toList();
     calcualteBillattributes();
+
     List<int> mrp = _cartItems.map((item) {
       return item.cartQuantity.toInt();
     }).toList();
@@ -186,7 +190,6 @@ class CartService with ReactiveServiceMixin {
   }
 
   Product serializeForCart(DetailedCartItem element) {
-    print(element.cartQuantity);
     Map<String, dynamic> result = {
       ...element.productId.toJson(),
       'cart_quantity': element.cartQuantity
