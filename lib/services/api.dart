@@ -13,17 +13,20 @@ import 'local_storage_service.dart';
 @singleton
 class ApiService{
 
-//  static const addressendpoint = 'http://10.0.2.2:2005';
+  static const addressendpoint = 'http://10.0.2.2:2005';
 //  static const userendpoint = 'http://10.0.2.2:2003';
 //  static const endpoint = 'http://10.0.2.2:2004';
-//  static const cartendpoint = 'http://10.0.2.2:2007';
-//  static const wishlistendpoint = 'http://10.0.2.2:2011';
+  static const cartendpoint = 'http://10.0.2.2:2007';
+  static const wishlistendpoint = 'http://10.0.2.2:2011';
 
-  static const addressendpoint = 'http://localhost:2005';
-  static const userendpoint = 'http://localhost:2003';
-  static const endpoint = 'http://localhost:2004';
-  static const cartendpoint = 'http://localhost:2007';
-  static const wishlistendpoint = 'http://localhost:2009';
+  static const endpoint = 'http://f85617c1ad66.ngrok.io';
+  static const userendpoint = "http://c79e35197a3c.ngrok.io";
+
+//  static const addressendpoint = 'http://localhost:2005';
+//  static const userendpoint = 'http://localhost:2003';
+//  static const endpoint = 'http://localhost:2004';
+//  static const cartendpoint = 'http://localhost:2007';
+//  static const wishlistendpoint = 'http://localhost:2009';
 
   DialogService _dialogService = locator<DialogService>();
   Future<LocalStorageService> _localStorageService = LocalStorageService.getInstance();

@@ -51,7 +51,7 @@ class ProductDetailsView extends StatelessWidget {
                 backgroundColor: Colors.black,
                 body: Container(
                   color: Colors.black,
-                  child: ListView(
+                  child: productDetails.images.length == 0? CircularProgressIndicator() :ListView(
                     children: <Widget>[
                       Hero(
                         tag: productDetails.id,
@@ -62,40 +62,33 @@ class ProductDetailsView extends StatelessWidget {
                               itemCount: productDetails.images.length,
                               options: CarouselOptions(
                                 aspectRatio: 1.0,
-//                                enlargeCenterPage: true,
+                                enlargeCenterPage: true,
                                 autoPlay: false,
                               ),
                               itemBuilder: (ctx, index) {
                                 return Container(
-                                  child:       productDetails.images?.length == 0 ? Padding(
+                                  child: productDetails.images?.length == 0 ?
+                                  Padding(
                                     padding: const EdgeInsets.all(38.0),
                                     child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
-                                  ):
+                                  )
+                                      :
 
-
-                                  CachedNetworkImage(
-                                    fit: BoxFit.fitHeight,
-                                    imageUrl: productDetails.images[index],
-                                    placeholder: (context, url) => CupertinoActivityIndicator(radius: 30,),
-                                    errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                                  GestureDetector(
+                                    onTap: (){
+                                      print('clicked photo');
+                                      model.navigateToFullScreenImageView(heroId: productDetails.id,url:productDetails.images[index]);
+                                    },
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.fitHeight,
+                                      imageUrl: productDetails.images[index],
+                                      placeholder: (context, url) => CupertinoActivityIndicator(radius: 30,),
+                                      errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                                    ),
                                   ),
                                 );
                               },
                             )
-
-
-//                            productDetails.images?.length == 0 ? Padding(
-//                              padding: const EdgeInsets.all(38.0),
-//                              child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
-//                            ):
-//
-//
-//                            CachedNetworkImage(
-//                                fit: BoxFit.fitHeight,
-//                                imageUrl: productDetails.images[0],
-//                                placeholder: (context, url) => CupertinoActivityIndicator(radius: 30,),
-//                                errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
-//                            )
                         ),
                       ),
                       SizedBox(

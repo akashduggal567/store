@@ -16,6 +16,7 @@ import 'package:store/ui/views/addresses/addresses_view.dart';
 import 'package:store/ui/views/product_list/productsList_view.dart';
 import 'package:store/ui/views/product_details/productDetails_view.dart';
 import 'package:store/models/product.dart';
+import 'package:store/ui/views/product_details/image_view.dart';
 import 'package:store/ui/views/cart/cart_view.dart';
 import 'package:store/ui/views/wishlist/wishlist_view.dart';
 import 'package:store/ui/views/buy/buy_view.dart';
@@ -36,6 +37,7 @@ abstract class Routes {
   static const addressesViewRoute = '/addresses-view-route';
   static const productsListViewRoute = '/products-list-view-route';
   static const productDetailsView = '/product-details-view';
+  static const imageViewRoute = '/image-view-route';
   static const cartViewRoute = '/cart-view-route';
   static const wishListViewRoute = '/wish-list-view-route';
   static const buyViewRoute = '/buy-view-route';
@@ -53,6 +55,7 @@ abstract class Routes {
     addressesViewRoute,
     productsListViewRoute,
     productDetailsView,
+    imageViewRoute,
     cartViewRoute,
     wishListViewRoute,
     buyViewRoute,
@@ -134,6 +137,16 @@ class Router extends RouterBase {
         return MaterialPageRoute<dynamic>(
           builder: (context) =>
               ProductDetailsView(productDetails: typedArgs.productDetails),
+          settings: settings,
+        );
+      case Routes.imageViewRoute:
+        if (hasInvalidArgs<ImageViewArguments>(args)) {
+          return misTypedArgsRoute<ImageViewArguments>(args);
+        }
+        final typedArgs = args as ImageViewArguments ?? ImageViewArguments();
+        return MaterialPageRoute<dynamic>(
+          builder: (context) =>
+              ImageView(url: typedArgs.url, HEROID: typedArgs.HEROID),
           settings: settings,
         );
       case Routes.cartViewRoute:
@@ -232,6 +245,13 @@ class ProductsListViewArguments {
 class ProductDetailsViewArguments {
   final Product productDetails;
   ProductDetailsViewArguments({@required this.productDetails});
+}
+
+//ImageView arguments holder class
+class ImageViewArguments {
+  final String url;
+  final String HEROID;
+  ImageViewArguments({this.url, this.HEROID});
 }
 
 //BuyView arguments holder class

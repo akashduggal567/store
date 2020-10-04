@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/app/router.gr.dart';
 import 'package:store/models/product.dart';
 import 'package:store/services/cart_service.dart';
+import 'package:store/ui/views/product_details/image_view.dart';
 
 class ProductDetailsViewModel extends BaseViewModel {
   static CartService _cartService = locator<CartService>();
@@ -17,7 +19,6 @@ class ProductDetailsViewModel extends BaseViewModel {
     print("cart Count on dashboard "+ _cartCount);
     notifyListeners();
 //    return _cartService.cartItemsList.length.toString();
-
   }
 
   void addItemToCart(Product product) {
@@ -28,5 +29,9 @@ class ProductDetailsViewModel extends BaseViewModel {
 
   void navigateToCart() async{
     await _navigationService.navigateTo(Routes.cartViewRoute);
+  }
+
+  void navigateToFullScreenImageView({@required url, @required heroId}) async{
+    await _navigationService.navigateWithTransition(ImageView(url: url,HEROID: heroId,), transition: "scale",duration: Duration(milliseconds: 500));
   }
 }

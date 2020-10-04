@@ -10,6 +10,7 @@ import 'package:store/ui/views/login/login_view.dart';
 import 'package:store/ui/views/login/otp/otp_view.dart';
 import 'package:store/ui/views/map/map_view.dart';
 import 'package:store/ui/views/onboarding/onBoarding_view.dart';
+import 'package:store/ui/views/product_details/image_view.dart';
 import 'package:store/ui/views/product_details/productDetails_view.dart';
 import 'package:store/ui/views/product_list/productsList_view.dart';
 import 'package:store/ui/views/splashScreen/splashScreen_view.dart';
@@ -27,6 +28,7 @@ class $Router {
   AddressesView addressesViewRoute;
   ProductsListView productsListViewRoute;
   ProductDetailsView productDetailsView;
+  ImageView imageViewRoute;
   CartView cartViewRoute;
   WishListView wishListViewRoute;
   BuyView buyViewRoute;
