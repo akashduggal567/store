@@ -1,7 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
 import 'package:store/models/product.dart';
@@ -55,9 +57,42 @@ class ProductDetailsView extends StatelessWidget {
                         tag: productDetails.id,
                         child: Container(
                             height: 400,
-//                            child: CachedNetworkImage(
-//                                fit: BoxFit.fill,
-////                                imageUrl: productDetails.thumbnailUrl,
+                            child:
+                            CarouselSlider.builder(
+                              itemCount: productDetails.images.length,
+                              options: CarouselOptions(
+                                aspectRatio: 1.0,
+//                                enlargeCenterPage: true,
+                                autoPlay: false,
+                              ),
+                              itemBuilder: (ctx, index) {
+                                return Container(
+                                  child:       productDetails.images?.length == 0 ? Padding(
+                                    padding: const EdgeInsets.all(38.0),
+                                    child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
+                                  ):
+
+
+                                  CachedNetworkImage(
+                                    fit: BoxFit.fitHeight,
+                                    imageUrl: productDetails.images[index],
+                                    placeholder: (context, url) => CupertinoActivityIndicator(radius: 30,),
+                                    errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                                  ),
+                                );
+                              },
+                            )
+
+
+//                            productDetails.images?.length == 0 ? Padding(
+//                              padding: const EdgeInsets.all(38.0),
+//                              child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
+//                            ):
+//
+//
+//                            CachedNetworkImage(
+//                                fit: BoxFit.fitHeight,
+//                                imageUrl: productDetails.images[0],
 //                                placeholder: (context, url) => CupertinoActivityIndicator(radius: 30,),
 //                                errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
 //                            )

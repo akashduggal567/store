@@ -248,7 +248,7 @@ class _ProductsListViewState extends State<ProductsListView> {
                                     child: Stack(
                                       children: <Widget>[
                                         Container(
-                                          color: Constants.darkBlackColor,
+                                          color: Colors.black,
                                           child: Column(
                                             children: <Widget>[
                                               Expanded(
@@ -272,23 +272,26 @@ class _ProductsListViewState extends State<ProductsListView> {
                                                                     index]
                                                                 .id,
                                                             child: Container(
-//                                                  margin:
-//                                                      EdgeInsets.only(top: 2),
-//                                                  child: CachedNetworkImage(
-//                                                    fit: BoxFit.fitHeight,
-//                                                    imageUrl: model
-//                                                        .productsList[index]
-//                                                        .thumbnailUrl,
-////                                            placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
-////                                            errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
-//                                                  ),
+                                                  margin:
+                                                      EdgeInsets.only(top: 2),
+                                                  child:model.productsList[index].images?.length == 0 ? Padding(
+                                                    padding: const EdgeInsets.all(38.0),
+                                                    child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
+                                                  ): CachedNetworkImage(
+                                                    fit: BoxFit.fill,
+                                                    imageUrl:  model
+                                                        .productsList[index]
+                                                        .images[0],
+                                            placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
+                                            errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                                                  ),
                                                                 ),
                                                           ),
                                                         ),
                                                         Expanded(
                                                           flex: 1,
                                                           child: Container(
-//                           color: Colors.blueAccent,
+                                                           color: Constants.darkBlackColor,
                                                             child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment

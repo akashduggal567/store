@@ -112,6 +112,7 @@ class Product {
     this.title,
     this.barcode,
     this.tags,
+    this.images,
     this.salePrice,
     this.retailPrice,
     this.discount,
@@ -124,6 +125,7 @@ class Product {
   String title;
   String barcode;
   List<dynamic> tags;
+  List<dynamic> images;
   String salePrice;
   String retailPrice;
   String discount;
@@ -136,6 +138,7 @@ class Product {
     title: json["title"],
     barcode: json["barcode"],
     tags: List<dynamic>.from(json["tags"].map((x) => x)),
+    images: List<dynamic>.from(json["images"].map((x) => x)),
     salePrice: json["sale_price"],
     retailPrice: json["retail_price"],
     discount: json["discount"],
@@ -149,6 +152,7 @@ class Product {
     "title": title,
     "barcode": barcode,
     "tags": List<dynamic>.from(tags.map((x) => x)),
+    "images": List<dynamic>.from(images.map((x) => x)),
     "sale_price": salePrice,
     "retail_price": retailPrice,
     "discount": discount,

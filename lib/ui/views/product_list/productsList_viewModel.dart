@@ -89,6 +89,7 @@ class ProductsListViewModel extends BaseViewModel {
 
       _totalProducts = response.result[0]['totalDocs'];
       _productsList = s;
+     s.map((e)=>print(s.toJson()));
 
       setBusy(false);
     }
