@@ -51,7 +51,7 @@ class ProductDetailsView extends StatelessWidget {
                 backgroundColor: Colors.black,
                 body: Container(
                   color: Colors.black,
-                  child: productDetails.images.length == 0? CircularProgressIndicator() :ListView(
+                  child: ListView(
                     children: <Widget>[
                       Hero(
                         tag: productDetails.id,

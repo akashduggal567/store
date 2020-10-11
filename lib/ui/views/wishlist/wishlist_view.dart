@@ -1,4 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stacked/stacked.dart';
@@ -64,16 +66,19 @@ Widget item(BuildContext context,WishListViewModel model,int index) {
                               .id,
 
                           child: Container(
-//                                                  margin:
-//                                                      EdgeInsets.only(top: 2),
-//                                                  child: CachedNetworkImage(
-//                                                    fit: BoxFit.fitHeight,
-//                                                    imageUrl: model
-//                                                        .productsList[index]
-//                                                        .thumbnailUrl,
-////                                            placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
-////                                            errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
-//                                                  ),
+                            margin:
+                            EdgeInsets.only(top: 2),
+                            child:model.wishListItemsList[index].images?.length == 0 ? Padding(
+                              padding: const EdgeInsets.all(38.0),
+                              child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
+                            ): CachedNetworkImage(
+                              fit: BoxFit.fill,
+                              imageUrl:  model
+                                  .wishListItemsList[index]
+                                  .images[0],
+                              placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
+                              errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                            ),
                           ),
                         ),
                       ),
@@ -255,13 +260,18 @@ Widget item(BuildContext context,WishListViewModel model,int index) {
                         padding:
                         const EdgeInsets
                             .all(8.0),
-                        child: Container(
-                          width: 80,
-                          child: Icon(
-                            Icons
-                                .cancel,
-                            color: Color(
-                                0xff00ADB5),
+                        child: GestureDetector(
+                          onTap: (){
+                            model.removeFromWishlist(index: index,product: model.wishListItemsList[index]);
+                          },
+                          child: Container(
+                            width: 80,
+                            child: Icon(
+                              Icons
+                                  .cancel,
+                              color: Color(
+                                  0xff00ADB5),
+                            ),
                           ),
                         ),
                       ),

@@ -33,18 +33,21 @@ class HomeViewModel extends FutureViewModel {
     setBusy(true);
     _categories = [];
     notifyListeners();
-    print("Categores" + _categories.toString());
-//    _categories = await _apiService.fetchCategories();
-    print("Categores" + _categories.toString());
-    setBusy(false);
-    notifyListeners();
-    return _categories;
+
+    ApiResponse response = await _apiService.fetchCategories();
+    if(response.status == "success"){
+      _categories = response.result.map((e) => Category.fromJson(e)).toList();
+
+      setBusy(false);
+      notifyListeners();
+      return _categories;
+    }
+
   }
 
   @override
   Future futureToRun() async{
     // TODO: implement futureToRun
-//   _categories = await _apiService.fetchCategories();
     ApiResponse response = await _apiService.fetchCategories();
     if(response.status == "success"){
       var s = response.result.map((e) => Category.fromJson(e)).toList();

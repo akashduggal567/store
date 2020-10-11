@@ -14,13 +14,13 @@ import 'local_storage_service.dart';
 class ApiService{
 
   static const addressendpoint = 'http://10.0.2.2:2005';
-//  static const userendpoint = 'http://10.0.2.2:2003';
-//  static const endpoint = 'http://10.0.2.2:2004';
+  static const userendpoint = 'http://10.0.2.2:2003';
+  static const endpoint = 'http://10.0.2.2:2004';
   static const cartendpoint = 'http://10.0.2.2:2007';
   static const wishlistendpoint = 'http://10.0.2.2:2011';
 
-  static const endpoint = 'http://f85617c1ad66.ngrok.io';
-  static const userendpoint = "http://c79e35197a3c.ngrok.io";
+//  static const endpoint = 'http://f85617c1ad66.ngrok.io';
+//  static const userendpoint = "http://c79e35197a3c.ngrok.io";
 
 //  static const addressendpoint = 'http://localhost:2005';
 //  static const userendpoint = 'http://localhost:2003';
@@ -213,8 +213,16 @@ class ApiService{
       return Future.delayed(Duration(seconds: 0)).then((value) => ApiResponse(response));
 //   return ApiResponse(response);
     });
+  }
 
-
+  Future<ApiResponse> removeItemFromWishlist(CartItem cartItem) async{
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.delete('$wishlistendpoint/api/wishlist/removeItem',data: cartItem);
+      print("removeItemfromCart  api : " + ApiResponse(response).toString());
+      return Future.delayed(Duration(seconds: 0)).then((value) => ApiResponse(response));
+    });
   }
 
 
@@ -251,6 +259,8 @@ class ApiService{
     });
 
   }
+
+
 
 
 
