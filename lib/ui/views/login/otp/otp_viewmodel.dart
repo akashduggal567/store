@@ -12,12 +12,14 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/services/cart_service.dart';
 import 'package:store/services/local_storage_service.dart';
+import 'package:store/services/push_notification_service.dart';
 
 class OtpViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthenticationService _authService = locator<AuthenticationService>();
   final ApiService _apiService = locator<ApiService>();
   final CartService _cartService = locator<CartService>();
+  final PushNotificationService _pushNotificationService = locator<PushNotificationService>();
   final LocalStorageService _localStorageService =
       locator<LocalStorageService>();
   var user = new User();
@@ -30,19 +32,21 @@ class OtpViewModel extends BaseViewModel {
       {@required verificationId, @required userInputOtp}) async {
     var result = await _authService.loginWithPhone(
         verificationId: verificationId, userInputOtp: userInputOtp);
-    print(result.additionalUserInfo.isNewUser);
+    var deviceToken = await _pushNotificationService.getDeviceToken();
     if (!result.additionalUserInfo.isNewUser) {
       FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
 
       bool doUserAlreadyExist = await _apiService.checkIfUserAlreadyExists(
-          firebaseId: firebaseUser.uid);
+          firebaseId: firebaseUser.uid,deviceToken: deviceToken);
+
 
       if (!doUserAlreadyExist) {
-        user = await _apiService.createUser(firebaseId: firebaseUser.uid);
+
+        user = await _apiService.createUser(firebaseId: firebaseUser.uid, deviceToken: deviceToken);
+
         LocalStorageService.getInstance().then((value) {
           _localStorageService.user = user;
-          print("User from create local storage service" +
-              _localStorageService.user.toJson().toString());
+
         });
         await _cartService.fetchUserCart();
         await _navigationService.navigateTo(
@@ -52,7 +56,7 @@ class OtpViewModel extends BaseViewModel {
         print("ELSE");
         LocalStorageService.getInstance().then((value) async {
           if (_localStorageService.user == null) {
-            _apiService.fetchUser(firebaseId: firebaseUser.uid).then((user) {
+            _apiService.fetchUser(firebaseId: firebaseUser.uid,deviceToken: deviceToken).then((user) {
               LocalStorageService.getInstance().then((value) {
                 _localStorageService.user = user;
               }).then((value) async {

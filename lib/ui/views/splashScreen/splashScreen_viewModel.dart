@@ -30,7 +30,8 @@ class SplashScreenViewModel extends BaseViewModel {
   }
 
   Future handleStartUpLogic() async{
-//    await _pushNotificationService.initialise();
+    print(await _pushNotificationService.getDeviceToken());
+    await _pushNotificationService.initialise();
     var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
 
     if(hasLoggedInUser){
@@ -39,9 +40,7 @@ class SplashScreenViewModel extends BaseViewModel {
           mobileNumber: firebaseUser.phoneNumber,
           firebaseId: firebaseUser.uid
       );
-      print(user.toJson());
-      print(firebaseUser.displayName);
-      print("phoneNumber "+firebaseUser.phoneNumber);
+
 //      await _cartService.fetchUserCart();
       await _navigationService.replaceWith(Routes.dashboardViewRoute,);
     }

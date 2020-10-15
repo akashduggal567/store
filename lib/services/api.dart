@@ -14,13 +14,13 @@ import 'local_storage_service.dart';
 class ApiService{
 
   static const addressendpoint = 'http://10.0.2.2:2005';
-  static const userendpoint = 'http://10.0.2.2:2003';
-  static const endpoint = 'http://10.0.2.2:2004';
+//  static const userendpoint = 'http://10.0.2.2:2003';
+//  static const endpoint = 'http://10.0.2.2:2004';
   static const cartendpoint = 'http://10.0.2.2:2007';
   static const wishlistendpoint = 'http://10.0.2.2:2011';
 
-//  static const endpoint = 'http://f85617c1ad66.ngrok.io';
-//  static const userendpoint = "http://c79e35197a3c.ngrok.io";
+  static const endpoint = 'http://d818b8785008.ngrok.io';
+  static const userendpoint = "http://8dc7103c2cc9.ngrok.io";
 
 //  static const addressendpoint = 'http://localhost:2005';
 //  static const userendpoint = 'http://localhost:2003';
@@ -64,9 +64,9 @@ class ApiService{
     }
   }
 
-  Future<bool> checkIfUserAlreadyExists({@required firebaseId}) async{
-    Response response = await Dio().get('$userendpoint/api/user/$firebaseId',
-        queryParameters: {"firebaseId": firebaseId},);
+  Future<bool> checkIfUserAlreadyExists({@required firebaseId, @required deviceToken}) async{
+    Response response = await Dio().get('$userendpoint/api/user',
+        queryParameters: {"firebaseId": firebaseId,"deviceToken": deviceToken},);
 
     Map responseBody = response.data;
     print("checkIfUserAlreadyExists api calling" + responseBody.toString());
@@ -82,9 +82,9 @@ class ApiService{
 
   }
 
-  Future<User> createUser({@required firebaseId}) async{
+  Future<User> createUser({@required firebaseId, @required deviceToken}) async{
     Response response = await Dio().post('$userendpoint/api/user',
-      data: {"firebaseId": firebaseId},);
+      data: {"firebaseId": firebaseId,"deviceToken": deviceToken},);
 
     Map responseBody = response.data;
     print("createUser api calling" + responseBody.toString());
@@ -95,9 +95,14 @@ class ApiService{
     return User.fromJson(responseBody["result"]);
   }
 
-  Future<User> fetchUser({@required firebaseId}) async{
+  Future<User> fetchUser({@required firebaseId, @required deviceToken}) async{
 
-    Response response = await Dio().get('$userendpoint/api/user/$firebaseId');
+    Response response = await Dio().get('$userendpoint/api/user',
+        queryParameters: {
+          "firebaseId" : firebaseId,
+          "deviceToken": deviceToken
+        }
+        );
 
     Map responseBody = response.data;
     print("fetchUser api calling" + responseBody.toString());
@@ -254,6 +259,16 @@ class ApiService{
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.get('$userendpoint/api/user/wishlist/wishlistItems');
+
+      return ApiResponse(response);
+    });
+
+  }
+  Future<ApiResponse> logout() async {
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.put('$userendpoint/api/user/logout');
 
       return ApiResponse(response);
     });

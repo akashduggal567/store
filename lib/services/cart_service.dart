@@ -164,7 +164,7 @@ class CartService with ReactiveServiceMixin {
     return response.status == "success";
   }
 
-  void fetchUserCart() async {
+  Future fetchUserCart() async {
     _cartItems.clear();
 
     ApiResponse response = await _apiService.fetchUserCart();

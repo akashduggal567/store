@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 
@@ -17,16 +18,18 @@ class LocalNotificationService{
     print("selected local notificaton");
   }
 
-  showNotification() async {
+  showNotification({@required notification, data}) async {
+
     var android = new AndroidNotificationDetails(
         'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
-        priority: Priority.High,importance: Importance.Max
+        priority: Priority.High,importance: Importance.Max,
+        styleInformation: BigTextStyleInformation('')
     );
     var iOS = new IOSNotificationDetails();
     var platform = new NotificationDetails(android, iOS);
     await flutterLocalNotificationsPlugin.show(
-        0, 'New Video is out', 'Flutter Local Notification', platform,
+        0, notification.title, notification.body, platform,
         payload: 'Nitish Kumar Singh is part time Youtuber');
-    print("show notification");
+
   }
 }

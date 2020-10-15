@@ -5,13 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:store/services/api.dart';
 import 'package:store/services/cart_service.dart';
+import 'package:store/ui/views/login/login_view.dart';
 
 @lazySingleton
 class AuthenticationService {
   final NavigationService _navigationService = locator<NavigationService>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CartService _cartService = locator<CartService>();
+  final ApiService _apiService = locator<ApiService>();
 
 
   Future<dynamic> sendCodeForAuth({
@@ -73,12 +76,13 @@ class AuthenticationService {
     return user != null;
   }
 
-  Future logOut() {
+  Future logOut() async{
+    await _apiService.logout();
     _firebaseAuth.signOut().then((value) async{
           SharedPreferences preferences = await SharedPreferences.getInstance();
           await preferences.clear();
           await _cartService.emptyCart();
-        _navigationService.navigateTo(Routes.loginViewRoute);
+        _navigationService.clearStackAndShow(Routes.loginViewRoute);
     });
 
   }
