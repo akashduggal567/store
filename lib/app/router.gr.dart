@@ -165,8 +165,9 @@ class Router extends RouterBase {
         }
         final typedArgs = args as BuyViewArguments ?? BuyViewArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) =>
-              BuyView(totalAmountPayable: typedArgs.totalAmountPayable),
+          builder: (context) => BuyView(
+              totalAmountPayable: typedArgs.totalAmountPayable,
+              orderDetails: typedArgs.orderDetails),
           settings: settings,
         );
       case Routes.subCategoryView:
@@ -257,7 +258,8 @@ class ImageViewArguments {
 //BuyView arguments holder class
 class BuyViewArguments {
   final double totalAmountPayable;
-  BuyViewArguments({this.totalAmountPayable});
+  final Map<dynamic, dynamic> orderDetails;
+  BuyViewArguments({this.totalAmountPayable, this.orderDetails});
 }
 
 //SubCategoryView arguments holder class

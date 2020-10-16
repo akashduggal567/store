@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -88,7 +89,13 @@ class CartView extends StatelessWidget {
                         return SingleChildScrollView(
                           child: Column(
                             children: <Widget>[
-                              _cartItem(model,index, model.cartItemsList[index]),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: FadeIn(
+                                    duration: Duration(seconds: 1),
+                                    child: _cartItem(model,index, model.cartItemsList[index])
+                                ),
+                              ),
                             ],
                           ),
                         );
@@ -1237,26 +1244,51 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
         child: Column(
           children: <Widget>[
             Container(
-              height: 130,
-              color: Constants.darkBlackColor,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Constants.lightBlackColor,width: 4
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20),)
+              ),
+              height: 180,
+//              color: Constants.darkBlackColor,
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    flex: 4,
+                    flex: 5,
                     child: Container(
                       child: Row(
                         children: <Widget>[
                           Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Container(
-//                            child: CachedNetworkImage(
-////                                        fit: BoxFit.,
-////                              imageUrl: productDetails.thumbnailUrl,
-//                            ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(topLeft:  Radius.circular(40)),
+                                ),
+                            child: productDetails.images?.length != 0 ? CachedNetworkImage(
+                                        fit: BoxFit.fill,
+                              imageBuilder: (context, imageProvider) => Container(
+//                                height: 100,
+//                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(topLeft:  Radius.circular(19.5)),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              imageUrl: productDetails.images[0],
+                              placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
+                              errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                            ): Padding(
+                              padding: const EdgeInsets.all(38.0),
+                              child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg",fit: BoxFit.fitWidth,)),
+                            )
                             ),
                           ),
                           Expanded(
-                            flex: 3,
+                            flex: 4,
                             child: Container(
 //                           color: Colors.blueAccent,
                               child: Row(
@@ -1375,7 +1407,7 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                                 ),
                                               ),
                                               Text(
-                                                model.cartItemsList[index].cartQuantity.toString(),
+                                                model.cartItemsList[index].quantity.toString(),
                                                 style: TextStyle(
                                                     color:
                                                     Color(0xffEEEEEE)),
@@ -1385,7 +1417,7 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                                   _debouncer.run(() => model.decreaseCartItemCount(productDetails));
 
                                                 },
-                                                child: model.cartItemsList[index].cartQuantity == 1 ? Container() :Container(
+                                                child: model.cartItemsList[index].quantity == 1 ? Container() :Container(
                                                   child: Icon(
                                                     Icons.remove,
                                                     color: Color(0xff00ADB5),
@@ -1420,10 +1452,12 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                 margin: EdgeInsets.only(
                                   top: 4,
                                 ),
-                                height: double.infinity,
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        width: 0, color: Colors.redAccent)),
+                                        width: 0, color: Colors.redAccent),
+                                  borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(20)),
+
+                                ),
                                 child: Center(
                                   child: Text('Remove',
                                       style: TextStyle(
@@ -1440,9 +1474,14 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                               height: double.infinity,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      width: 0.5, color: Constants.tealColor)),
+                                      width: 0.5, color: Constants.tealColor),
+                                borderRadius: BorderRadius.only(bottomRight:  Radius.circular(20)),
+                              ),
                               child: SizedBox.expand(
                                 child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(bottomRight:  Radius.circular(20)),
+                                  ),
                                   color: Constants.darkBlackColor,
                                   onPressed: () {
                                     model.addToWishList(id: model.cartItemsList[index].id);
@@ -1461,7 +1500,7 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                 ],
               ),
             ),
-            SizedBox(height: 10),
+//            SizedBox(height: 10),
           ],
         )),
   );

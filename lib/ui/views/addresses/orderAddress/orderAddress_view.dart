@@ -90,9 +90,9 @@ Widget _buildDefaultAddressCard(OrderAddressViewModel model){
                             Container(
 //                                color: Colors.red,
                               child: Checkbox(
-                                value: model.selectedAddressMap[model.defaultAddress.id],
+                                tristate: true,
+                                value: model.selectedAddressMap[model.defaultAddress.id] ?? false,
                                 onChanged: (val){
-                                  print(val);
                                   model.updateSelectedAddress(model.defaultAddress.id);
                                 },
                               ),
@@ -217,7 +217,7 @@ Widget _buildOtherAddressCard(OrderAddressViewModel model){
                                       child: Checkbox(
                                         value: model.selectedAddressMap[model.otherAddresses[index].id],
                                         onChanged: (val){
-                                          print(val);
+
                                           model.updateSelectedAddress(model.otherAddresses[index].id);
                                         },
                                       ),

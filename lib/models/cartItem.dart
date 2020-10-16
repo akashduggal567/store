@@ -11,25 +11,25 @@ String cartItemToJson(CartItem data) => json.encode(data.toJson());
 class CartItem {
   CartItem({
     this.productId,
-    this.cartQuantity,
+    this.quantity,
   });
 
   String productId;
-  int cartQuantity;
+  int quantity;
 
   factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
     productId: json["product_id"],
-    cartQuantity: json["cart_quantity"],
+    quantity: json["quantity"],
   );
 
   Map<String, dynamic> toJson() => {
     "product_id": productId,
-    "cart_quantity": cartQuantity,
+    "quantity": quantity,
   };
 }
 
 
 //{
 //"product_id":"njknkj",
-//"cart_quantity" : 3
+//"quantity" : 3
 //}

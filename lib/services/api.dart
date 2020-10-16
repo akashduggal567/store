@@ -13,14 +13,19 @@ import 'local_storage_service.dart';
 @singleton
 class ApiService{
 
-  static const addressendpoint = 'http://10.0.2.2:2005';
+//  static const addressendpoint = 'http://10.0.2.2:2005';
 //  static const userendpoint = 'http://10.0.2.2:2003';
 //  static const endpoint = 'http://10.0.2.2:2004';
-  static const cartendpoint = 'http://10.0.2.2:2007';
-  static const wishlistendpoint = 'http://10.0.2.2:2011';
+//  static const cartendpoint = 'http://10.0.2.2:2007';
+//  static const invoiceendpoint = 'http://10.0.2.2:2008';
+//  static const wishlistendpoint = 'http://10.0.2.2:2011';
 
-  static const endpoint = 'http://d818b8785008.ngrok.io';
-  static const userendpoint = "http://8dc7103c2cc9.ngrok.io";
+    static const addressendpoint = 'http://d38fc5773680.ngrok.io';
+    static const endpoint = 'http://d818b8785008.ngrok.io';
+    static const userendpoint = "http://8dc7103c2cc9.ngrok.io";
+    static const cartendpoint = 'http://a0126d68b43c.ngrok.io';
+    static const invoiceEndpoint = "http://67706e2b04de.ngrok.io";
+    static const wishlistendpoint = 'http://38359e90af5a.ngrok.io';
 
 //  static const addressendpoint = 'http://localhost:2005';
 //  static const userendpoint = 'http://localhost:2003';
@@ -120,21 +125,21 @@ class ApiService{
     return ApiResponse(response);
   }
 
-  Future<List<Address>> fetchAllAddresses(userId) async{
+  Future<List<Address>> fetchAllAddresses() async{
     Dio dio = new Dio();
-    dio.options.headers["user-id"] = userId.toString();
-    Response response = await dio.get('$addressendpoint/api/address');
-    Map responseBody = response.data;
-    var address_array_response_object = responseBody["result"];
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.get('$addressendpoint/api/address');
+      Map responseBody = response.data;
+      var address_array_response_object = responseBody["result"];
 
-    // converting list of response objects to model objects respectively
-    List<Address> addressObjectArray =    (address_array_response_object as List)
-        .map((data) => new Address.fromJson(data))
-        .toList();
-    return Future.delayed(Duration(seconds: 3)).then((value) => addressObjectArray);
-   return addressObjectArray;
-
-//    return
+      // converting list of response objects to model objects respectively
+      List<Address> addressObjectArray = (address_array_response_object as List)
+          .map((data) => new Address.fromJson(data))
+          .toList();
+      return Future.delayed(Duration(seconds: 3)).then((
+          value) => addressObjectArray);
+    });
   }
 
   Future<ApiResponse> setAddressAsDefault(userId,addressId) async{
@@ -167,26 +172,32 @@ class ApiService{
   }
 
 
-  Future<ApiResponse> fetchDefaultAddressId(userId) async{
+  Future<ApiResponse> fetchDefaultAddressId() async{
     BaseOptions options = new BaseOptions(
         receiveDataWhenStatusError: true,
         connectTimeout: 10*1000, // 60 seconds
         receiveTimeout: 10*1000 // 60 seconds
     );
     Dio dio = new Dio(options);
-    dio.options.headers["user-id"] = userId.toString();
-    Response response = await dio.get('$userendpoint/api/user/$userId/defaultAddress');
-    print("default address api" + ApiResponse(response).result.toString());
-    return ApiResponse(response);
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.get(
+          '$userendpoint/api/user/defaultAddress');
+      print("default address api" + ApiResponse(response).result.toString());
+      return ApiResponse(response);
+    });
   }
 
   Future<ApiResponse> updateAddressDetails({@required addressId, @required updatedFields}) async{
     Dio dio = new Dio();
-    dio.options.headers["user-id"] = "5f4b98d0e4e31f2514c045c8";
-    Response response = await dio.put('$addressendpoint/api/address/$addressId',data: updatedFields);
-    print("updateAddressDetails  api" + ApiResponse(response).result.toString());
-    return ApiResponse(response);
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.toString();
+      Response response = await dio.put('$addressendpoint/api/address/$addressId',data: updatedFields);
+      print("updateAddressDetails  api" + ApiResponse(response).result.toString());
+      return ApiResponse(response);
+      });
   }
+
   Future<ApiResponse> addToCart(CartItem cartItem) async{
     Dio dio = new Dio();
     return _localStorageService.then((value) async {
@@ -233,7 +244,6 @@ class ApiService{
 
   Future<ApiResponse> fetchProducts({@required tagsArray,sortBy,sortOrder, page=1,limit=10}) async{
     Dio dio = new Dio();
-//    dio.options.headers["user-id"] = "5f4b98d0e4e31f2514c045c8";
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.get('$endpoint/api/product/getByTag',queryParameters: {"tags" :tagsArray,"sortBy":sortBy,"sortOrder": sortOrder, "page": page, 'limit':limit});
@@ -275,6 +285,16 @@ class ApiService{
 
   }
 
+  Future<ApiResponse>  createOrder({@required orderDetails}) async{
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.put('$invoiceEndpoint/api/invoice',data: orderDetails );
+
+      return ApiResponse(response);
+    });
+
+  }
 
 
 
@@ -285,7 +305,8 @@ class ApiService{
 
 
 
-//  Future createUser(User userInfo) async {
+
+//  Future createUser(Info) async {
 //    print(json.encode(userInfo.toJson()));
 //    var response = await client.post('$endpoint/api/user/create',headers: {
 //      'Content-Type': 'application/json',

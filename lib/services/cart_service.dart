@@ -45,7 +45,7 @@ class CartService with ReactiveServiceMixin {
 
   void calculateTotalAmount() {
     List<double> mrp = _cartItems.map((item) {
-      return double.parse(item.retailPrice) * item.cartQuantity;
+      return double.parse(item.retailPrice) * item.quantity;
     }).toList();
     double amountCalculated =
         mrp.fold(0, (previousValue, element) => previousValue + element);
@@ -56,7 +56,7 @@ class CartService with ReactiveServiceMixin {
   void calculateTotalDiscountAmount() {
     List<double> mrp = _cartItems.map((item) {
       return (double.parse(item.retailPrice) - double.parse(item.salePrice)) *
-          item.cartQuantity;
+          item.quantity;
     }).toList();
     double discountAmountCalculated =
         mrp.fold(0, (previousValue, element) => previousValue + element);
@@ -66,7 +66,7 @@ class CartService with ReactiveServiceMixin {
 
   void calculateAmountPayable() {
     List<double> mrp = _cartItems.map((item) {
-      return double.parse(item.salePrice) * item.cartQuantity;
+      return double.parse(item.salePrice) * item.quantity;
     }).toList();
     double totalAmountPayableCalculated =
         mrp.fold(0, (previousValue, element) => previousValue + element);
@@ -83,7 +83,7 @@ class CartService with ReactiveServiceMixin {
   void removeCartItem(int index, Product product) async{
     await _apiService
         .removeItemfromCart(
-            CartItem(productId: product.id.toString(), cartQuantity: 0))
+            CartItem(productId: product.id.toString(), quantity: 0))
         .then((value) {
       _cartItems.removeAt(index);
       notifyListeners();
@@ -97,19 +97,20 @@ class CartService with ReactiveServiceMixin {
   void addToCart(Product product) {
     List<Product> item =
     _cartItems.where((element) => element.id == product.id).toList();
+
     if(item.length>0){
       print("already present in cart");
       increaseCartItemCount(product);
     }else{
       _apiService
-          .addToCart(CartItem(productId: product.id.toString(), cartQuantity: 1))
+          .addToCart(CartItem(productId: product.id.toString(), quantity: 1))
           .then((value) => null);
       _cartItems.add(product);
       calcualteBillattributes();
     }
 
     List<int> mrp = _cartItems.map((item) {
-      return item.cartQuantity.toInt();
+      return item.quantity.toInt();
     }).toList();
 
     _totalItemCount = RxValue(initial: mrp.reduce((a, b) => a + b));
@@ -125,14 +126,14 @@ class CartService with ReactiveServiceMixin {
     print('calledIncrease');
     List<Product> item =
         _cartItems.where((element) => element.id == productDetails.id).toList();
-    item[0].cartQuantity = item[0].cartQuantity + 1;
+    item[0].quantity = item[0].quantity + 1;
     ApiResponse response = await _apiService.addToCart(CartItem(
         productId: productDetails.id.toString(),
-        cartQuantity: item[0].cartQuantity));
+        quantity: item[0].quantity));
 
     calcualteBillattributes();
     List<int> mrp = _cartItems.map((item) {
-      return item.cartQuantity.toInt();
+      return item.quantity.toInt();
     }).toList();
 
     _totalItemCount = RxValue(initial: mrp.reduce((a, b) => a + b));
@@ -146,18 +147,18 @@ class CartService with ReactiveServiceMixin {
 //      _apiService
 //          .addToCart(CartItem(
 //          productId: productDetails.id.toString(),
-//          cartQuantity: item[0].cartCount))
+//          quantity: item[0].cartCount))
 //          .then((value) => item[0].cartCount = 1);
 ////      return;
 //    } else {
-    print("before decrease cart count " + item[0].cartQuantity.toString());
-    item[0].cartQuantity = item[0].cartQuantity - 1;
+    print("before decrease cart count " + item[0].quantity.toString());
+    item[0].quantity = item[0].quantity - 1;
     ApiResponse response = await _apiService.addToCart(CartItem(
         productId: productDetails.id.toString(),
-        cartQuantity: item[0].cartQuantity));
+        quantity: item[0].quantity));
     calcualteBillattributes();
     List<int> mrp = _cartItems.map((item) {
-      return item.cartQuantity.toInt();
+      return item.quantity.toInt();
     }).toList();
     print(mrp.runtimeType);
     _totalItemCount = RxValue(initial: mrp.reduce((a, b) => a + b));
@@ -175,9 +176,9 @@ class CartService with ReactiveServiceMixin {
     calcualteBillattributes();
 
     List<int> mrp = _cartItems.map((item) {
-      return item.cartQuantity.toInt();
+      return item.quantity.toInt();
     }).toList();
-    print(mrp);
+
     _totalItemCount = mrp.length == 0
         ? RxValue(initial: 0)
         : RxValue(initial: mrp.reduce((a, b) => a + b));
@@ -192,14 +193,14 @@ class CartService with ReactiveServiceMixin {
   Product serializeForCart(DetailedCartItem element) {
     Map<String, dynamic> result = {
       ...element.productId.toJson(),
-      'cart_quantity': element.cartQuantity
+      'quantity': element.quantity
     };
     return Product.fromJson(result);
   }
 
   void _totalCartItemsCount(){
     List<int> mrp = _cartItems.map((item) {
-      return item.cartQuantity.toInt();
+      return item.quantity.toInt();
     }).toList();
     if(mrp.length>0){
       _totalItemCount = RxValue(initial: mrp.reduce((a, b) => a + b));

@@ -17,7 +17,7 @@ class AddressesViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
   ApiService _apiService = locator<ApiService>();
   DialogService _dialogService = locator<DialogService>();
-  LocalStorageService _localStorageService = locator<LocalStorageService>();
+  Future<LocalStorageService> _localStorageService =  LocalStorageService.getInstance();
 
   bool checkDefaultAddress() {
     return false;
@@ -46,10 +46,10 @@ class AddressesViewModel extends BaseViewModel {
     setBusy(true);
     print("initialiseAllAddresses");
     _addresses =
-        await _apiService.fetchAllAddresses("5f4b98d0e4e31f2514c045c8");
+        await _apiService.fetchAllAddresses();
     var defaultAddressId =
-        await _apiService.fetchDefaultAddressId("5f4b98d0e4e31f2514c045c8");
-    print(defaultAddressId.result);
+        await _apiService.fetchDefaultAddressId();
+    print("defaultAddressId Respinse" + defaultAddressId.result.toString());
 
     //add validation of api response status
     if (defaultAddressId.result == null && _addresses.length!=0) {
@@ -57,10 +57,12 @@ class AddressesViewModel extends BaseViewModel {
       setDefaultIndex(0);
     }
     else{
-      LocalStorageService.getInstance().then((value){
-        _localStorageService.userAddresses = _addresses;
-        _localStorageService.defaultAddressId = Address.fromJson(defaultAddressId.result[0]).id;
+      _localStorageService.then((value){
+        value.userAddresses = _addresses;
+        value.defaultAddressId = Address.fromJson(defaultAddressId.result[0]).id;
+        print("USER ADDRESSES IN LOCAL" + value.userAddresses.toString() );
       });
+
       _addresses.asMap().forEach((index, address) {
         if (address.id == Address.fromJson(defaultAddressId.result[0]).id) {   //converted to list response
           _selectedIndex.clear();
@@ -78,47 +80,50 @@ class AddressesViewModel extends BaseViewModel {
   }
 
   void setAddressAsDefault(addressId, index) async {
-    print(addressId);
+
     setBusy(true);
     selectedIndex.clear();
     setSelectedIndex(index);
     setDefaultIndex(index);
-    var defaultAddressResponse = await _apiService.setAddressAsDefault(
-        "5f4b98d0e4e31f2514c045c8", addressId);
-    if (defaultAddressResponse.status == "success") {
-      Future.delayed(Duration(seconds: 3)).then((value) {
-        setBusy(false);
-      });
-    }
-////    print(addresses);
+    _localStorageService.then((value) async{
+      var defaultAddressResponse = await _apiService.setAddressAsDefault(
+          value.user.id, addressId);
+      if (defaultAddressResponse.status == "success") {
+        Future.delayed(Duration(seconds: 3)).then((value) {
+          setBusy(false);
+        });
+      }
+    });
 
-//    notifyListeners();
   }
 
   void deleteUserAddressById(addressId, index) async {
     print(addressId);
     //    setBusy(true);
-    var deleteAddressResponse = await _apiService.deleteUserAddress(
-        "5f4b98d0e4e31f2514c045c8", addressId);
-    if (deleteAddressResponse.status == "success") {
-      _addresses.removeAt(index);
-      if(index==_DefaultIndex){
-        _DefaultIndex = -1;
+    _localStorageService.then((value) async{
+      var deleteAddressResponse = await _apiService.deleteUserAddress(
+          value.user.id, addressId);
+      if (deleteAddressResponse.status == "success") {
+        _addresses.removeAt(index);
+        if(index==_DefaultIndex){
+          _DefaultIndex = -1;
+        }
+        if(index<defaultIndex){
+          setDefaultIndex(_DefaultIndex-1);
+        }
+        if(defaultIndex==-1 && _addresses.length ==1){
+          initialiseAllAddresses();
+        }
+        notifyListeners();
+      }else{
+        _dialogService.showDialog(
+            title: "error",
+            buttonTitle: "ok",
+            description: deleteAddressResponse.result.toString()
+        );
       }
-      if(index<defaultIndex){
-        setDefaultIndex(_DefaultIndex-1);
-      }
-      if(defaultIndex==-1 && _addresses.length ==1){
-        initialiseAllAddresses();
-      }
-      notifyListeners();
-    }else{
-      _dialogService.showDialog(
-        title: "error",
-        buttonTitle: "ok",
-        description: deleteAddressResponse.result.toString()
-      );
-    }
+    });
+
   }
 
   void openEditAddressView(Address address) async{

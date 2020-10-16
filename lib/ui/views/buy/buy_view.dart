@@ -8,9 +8,10 @@ import 'package:store/ui/views/buy/buy_viewModel.dart';
 
 class BuyView extends StatefulWidget {
   double totalAmountPayable;
-
+  Map orderDetails;
   BuyView({
-    this.totalAmountPayable
+    this.totalAmountPayable,
+    this.orderDetails
   });
 
   @override
@@ -241,32 +242,37 @@ class _BuyViewState extends State<BuyView> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      color: Constants.lightBlackColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.home,color: Colors.black,),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Container(
-                                child: Text("Cash On Delivery",
-                                    style: TextStyle(
-                                      color: Constants.offWhiteColor,
-                                    )),
+                    GestureDetector(
+                      onTap: (){
+                        model.codPayment(orderDetails: widget.orderDetails, paymentMode: "Cash On Delivery", totalAmount: widget.totalAmountPayable);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 60,
+                        color: Constants.lightBlackColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Icon(Icons.home,color: Colors.black,),
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  child: Text("Cash On Delivery",
+                                      style: TextStyle(
+                                        color: Constants.offWhiteColor,
+                                      )),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

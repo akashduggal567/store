@@ -295,7 +295,6 @@ class _AddAddressViewState extends State<AddAddressView> {
                                       child: TextFormField(
                                         controller: fullNameController,
                                         focusNode: _fullNameFocusNode,
-                                        keyboardType: TextInputType.number,
                                         validator: (String value) {
                                           if (value.isEmpty) {
                                             return 'Please enter Full Name';

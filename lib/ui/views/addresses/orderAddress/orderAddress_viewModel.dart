@@ -28,15 +28,19 @@ class OrderAddressViewModel extends BaseViewModel {
   Map _selectedAddressMap = {};
   get selectedAddressMap => _selectedAddressMap;
 
+  String selectedAddresId  = "";
+
   initialise(){
     LocalStorageService.getInstance().then((value) async{
       setBusy(true);
       _defaultAddressId = _localStorageService.defaultAddressId;
+      selectedAddresId = _defaultAddressId;
       _allAddresses = _localStorageService.userAddresses.map((e) => Address.fromJson(e)).toList();
       _otherAddresses = _allAddresses.where((address) => address.id!= _defaultAddressId).toList();
       _defaultAddress = _allAddresses.where((address) => address.id == _defaultAddressId).toList()[0];
       _allAddresses.asMap().forEach((index, value) => _allAddresses[index].id != _defaultAddressId ? _selectedAddressMap[_allAddresses[index].id]=false : _selectedAddressMap[_allAddresses[index].id]=true);
-      setBusy(false);
+      Future.delayed(Duration(seconds: 1)).then((value) => setBusy(false));
+      print("Selected AddressId :"+ selectedAddresId);
     });
 
   }
@@ -45,11 +49,12 @@ class OrderAddressViewModel extends BaseViewModel {
     _allAddresses.asMap().forEach((index, value) => _allAddresses[index].id != _defaultAddressId ? _selectedAddressMap[_allAddresses[index].id]=false : _selectedAddressMap[_allAddresses[index].id]=true);
     _selectedAddressMap.forEach((address,value) => address == addressId ? _selectedAddressMap[address] = true :  _selectedAddressMap[address] = false );
     notifyListeners();
-    print(_selectedAddressMap);
+    selectedAddresId = _selectedAddressMap.keys.where((element) => _selectedAddressMap[element]==true).toList().removeLast();
+    print("Selected AddressId :"+ selectedAddresId);
   }
 
   void navigateToPaymentOptionView(totalAmountPayable) async{
-    await _navigationService.navigateTo(Routes.buyViewRoute, arguments: BuyViewArguments(totalAmountPayable: totalAmountPayable));
+    await _navigationService.navigateTo(Routes.buyViewRoute, arguments: BuyViewArguments(totalAmountPayable: totalAmountPayable, orderDetails: {"addressId": selectedAddresId }));
   }
 
 }

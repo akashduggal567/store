@@ -9,7 +9,7 @@ class LocalNotificationService{
   LocalNotificationService(){
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     var android = new AndroidInitializationSettings("@mipmap/ic_launcher");
-    var ios = IOSInitializationSettings();
+    var ios = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, ios);
     flutterLocalNotificationsPlugin.initialize(initSettings, onSelectNotification: onSelectNotification);
   }

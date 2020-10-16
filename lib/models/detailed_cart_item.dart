@@ -11,20 +11,20 @@ String detailedCartItemToJson(DetailedCartItem data) => json.encode(data.toJson(
 class DetailedCartItem {
   DetailedCartItem({
     this.productId,
-    this.cartQuantity,
+    this.quantity,
   });
 
   ProductId productId;
-  int cartQuantity;
+  int quantity;
 
   factory DetailedCartItem.fromJson(Map<String, dynamic> json) => DetailedCartItem(
     productId: json["product_id"] == null ? null : ProductId.fromJson(json["product_id"]),
-    cartQuantity: json["cart_quantity"] == null ? null : json["cart_quantity"],
+    quantity: json["quantity"] == null ? null : json["quantity"],
   );
 
   Map<String, dynamic> toJson() => {
     "product_id": productId == null ? null : productId.toJson(),
-    "cart_quantity": cartQuantity == null ? null : cartQuantity,
+    "quantity": quantity == null ? null : quantity,
   };
 }
 
@@ -35,6 +35,7 @@ class ProductId {
     this.barcode,
     this.tags,
     this.salePrice,
+    this.images,
     this.retailPrice,
     this.discount,
     this.inventoryCount,
@@ -43,6 +44,7 @@ class ProductId {
   String id;
   String title;
   String barcode;
+  List<dynamic> images;
   List<dynamic> tags;
   String salePrice;
   String retailPrice;
@@ -54,6 +56,8 @@ class ProductId {
     title: json["title"] == null ? null : json["title"],
     barcode: json["barcode"] == null ? null : json["barcode"],
     tags: json["tags"] == null ? null : List<dynamic>.from(json["tags"].map((x) => x)),
+    images: json["images"] == null ? null : List<dynamic>.from(json["images"].map((x) => x)),
+
     salePrice: json["sale_price"] == null ? null : json["sale_price"],
     retailPrice: json["retail_price"] == null ? null : json["retail_price"],
     discount: json["discount"] == null ? null : json["discount"],
@@ -65,6 +69,7 @@ class ProductId {
     "title": title == null ? null : title,
     "barcode": barcode == null ? null : barcode,
     "tags": tags == null ? null : List<dynamic>.from(tags.map((x) => x)),
+    "images": images == null ? null : List<dynamic>.from(images.map((x) => x)),
     "sale_price": salePrice == null ? null : salePrice,
     "retail_price": retailPrice == null ? null : retailPrice,
     "discount": discount == null ? null : discount,
@@ -84,5 +89,5 @@ class ProductId {
 //"discount": "shampoo",
 //"inventory_count": 3
 //},
-//"cart_quantity" : 3
+//"quantity" : 3
 //}

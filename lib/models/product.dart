@@ -118,7 +118,7 @@ class Product {
     this.discount,
     this.inventoryCount,
     this.minInventoryCount,
-    this.cartQuantity,
+    this.quantity,
   });
 
   String id;
@@ -131,7 +131,7 @@ class Product {
   String discount;
   int inventoryCount;
   int minInventoryCount;
-  int cartQuantity;
+  int quantity;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
     id: json["_id"],
@@ -144,7 +144,7 @@ class Product {
     discount: json["discount"],
     inventoryCount: json["inventory_count"],
     minInventoryCount: json['min_inventory_count'],
-    cartQuantity: json["cart_quantity"] == null ? 1 : json["cart_quantity"],
+    quantity: json["quantity"] == null ? 1 : json["quantity"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -158,7 +158,7 @@ class Product {
     "discount": discount,
     "inventory_count": inventoryCount,
     "min_inventory_count": minInventoryCount,
-    "cart_quantity": cartQuantity == null ? 1 : cartQuantity,
+    "quantity": quantity == null ? 1 : quantity,
   };
 }
 

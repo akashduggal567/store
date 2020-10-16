@@ -57,7 +57,9 @@ class CartViewModel extends BaseViewModel {
   }
 
   void navigateToSelectAddressView() async{
-    await _navigationService.navigateTo(Routes.orderAddressViewRoute, arguments: OrderAddressViewArguments(totalAmountPayable: _totalAmountPayable));
+    print(_cartService.cartItemsList[0].toJson());
+
+//    await _navigationService.navigateTo(Routes.orderAddressViewRoute, arguments: OrderAddressViewArguments(totalAmountPayable: _totalAmountPayable));
   }
 
   void increaseCartItemCount(productDetails) async{
@@ -66,7 +68,7 @@ class CartViewModel extends BaseViewModel {
     setBusy(false);
     calcualteBillattributes();
     List mrp =  _cartItems.map((item){
-      return item.cartQuantity;
+      return item.quantity;
     }).toList();
 
     _cartTotalItemCount = _cartService.totalItemCount.value;
@@ -81,7 +83,7 @@ class CartViewModel extends BaseViewModel {
     if(response){
     calcualteBillattributes();
     List mrp =  _cartItems.map((item){
-      return item.cartQuantity;
+      return item.quantity;
     }).toList();
     _cartTotalItemCount = _cartService.totalItemCount.value;
     notifyListeners();
@@ -91,14 +93,14 @@ class CartViewModel extends BaseViewModel {
       _cartItems.where((element) => element.id == productDetails.id).toList();
       int index = _cartItems.indexWhere((cartItem) => cartItem.id == item[0].id);
       print("item "+ index.toString());
-      _cartItems[index].cartQuantity = _cartItems[index].cartQuantity+1;
+      _cartItems[index].quantity = _cartItems[index].quantity+1;
       notifyListeners();
     }
   }
 
   void calculateTotalItemCount(){
     List mrp =  _cartItems.map((item){
-      return item.cartQuantity;
+      return item.quantity;
     }).toList();
     _cartTotalItemCount = mrp.fold(0, (previousValue, element) => previousValue+element);
     notifyListeners();
