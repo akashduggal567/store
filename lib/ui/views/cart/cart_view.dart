@@ -8,6 +8,7 @@ import 'package:stacked/stacked.dart';
 import 'package:store/helpers/constants.dart';
 import 'package:store/helpers/debouncer.dart';
 import 'package:store/models/product.dart';
+import 'package:store/ui/views/wishlist/wishlist_viewModel.dart';
 import 'cart_viewModel.dart';
 
 class CartView extends StatelessWidget {
@@ -16,6 +17,7 @@ class CartView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CartViewModel>.reactive(
+//        onModelReady: (model)=>model.fetchWishListItems(),
         builder: (context, model, child)=>WillPopScope(
           onWillPop: (){
 //            model.navigateToDashboard();
@@ -430,753 +432,19 @@ class CartView extends StatelessWidget {
                     ),
                     Container(
 //              color: Constants.darkBlackColor,
-                      height: 200,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.yellow,
-                              height: 40,
-                              width: 150,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  color: Color(0xff222831),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-//                               color: Colors.blueGrey,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          colorFilter: new ColorFilter
-                                                              .mode(
-                                                              Color(0xffEEEEEE)
-                                                                  .withOpacity(
-                                                                  0.9),
-                                                              BlendMode
-                                                                  .dstATop),
-                                                          image: AssetImage(
-                                                              "assets/images/shopping.png"))),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-//                           color: Colors.blueAccent,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(4.0),
-                                                          child: Container(
-                                                            margin:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 4),
-//                                      color: Colors.blueAccent,
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  "Biotique",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                      15,
-                                                                      color: Color(
-                                                                          0xffEEEEEE)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            "10% OFF",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Color(
-                                                                    0xffEEEEEE)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.yellow,
-                              height: 40,
-                              width: 150,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  color: Color(0xff222831),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-//                               color: Colors.blueGrey,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          colorFilter: new ColorFilter
-                                                              .mode(
-                                                              Color(0xffEEEEEE)
-                                                                  .withOpacity(
-                                                                  0.9),
-                                                              BlendMode
-                                                                  .dstATop),
-                                                          image: AssetImage(
-                                                              "assets/images/shopping.png"))),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-//                           color: Colors.blueAccent,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(4.0),
-                                                          child: Container(
-                                                            margin:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 4),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  "Biotique",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                      15,
-                                                                      color: Color(
-                                                                          0xffEEEEEE)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            "10% OFF",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Color(
-                                                                    0xffEEEEEE)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.yellow,
-                              height: 40,
-                              width: 150,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  color: Color(0xff222831),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-//                               color: Colors.blueGrey,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          colorFilter: new ColorFilter
-                                                              .mode(
-                                                              Color(0xffEEEEEE)
-                                                                  .withOpacity(
-                                                                  0.9),
-                                                              BlendMode
-                                                                  .dstATop),
-                                                          image: AssetImage(
-                                                              "assets/images/shopping.png"))),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-//                           color: Colors.blueAccent,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(4.0),
-                                                          child: Container(
-                                                            margin:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 4),
-//                                      color: Colors.blueAccent,
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  "Biotique",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                      15,
-                                                                      color: Color(
-                                                                          0xffEEEEEE)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            "10% OFF",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Color(
-                                                                    0xffEEEEEE)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.yellow,
-                              height: 40,
-                              width: 150,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  color: Color(0xff222831),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-//                               color: Colors.blueGrey,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          colorFilter: new ColorFilter
-                                                              .mode(
-                                                              Color(0xffEEEEEE)
-                                                                  .withOpacity(
-                                                                  0.9),
-                                                              BlendMode
-                                                                  .dstATop),
-                                                          image: AssetImage(
-                                                              "assets/images/shopping.png"))),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-//                           color: Colors.blueAccent,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(4.0),
-                                                          child: Container(
-                                                            margin:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 4),
-//                                      color: Colors.blueAccent,
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  "Biotique",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                      15,
-                                                                      color: Color(
-                                                                          0xffEEEEEE)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            "10% OFF",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Color(
-                                                                    0xffEEEEEE)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.yellow,
-                              height: 40,
-                              width: 150,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  color: Color(0xff222831),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-//                               color: Colors.blueGrey,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          colorFilter: new ColorFilter
-                                                              .mode(
-                                                              Color(0xffEEEEEE)
-                                                                  .withOpacity(
-                                                                  0.9),
-                                                              BlendMode
-                                                                  .dstATop),
-                                                          image: AssetImage(
-                                                              "assets/images/shopping.png"))),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(4.0),
-                                                          child: Container(
-                                                            margin:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 4),
-//                                      color: Colors.blueAccent,
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  "Biotique",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                      15,
-                                                                      color: Color(
-                                                                          0xffEEEEEE)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            "10% OFF",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Color(
-                                                                    0xffEEEEEE)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.yellow,
-                              height: 40,
-                              width: 150,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  color: Color(0xff222831),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-//                               color: Colors.blueGrey,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          colorFilter: new ColorFilter
-                                                              .mode(
-                                                              Color(0xffEEEEEE)
-                                                                  .withOpacity(
-                                                                  0.9),
-                                                              BlendMode
-                                                                  .dstATop),
-                                                          image: AssetImage(
-                                                              "assets/images/shopping.png"))),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(4.0),
-                                                          child: Container(
-                                                            margin:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 4),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  "Biotique",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                      15,
-                                                                      color: Color(
-                                                                          0xffEEEEEE)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            "10% OFF",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Color(
-                                                                    0xffEEEEEE)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              color: Colors.yellow,
-                              height: 40,
-                              width: 150,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  color: Color(0xff222831),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-//                               color: Colors.blueGrey,
-                                                      image: DecorationImage(
-                                                          fit: BoxFit.fill,
-                                                          colorFilter: new ColorFilter
-                                                              .mode(
-                                                              Color(0xffEEEEEE)
-                                                                  .withOpacity(
-                                                                  0.9),
-                                                              BlendMode
-                                                                  .dstATop),
-                                                          image: AssetImage(
-                                                              "assets/images/shopping.png"))),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                    children: <Widget>[
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .all(4.0),
-                                                          child: Container(
-                                                            margin:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 4),
-//                                      color: Colors.blueAccent,
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: <
-                                                                  Widget>[
-                                                                Text(
-                                                                  "Biotique",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                      15,
-                                                                      color: Color(
-                                                                          0xffEEEEEE)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          child: Text(
-                                                            "10% OFF",
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Color(
-                                                                    0xffEEEEEE)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                        ],
+                      height: 270,
+                      child:  model.wishListItemsList.length ==0 ? Center(
+                        child: Text("No items in wishlist",style: TextStyle(color: Colors.white),),
+                      ) : ListView.builder(
+                          itemCount: model.wishListItemsList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext contex,int index){
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _wishlistItem(context, model, index)
+                            );
+                          })
                       ),
-                    )
                   ]),
               ),
             ),
@@ -1473,7 +741,7 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                         ),
                                         color: Constants.darkBlackColor,
                                         onPressed: () {
-                                          model.addToWishList(id: model.cartItemsList[index].id);
+                                          model.addToWishList(id: model.cartItemsList[index].id,index: index);
                                         },
                                         child: Text('Add to Wishlist',
                                             style: TextStyle(
@@ -1498,4 +766,330 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
       ],
     ),
   );
+}
+
+
+Widget _wishlistItem(BuildContext context,CartViewModel model,int index) {
+  return Stack(
+    alignment: AlignmentDirectional.topEnd,  //https://stackoverflow.com/questions/56994946/flutter-stack-widget-not-sizing-correctly-when-used-in-a-listview
+    children: <Widget>[
+      Container(
+        width: 180,
+        color: Constants.darkBlackColor,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: InkWell(
+                onTap: (){
+                  model.navigateToProductDetailsView(
+                      productDetails:
+                      model.wishListItemsList[index]);
+                },
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: Hero(
+                          transitionOnUserGestures:
+                          true,
+                          tag: model
+                              .wishListItemsList[
+                          index]
+                              .id,
+                          child: Container(
+                            margin:
+                            EdgeInsets.only(top: 1),
+                            child:model.wishListItemsList[index].images?.length == 0 ? Padding(
+                              padding: const EdgeInsets.all(38.0),
+                              child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
+                            ): CachedNetworkImage(
+                              fit: BoxFit.fill,
+                              imageBuilder: (context, imageProvider) => Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                              imageUrl:  model
+                                  .wishListItemsList[
+                              index].images[0],
+                              placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
+                              errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                            )
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+//                           color: Colors.blueAccent,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment
+                                .spaceAround,
+                            children: <
+                                Widget>[
+                              Expanded(
+                                flex: 2,
+                                child:
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.all(
+                                      4.0),
+                                  child:
+                                  Container(
+                                    margin: const EdgeInsets
+                                        .only(
+                                        left:
+                                        4),
+//                                      color: Colors.blueAccent,
+                                    child:
+                                    Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: <
+                                          Widget>[
+                                        Text(
+                                          'config brand',
+//                                                                model
+//                                                                    .productsList[
+//                                                                        index]
+//                                                                    .brand,
+                                          style:
+                                          TextStyle(fontSize: 15, color: Color(0xffEEEEEE)),
+                                        ),
+                                        Text(
+                                          model.wishListItemsList[index].title,
+
+                                          overflow:
+                                          TextOverflow.ellipsis,
+                                          style:
+                                          TextStyle(fontSize: 12, color: Color(0xffEEEEEE).withOpacity(0.7)),
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                          textBaseline:
+                                          TextBaseline.alphabetic,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  "\u20B9",
+                                                  style: TextStyle(color: Constants.offWhiteColor),
+                                                ),
+                                                Text(
+                                                  model.wishListItemsList[index].salePrice,
+
+                                                  style: TextStyle(fontSize: 15, color: Color(0xffEEEEEE)),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  "\u20B9",
+                                                  style: TextStyle(fontSize: 11, color: Constants.offWhiteColor),
+                                                ),
+                                                Text(
+                                                  model.wishListItemsList[index].retailPrice,
+                                                  style: TextStyle(fontSize: 11, decoration: TextDecoration.lineThrough, color: Color(0xffEEEEEE).withOpacity(0.7)),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              model.wishListItemsList[index].inventoryCount > model.wishListItemsList[index].minInventoryCount
+
+                                  ? Container()
+                                  : Expanded(
+                                flex: 1,
+                                child:
+                                Container(
+                                  child:
+                                  Text(
+                                    'Few Left',
+                                    style:
+                                    TextStyle(fontSize: 14, color: Colors.red.withOpacity(0.9)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+//            Expanded(
+//              flex: 1,
+//              child: Container(
+//                color: Color(0xff393E46),
+//                child: Row(
+//                  mainAxisAlignment:
+//                  MainAxisAlignment
+//                      .spaceEvenly,
+//                  children: <Widget>[
+//                    Expanded(
+//                      flex: 2,
+//                      child: Padding(
+//                        padding:
+//                        const EdgeInsets
+//                            .all(8.0),
+//                        child: Container(
+////                                            width: 120,
+//                          child:
+//                          model.wishListItemsList[index].inventoryCount==0 ? RaisedButton(
+//                            color: Constants.tealColor,
+//                            disabledColor:
+//                            Constants.darkBlackColor,
+////                            onPressed: model.productsList[index].inventoryCount <= model.productsList[index].minInventoryCount ? null :(){
+//////                                                                     model.addItemToCart(
+//////                                                                        model.productsList[
+//////                                                                        index]);
+//
+////                            },
+//                            child: Text(
+//                                'Out Of Stock',
+//                                style: TextStyle(
+//                                    fontSize:
+//                                    12,
+//                                    color:
+//                                    Color(0xffEEEEEE))),
+//                          ) :  RaisedButton(
+//                            color: Constants.tealColor,
+//                            disabledColor:
+//                            Constants.darkBlackColor,
+//                            onPressed: (){
+//
+////                              model.addItemToCart(
+////                                  model.productsList[
+////                                  index]);
+//
+//                            },
+//                            child: Text(
+//                                'Add To Cart',
+//                                style: TextStyle(
+//                                    fontSize:
+//                                    12,
+//                                    color:
+//                                    Color(0xffEEEEEE))),
+//                          ),
+//                        ),
+//                      ),
+//                    ),
+//                    Flexible(
+//                      child: Padding(
+//                        padding:
+//                        const EdgeInsets
+//                            .all(8.0),
+//                        child: GestureDetector(
+//                          onTap: (){
+//                            model.removeFromWishlist(index: index,product: model.wishListItemsList[index]);
+//                          },
+//                          child: Container(
+//                            width: 80,
+//                            child: Icon(
+//                              Icons
+//                                  .cancel,
+//                              color: Color(
+//                                  0xff00ADB5),
+//                            ),
+//                          ),
+//                        ),
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//            )
+          ],
+        ),
+      ),
+      Positioned(
+        child: Container(
+          alignment: Alignment.topRight,
+          child: CustomPaint(
+            painter: CurvePainter(),
+            child: Container(
+              height: 160,
+              width: 60,
+              padding:
+              EdgeInsets.only(top: 10),
+              child: Container(
+//                                        color: Colors.red,
+                margin: EdgeInsets.only(
+                    left: 6),
+                child: Text(
+                  model.wishListItemsList[index]
+                      .discount +
+                      "% OFF",
+                  textAlign:
+                  TextAlign.center,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(
+                          context)
+                          .size
+                          .width /
+                          MediaQuery.of(
+                              context)
+                              .size
+                              .width *
+                          14.0,
+                      fontWeight:
+                      FontWeight.w900,
+                      color: Constants
+                          .offWhiteColor),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+
+class CurvePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint();
+    paint.color = Colors.green[800];
+    paint.style = PaintingStyle.fill; // Change this to fill
+
+    var path = Path();
+
+    path.moveTo(0, 0);
+    path.quadraticBezierTo(
+        size.width / 20, size.height / 3, size.width, size.height * 0.4);
+
+    path.lineTo(size.width, 0);
+    path.lineTo(0, 0);
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
 }

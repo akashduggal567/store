@@ -5,15 +5,24 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/app/router.gr.dart';
 import 'package:store/helpers/ApiResponse.dart';
+import 'package:store/models/cartItem.dart';
 import 'package:store/models/product.dart';
+import 'package:store/services/api.dart';
 import 'package:store/services/cart_service.dart';
 import 'package:store/services/wishlist_service.dart';
 
 class CartViewModel extends BaseViewModel {
   static CartService _cartService = locator<CartService>();
-  WishListService _wishListService = locator<WishListService>();
+  WishListService _wishListService;
+  List<Product> wishListItemsList;
+  CartViewModel(){
+    _wishListService  = locator<WishListService>();
+    wishListItemsList = _wishListService.wishListItemsList;
+  }
+
   NavigationService _navigationService = locator<NavigationService>();
   DialogService _dialogService = locator<DialogService>();
+  ApiService _apiService = locator<ApiService>();
 
   List<Product> _cartItems = _cartService.cartItemsList;
   get cartItemsList => _cartItems;
@@ -29,6 +38,7 @@ class CartViewModel extends BaseViewModel {
 
   int _cartTotalItemCount = _cartService.totalItemCount.value;
   get cartTotalItemCount => _cartTotalItemCount;
+
 
 
 
@@ -48,8 +58,11 @@ class CartViewModel extends BaseViewModel {
 
   }
 
-  void addToWishList({@required id}){
-    _wishListService.addToWishList(id);
+  void addToWishList({@required id, index}) async{
+    setBusy(true);
+   await _wishListService.addToWishList(id, index);
+   setBusy(false);
+    notifyListeners();
   }
 
   void navigateToDashboard() async{
@@ -104,6 +117,32 @@ class CartViewModel extends BaseViewModel {
     }).toList();
     _cartTotalItemCount = mrp.fold(0, (previousValue, element) => previousValue+element);
     notifyListeners();
+  }
+
+  void navigateToProductDetailsView({productDetails}) async{
+    await _navigationService.navigateTo(Routes.productDetailsView,
+        arguments: ProductDetailsViewArguments(productDetails: productDetails));
+  }
+
+  void removeFromWishlist({@required index,@required Product product}) async{
+    ApiResponse response = await _apiService.removeItemFromWishlist(CartItem(productId: product.id));
+    print(response.status.toString());
+    if(response.status == "success"){
+      wishListItemsList.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  void fetchWishListItems() async{
+    wishListItemsList.clear();
+    ApiResponse response = await _apiService.fetchUserWishlist();
+    if(response.status == "success"){
+      var wishlistItems = response.result.map((e) => Product.fromJson(e)).toList();
+      wishlistItems.forEach((item) { wishListItemsList.add(item);});
+      notifyListeners();
+      print(wishListItemsList);
+    }
+
   }
 
 }

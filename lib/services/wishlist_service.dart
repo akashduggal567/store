@@ -6,9 +6,13 @@ import 'package:store/helpers/ApiResponse.dart';
 import 'package:store/models/detailed_cart_item.dart';
 import 'package:store/models/product.dart';
 import 'package:store/services/api.dart';
+import 'package:store/services/cart_service.dart';
 
 @lazySingleton
-class WishListService with ReactiveServiceMixin{
+class WishListService with ReactiveServiceMixin {
+
+  CartService _cartService = locator<CartService>();
+
   WishListService() {
     listenToReactiveValues([_wishListItemsList]);
   }
@@ -18,23 +22,42 @@ class WishListService with ReactiveServiceMixin{
 
   ApiService _apiService = locator<ApiService>();
 
+  Future addToWishList(String productId, index) async {
+    var isAlreadyPresent = wishListItemsList
+                .where((object) => object.toJson()["_id"] == productId)
+                .length > 0
+        ? true
+        : false;
 
-
-  void addToWishList(String productId) {
-    _apiService.addToWishlist(productId);
-//    _wishListItemsList.add("W");
-    print("WishList: " + _wishListItemsList.toString());
+    if (!isAlreadyPresent) {
+      ApiResponse response = await _apiService.addToWishlist(productId);
+      if (response.status == "success") {
+        _wishListItemsList.clear();
+        await _cartService.removeCartItem(index, Product(id: productId));
+        ApiResponse response = await _apiService.fetchUserWishlist();
+        if (response.status == "success") {
+          var wishlistItems =
+              response.result.map((e) => Product.fromJson(e)).toList();
+          wishlistItems.forEach((item) {
+            wishListItemsList.add(item);
+            notifyListeners();
+          });
+        }
+      }
+    }
   }
 
-  void fetchWishListItems() async{
+  void fetchWishListItems() async {
     _wishListItemsList.clear();
     ApiResponse response = await _apiService.fetchUserWishlist();
-    if(response.status == "success"){
-      var wishlistItems = response.result.map((e) => Product.fromJson(e)).toList();
-      wishlistItems.forEach((item) { wishListItemsList.add(item);});
+    if (response.status == "success") {
+      var wishlistItems =
+          response.result.map((e) => Product.fromJson(e)).toList();
+      wishlistItems.forEach((item) {
+        wishListItemsList.add(item);
+      });
       notifyListeners();
       print(wishListItemsList);
     }
-
   }
 }

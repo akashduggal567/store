@@ -80,7 +80,7 @@ class CartService with ReactiveServiceMixin {
     calculateAmountPayable();
   }
 
-  void removeCartItem(int index, Product product) async{
+  Future removeCartItem(int index, Product product) async{
     await _apiService
         .removeItemfromCart(
             CartItem(productId: product.id.toString(), quantity: 0))
