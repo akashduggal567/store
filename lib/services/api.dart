@@ -13,19 +13,20 @@ import 'local_storage_service.dart';
 @singleton
 class ApiService{
 
-//  static const addressendpoint = 'http://10.0.2.2:2005';
+
 //  static const userendpoint = 'http://10.0.2.2:2003';
 //  static const endpoint = 'http://10.0.2.2:2004';
+//  static const addressendpoint = 'http://10.0.2.2:2005';
 //  static const cartendpoint = 'http://10.0.2.2:2007';
 //  static const invoiceendpoint = 'http://10.0.2.2:2008';
 //  static const wishlistendpoint = 'http://10.0.2.2:2011';
 
-    static const addressendpoint = 'http://d38fc5773680.ngrok.io';
-    static const endpoint = 'http://d818b8785008.ngrok.io';
-    static const userendpoint = "http://8dc7103c2cc9.ngrok.io";
-    static const cartendpoint = 'http://a0126d68b43c.ngrok.io';
-    static const invoiceEndpoint = "http://67706e2b04de.ngrok.io";
-    static const wishlistendpoint = 'http://38359e90af5a.ngrok.io';
+    static const userendpoint = "http://c315570e5fb3.ngrok.io";
+    static const endpoint = 'http://e6de52a30a72.ngrok.io';
+    static const addressendpoint = 'http://fab6b8fac0b7.ngrok.io';
+    static const cartendpoint = 'http://5e63297f11c4.ngrok.io';
+    static const invoiceEndpoint = "http://0caeb56ab4be.ngrok.io";
+    static const wishlistendpoint = 'http://3635cad79c41.ngrok.io';
 
 //  static const addressendpoint = 'http://localhost:2005';
 //  static const userendpoint = 'http://localhost:2003';

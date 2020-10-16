@@ -18,8 +18,9 @@ class CartView extends StatelessWidget {
     return ViewModelBuilder<CartViewModel>.reactive(
         builder: (context, model, child)=>WillPopScope(
           onWillPop: (){
-            model.navigateToDashboard();
-            return Future.value(false);
+//            model.navigateToDashboard();
+//            return Future.value(false);
+            return Future.value(true);
           },
           child: Scaffold(
             appBar: AppBar(
@@ -38,7 +39,6 @@ class CartView extends StatelessWidget {
                       Column(
                         children: [
                           Expanded(
-//                        flex: 6,
                             child: FadeIn(
                                 duration: Duration(seconds: 1),
                                 child: Container(
@@ -1237,271 +1237,265 @@ class CartView extends StatelessWidget {
 
 Widget _cartItem(CartViewModel model,int index, Product productDetails) {
   final _debouncer = Debouncer(milliseconds: 500);
-  return InkWell(
-    onTap: (){
-    },
-    child: Container(
-        child: Column(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Constants.lightBlackColor,width: 4
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20),)
-              ),
-              height: 180,
+  return Container(
+    decoration: BoxDecoration(
+        border: Border.all(
+          color: Constants.lightBlackColor,width: 4
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(20),)
+    ),
+    height: 150,
 //              color: Constants.darkBlackColor,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft:  Radius.circular(40)),
-                                ),
-                            child: productDetails.images?.length != 0 ? CachedNetworkImage(
-                                        fit: BoxFit.fill,
-                              imageBuilder: (context, imageProvider) => Container(
-//                                height: 100,
-//                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(topLeft:  Radius.circular(19.5)),
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              imageUrl: productDetails.images[0],
-                              placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
-                              errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
-                            ): Padding(
-                              padding: const EdgeInsets.all(38.0),
-                              child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg",fit: BoxFit.fitWidth,)),
-                            )
-                            ),
-                          ),
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-//                           color: Colors.blueAccent,
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 4,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Container(
-                                        margin:
-                                        const EdgeInsets.only(left: 4),
+    child: Column(
+      children: <Widget>[
+        Expanded(
+          flex: 5,
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 0.7),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Constants.offWhiteColor,width: 0.1),
+                          borderRadius: BorderRadius.only(topLeft:  Radius.circular(15),bottomLeft:  Radius.circular(15)),
+                      ),
+                  child: productDetails.images?.length != 0 ? CachedNetworkImage(
+                              fit: BoxFit.fill,
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(topLeft:  Radius.circular(15),bottomLeft:  Radius.circular(15)),
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    imageUrl: productDetails.images[0],
+                    placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
+                    errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                  ): Padding(
+                    padding: const EdgeInsets.all(38.0),
+                    child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg",fit: BoxFit.fitWidth,)),
+                  )
+                  ),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 4,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Container(
+                                    margin:
+                                    const EdgeInsets.only(left: 4),
 //                                      color: Colors.blueAccent,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              "config brand",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Color(0xffEEEEEE)),
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Text(
-                                              productDetails.title,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight:
-                                                  FontWeight.w400,
-                                                  color: Color(0xffEEEEEE)
-                                                      .withOpacity(0.7)),
-                                            ),
-                                            SizedBox(
-                                              height: 16,
-                                            ),
-                                            Container(
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .baseline,
-                                                textBaseline:
-                                                TextBaseline.alphabetic,
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                    productDetails.salePrice,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Color(
-                                                            0xffEEEEEE)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 4,
-                                                  ),
-                                                  Text(
-                                                    productDetails.retailPrice,
-                                                    style: TextStyle(
-                                                        fontSize: 11,
-                                                        decoration:
-                                                        TextDecoration
-                                                            .lineThrough,
-                                                        color: Color(
-                                                            0xffEEEEEE)
-                                                            .withOpacity(
-                                                            0.7)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 14,
-                                                  ),
-                                                  Container(
-                                                    child: Text(
-                                                      productDetails.discount +" OFF",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.red[400],)
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
                                     child: Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                       children: <Widget>[
+                                        Text(
+                                          "config brand",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Color(0xffEEEEEE)),
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          productDetails.title,
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight:
+                                              FontWeight.w400,
+                                              color: Color(0xffEEEEEE)
+                                                  .withOpacity(0.7)),
+                                        ),
+                                        SizedBox(
+                                          height: 16,
+                                        ),
                                         Container(
-//                                          color: Colors.red,
-                                          margin: const EdgeInsets.only(
-                                              left: 4),
                                           child: Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .baseline,
+                                            textBaseline:
+                                            TextBaseline.alphabetic,
                                             mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceAround,
+                                            MainAxisAlignment.start,
                                             children: <Widget>[
-                                              InkWell(
-                                                onTap: (){
-//
-                                                  _debouncer.run(() =>  model.increaseCartItemCount(productDetails));
-                                                },
-                                                child: Container(
-                                                  child: Icon(
-                                                    Icons.add,
-                                                    color: Color(0xff00ADB5),
-                                                  ),
-                                                ),
+                                              Text(
+                                                "\u20B9",
+                                                style: TextStyle(color: Constants.offWhiteColor),
                                               ),
                                               Text(
-                                                model.cartItemsList[index].quantity.toString(),
+                                                productDetails.salePrice,
                                                 style: TextStyle(
-                                                    color:
-                                                    Color(0xffEEEEEE)),
+                                                    fontSize: 14,
+                                                    color: Color(
+                                                        0xffEEEEEE)),
                                               ),
-                                              InkWell(
-                                                onTap: (){
-                                                  _debouncer.run(() => model.decreaseCartItemCount(productDetails));
-
-                                                },
-                                                child: model.cartItemsList[index].quantity == 1 ? Container() :Container(
-                                                  child: Icon(
-                                                    Icons.remove,
-                                                    color: Color(0xff00ADB5),
-                                                  ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
+                                              Text(
+                                                "\u20B9",
+                                                style: TextStyle(color: Constants.offWhiteColor, fontSize: 11),
+                                              ),
+                                              Text(
+                                                productDetails.retailPrice,
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    decoration:
+                                                    TextDecoration
+                                                        .lineThrough,
+                                                    color: Color(
+                                                        0xffEEEEEE)
+                                                        .withOpacity(
+                                                        0.7)),
+                                              ),
+                                              SizedBox(
+                                                width: 14,
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  productDetails.discount +"% OFF",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.red[400],)
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
+
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                model.removeCartItem(index,model.cartItemsList[index]);
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  top: 4,
                                 ),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 0, color: Colors.redAccent),
-                                  borderRadius: BorderRadius.only(bottomLeft:  Radius.circular(20)),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Container(
+//                                          color: Colors.red,
+                                      margin: const EdgeInsets.only(
+                                          left: 4),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceAround,
+                                        children: <Widget>[
+                                          InkWell(
+                                            onTap: (){
+//
+                                              _debouncer.run(() =>  model.increaseCartItemCount(productDetails));
+                                            },
+                                            child: Container(
+                                              child: Icon(
+                                                Icons.add,
+                                                color: Color(0xff00ADB5),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            model.cartItemsList[index].quantity.toString(),
+                                            style: TextStyle(
+                                                color:
+                                                Color(0xffEEEEEE)),
+                                          ),
+                                          InkWell(
+                                            onTap: (){
+                                              _debouncer.run(() => model.decreaseCartItemCount(productDetails));
 
-                                ),
-                                child: Center(
-                                  child: Text('Remove',
-                                      style: TextStyle(
-                                          fontSize: 14,
-//                          fontWeight: FontWeight.w400,
-                                          color: Color(0xffEEEEEE))),
+                                            },
+                                            child: model.cartItemsList[index].quantity == 1 ? Container() :Container(
+                                              child: Icon(
+                                                Icons.remove,
+                                                color: Color(0xff00ADB5),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(top: 4),
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 0.5, color: Constants.tealColor),
-                                borderRadius: BorderRadius.only(bottomRight:  Radius.circular(20)),
-                              ),
-                              child: SizedBox.expand(
-                                child: RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(bottomRight:  Radius.circular(20)),
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      model.removeCartItem(index,model.cartItemsList[index]);
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 1,bottom: 0.5),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffCF6679).withOpacity(0.9),
+                                      ),
+                                      child: Center(
+                                          child: Icon(Icons.delete, color: Colors.white.withOpacity(0.9),size: 16,)
+                                      ),
+                                    ),
                                   ),
-                                  color: Constants.darkBlackColor,
-                                  onPressed: () {
-                                    model.addToWishList(id: model.cartItemsList[index].id);
-                                  },
-                                  child: Text('Add to Wishlist',
-                                      style: TextStyle(
-                                          fontSize: 14, color: Color(0xffEEEEEE))),
                                 ),
-                              ),
+                                Expanded(
+                                  child: Container(
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(bottomRight:  Radius.circular(16)),
+                                    ),
+                                    child: SizedBox.expand(
+                                      child: RaisedButton(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(bottomRight:  Radius.circular(16)),
+                                        ),
+                                        color: Constants.darkBlackColor,
+                                        onPressed: () {
+                                          model.addToWishList(id: model.cartItemsList[index].id);
+                                        },
+                                        child: Text('Add to Wishlist',
+                                            style: TextStyle(
+                                                fontSize: 12, color: Color(0xffEEEEEE))),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-//            SizedBox(height: 10),
-          ],
-        )),
+          ),
+        ),
+
+      ],
+    ),
   );
 }
