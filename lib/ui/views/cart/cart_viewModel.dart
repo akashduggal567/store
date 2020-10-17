@@ -70,9 +70,8 @@ class CartViewModel extends BaseViewModel {
   }
 
   void navigateToSelectAddressView() async{
-    print(_cartService.cartItemsList[0].toJson());
-
-//    await _navigationService.navigateTo(Routes.orderAddressViewRoute, arguments: OrderAddressViewArguments(totalAmountPayable: _totalAmountPayable));
+    var cartItems = cartItemsList.map((item)=> {"id": item.id, "quantity": item.quantity}).toList();
+    await _navigationService.navigateTo(Routes.orderAddressViewRoute, arguments: OrderAddressViewArguments(orderDetails: cartItems,totalAmountPayable: _totalAmountPayable));
   }
 
   void increaseCartItemCount(productDetails) async{

@@ -6,9 +6,10 @@ import 'package:store/ui/views/addresses/orderAddress/orderAddress_viewModel.dar
 
 class OrderAddressView extends StatelessWidget {
   double totalAmountPayable;
-
+  List orderDetails;
   OrderAddressView({
-    this.totalAmountPayable
+    this.totalAmountPayable,
+    this.orderDetails
   });
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class OrderAddressView extends StatelessWidget {
                       elevation: 0,
                       color: Constants.tealColor,
                       onPressed: () {
-                        model.navigateToPaymentOptionView(totalAmountPayable);
+                        model.navigateToPaymentOptionView(totalAmountPayable,orderDetails);
                       },
                       child: Text('Proceed to Pay',
                           style:

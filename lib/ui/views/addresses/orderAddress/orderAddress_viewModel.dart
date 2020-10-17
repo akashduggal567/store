@@ -53,8 +53,8 @@ class OrderAddressViewModel extends BaseViewModel {
     print("Selected AddressId :"+ selectedAddresId);
   }
 
-  void navigateToPaymentOptionView(totalAmountPayable) async{
-    await _navigationService.navigateTo(Routes.buyViewRoute, arguments: BuyViewArguments(totalAmountPayable: totalAmountPayable, orderDetails: {"addressId": selectedAddresId }));
+  void navigateToPaymentOptionView(totalAmountPayable,cartItems) async{
+    await _navigationService.navigateTo(Routes.buyViewRoute, arguments: BuyViewArguments(totalAmountPayable: totalAmountPayable, orderDetails: {"addressId": selectedAddresId,"items": cartItems }));
   }
 
 }

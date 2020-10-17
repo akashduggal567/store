@@ -213,7 +213,8 @@ class Router extends RouterBase {
             args as OrderAddressViewArguments ?? OrderAddressViewArguments();
         return MaterialPageRoute<dynamic>(
           builder: (context) => OrderAddressView(
-              totalAmountPayable: typedArgs.totalAmountPayable),
+              totalAmountPayable: typedArgs.totalAmountPayable,
+              orderDetails: typedArgs.orderDetails),
           settings: settings,
         );
       default:
@@ -284,5 +285,6 @@ class EditAddressViewArguments {
 //OrderAddressView arguments holder class
 class OrderAddressViewArguments {
   final double totalAmountPayable;
-  OrderAddressViewArguments({this.totalAmountPayable});
+  final List<dynamic> orderDetails;
+  OrderAddressViewArguments({this.totalAmountPayable, this.orderDetails});
 }

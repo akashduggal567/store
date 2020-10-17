@@ -22,6 +22,8 @@ class BuyViewModel extends BaseViewModel {
       "paymentMode": paymentMode
     };
 
+    print(invoiceObject);
+
     await _apiService.createOrder(orderDetails: invoiceObject);
   }
 }
