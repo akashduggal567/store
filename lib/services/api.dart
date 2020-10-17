@@ -14,18 +14,18 @@ import 'local_storage_service.dart';
 class ApiService{
 
 
-  static const userendpoint = 'http://10.0.2.2:2003';
-  static const endpoint = 'http://10.0.2.2:2004';
-  static const addressendpoint = 'http://10.0.2.2:2005';
-  static const cartendpoint = 'http://10.0.2.2:2007';
-  static const invoiceEndpoint = 'http://10.0.2.2:2008';
+//  static const userendpoint = 'http://10.0.2.2:2003';
+//  static const endpoint = 'http://10.0.2.2:2004';
+//  static const addressendpoint = 'http://10.0.2.2:2005';
+//  static const cartendpoint = 'http://10.0.2.2:2007';
+//  static const invoiceEndpoint = 'http://10.0.2.2:2008';
   static const wishlistendpoint = 'http://10.0.2.2:2011';
 
-//    static const userendpoint = "http://c315570e5fb3.ngrok.io";
-//    static const endpoint = 'http://e6de52a30a72.ngrok.io';
-//    static const addressendpoint = 'http://fab6b8fac0b7.ngrok.io';
-//    static const cartendpoint = 'http://5e63297f11c4.ngrok.io';
-//    static const invoiceEndpoint = "http://0caeb56ab4be.ngrok.io";
+    static const userendpoint = "http://a8073c2973ea.ngrok.io";
+    static const endpoint = 'http://5fe2141892eb.ngrok.io';
+    static const addressendpoint = 'http://cd954ee024a4.ngrok.io';
+    static const cartendpoint = 'http://706c5706a823.ngrok.io';
+    static const invoiceEndpoint = "http://612111b9e8c2.ngrok.io";
 //    static const wishlistendpoint = 'http://3635cad79c41.ngrok.io';
 //
 //  static const userendpoint = 'http://localhost:2003';
@@ -292,6 +292,17 @@ class ApiService{
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.put('$invoiceEndpoint/api/invoice',data: orderDetails );
+
+      return ApiResponse(response);
+    });
+
+  }
+
+  Future<ApiResponse> updateUserDeviceToken(deviceToken) async{
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.put('$userendpoint/api/user',data: {"deviceToken": deviceToken} );
 
       return ApiResponse(response);
     });

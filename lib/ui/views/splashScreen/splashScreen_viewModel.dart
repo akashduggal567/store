@@ -1,6 +1,7 @@
 import 'package:store/app/locator.dart';
 import 'package:store/app/router.gr.dart';
 import 'package:store/models/user.dart';
+import 'package:store/services/api.dart';
 //import 'package:store/models/user.dart';
 import 'package:store/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,7 @@ class SplashScreenViewModel extends BaseViewModel {
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
   final PushNotificationService _pushNotificationService = locator<PushNotificationService>();
   final CartService _cartService = locator<CartService>();
+  final ApiService _apiService = locator<ApiService>();
 
 
   String _title = "DJ Vicinity";
@@ -41,7 +43,7 @@ class SplashScreenViewModel extends BaseViewModel {
           firebaseId: firebaseUser.uid
       );
 
-//      await _cartService.fetchUserCart();
+      await _apiService.updateUserDeviceToken(await _pushNotificationService.getDeviceToken());
       await _navigationService.replaceWith(Routes.dashboardViewRoute,);
     }
     else{
