@@ -31,33 +31,41 @@ class _PdfViewPageState extends State<PdfViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Document"),
+        title: Text("Invoice PDF"),
       ),
       body: Stack(
         children: <Widget>[
-          PDFView(
-            filePath: widget.path,
-            autoSpacing: true,
-            enableSwipe: true,
-            pageSnap: true,
-            swipeHorizontal: true,
-            nightMode: false,
-            onError: (e) {
-              print(e);
-            },
-            onRender: (_pages) {
-              setState(() {
-                _totalPages = _pages;
-                pdfReady = true;
-              });
-            },
-            onViewCreated: (PDFViewController vc) {
-              _pdfViewController = vc;
-            },
-            onPageChanged: (int page, int total) {
-              setState(() {});
-            },
-            onPageError: (page, e) {},
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: Constants.lightBlackColor.withOpacity(1.0),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: PDFView(
+              filePath: widget.path,
+              autoSpacing: true,
+              enableSwipe: true,
+              pageSnap: true,
+              swipeHorizontal: true,
+              nightMode: false,
+              onError: (e) {
+                print(e);
+              },
+              onRender: (_pages) {
+                setState(() {
+                  _totalPages = _pages;
+                  pdfReady = true;
+                });
+              },
+              onViewCreated: (PDFViewController vc) {
+                _pdfViewController = vc;
+              },
+              onPageChanged: (int page, int total) {
+                setState(() {});
+              },
+              onPageError: (page, e) {},
+            ),
           ),
           !pdfReady
               ? Center(
@@ -89,7 +97,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
             ),
           ),
               )
-              : Text("No Data"),
+              : Container(),
         ],
       ),
       floatingActionButton: Row(
@@ -116,7 +124,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
           )
               : Offstage(),
           FloatingActionButton.extended(
-            backgroundColor: Constants.lightBlackColor,
+            backgroundColor: Colors.black,
             label: Icon(Icons.file_download),
             onPressed: () {
               downloadFile(widget.fileUrl);

@@ -321,11 +321,11 @@ class _ProductsListViewState extends State<ProductsListView> {
                                                                         children: <
                                                                             Widget>[
                                                                           Text(
-                                                                            'config brand',
-//                                                                model
-//                                                                    .productsList[
-//                                                                        index]
-//                                                                    .brand,
+//                                                                            'config brand',
+                                                                model
+                                                                    .productsList[
+                                                                        index]
+                                                                    .brand ?? "Unknown Brand",
                                                                             style:
                                                                                 TextStyle(fontSize: 15, color: Color(0xffEEEEEE)),
                                                                           ),

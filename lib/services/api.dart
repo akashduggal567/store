@@ -14,18 +14,18 @@ import 'local_storage_service.dart';
 class ApiService{
 
 
-//  static const userendpoint = 'http://10.0.2.2:2003';
-//  static const endpoint = 'http://10.0.2.2:2004';
-//  static const addressendpoint = 'http://10.0.2.2:2005';
-//  static const cartendpoint = 'http://10.0.2.2:2007';
-//  static const invoiceEndpoint = 'http://10.0.2.2:2008';
+  static const userendpoint = 'http://10.0.2.2:2003';
+  static const endpoint = 'http://10.0.2.2:2004';
+  static const addressendpoint = 'http://10.0.2.2:2005';
+  static const cartendpoint = 'http://10.0.2.2:2007';
+  static const invoiceEndpoint = 'http://10.0.2.2:2008';
   static const wishlistendpoint = 'http://10.0.2.2:2011';
-
-    static const userendpoint = "http://a8073c2973ea.ngrok.io";
-    static const endpoint = 'http://5fe2141892eb.ngrok.io';
-    static const addressendpoint = 'http://cd954ee024a4.ngrok.io';
-    static const cartendpoint = 'http://706c5706a823.ngrok.io';
-    static const invoiceEndpoint = "http://612111b9e8c2.ngrok.io";
+//
+//    static const userendpoint = "http://a8073c2973ea.ngrok.io";
+//    static const endpoint = 'http://5fe2141892eb.ngrok.io';
+//    static const addressendpoint = 'http://cd954ee024a4.ngrok.io';
+//    static const cartendpoint = 'http://706c5706a823.ngrok.io';
+//    static const invoiceEndpoint = "http://612111b9e8c2.ngrok.io";
 //    static const wishlistendpoint = 'http://3635cad79c41.ngrok.io';
 //
 //  static const userendpoint = 'http://localhost:2003';

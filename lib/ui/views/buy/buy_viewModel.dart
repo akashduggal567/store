@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
+import 'package:store/app/setup_snackbar_ui.dart';
 import 'package:store/helpers/ApiResponse.dart';
 import 'package:store/services/api.dart';
 import 'package:store/services/local_storage_service.dart';
@@ -54,7 +55,7 @@ class BuyViewModel extends BaseViewModel {
    print(response.status+ response.result.toString());
    if(response.status == 'success'){
      var dialogResponse = await _dialogService.showConfirmationDialog(
-        title: "Order",description: "Placed Successfully",confirmationTitle: "View", cancelTitle: "Cancel"
+        title: "Invoice",description: "Order was Placed Successfully. \n Press view to see your invoice for the order",confirmationTitle: "View", cancelTitle: "Cancel"
       );
 
      if(dialogResponse.confirmed){
@@ -66,8 +67,9 @@ class BuyViewModel extends BaseViewModel {
      }
 
    }else{
-     _dialogService.showDialog(
-         title: "Error",description: "Order was unable to be placed. Please try again",buttonTitle: "ok",
+     _dialogService.showCustomDialog(
+       variant: SnackbarType.greenAndRed,
+         title: "Error",description: "Order was unable to be placed. Please try again",
      );
    }
   }

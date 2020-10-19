@@ -118,8 +118,8 @@ class ProductDetailsView extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-//                                            productDetails.brand,
-                                          "config brand",
+                                            productDetails.brand ?? "Unknown Brand",
+//                                          "config brand",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 18,
@@ -247,12 +247,12 @@ class ProductDetailsView extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
                                 child: Text(
-//                                  productDetails.description,
-                                "config descripttion",
+                                  productDetails.description ?? "No details yet :(",
+//                                "config descripttion",
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w300,
+                                      fontWeight: FontWeight.w400,
                                       wordSpacing: 5,
                                       color: Colors.white70),
                                 ),

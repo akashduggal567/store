@@ -110,6 +110,8 @@ class Product {
   Product({
     this.id,
     this.title,
+    this.brand,
+    this.description,
     this.barcode,
     this.tags,
     this.images,
@@ -123,6 +125,8 @@ class Product {
 
   String id;
   String title;
+  String brand;
+  String description;
   String barcode;
   List<dynamic> tags;
   List<dynamic> images;
@@ -136,9 +140,11 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) => Product(
     id: json["_id"],
     title: json["title"],
+    brand: json["brand"],
+    description: json["description"] == null ? null  : json["description"],
     barcode: json["barcode"],
     tags: List<dynamic>.from(json["tags"].map((x) => x)),
-    images: json["images"] == null ? null : List<dynamic>.from(json["images"].map((x) => x)),
+    images: json["images"] == null ? "" : List<dynamic>.from(json["images"].map((x) => x)),
     salePrice: json["sale_price"],
     retailPrice: json["retail_price"],
     discount: json["discount"],
@@ -150,6 +156,8 @@ class Product {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "title": title,
+    "brand": brand,
+    "description": description == null  ? "" : description,
     "barcode": barcode,
     "tags": List<dynamic>.from(tags.map((x) => x)),
     "images": images == null ? null : List<dynamic>.from(images.map((x) => x)),
