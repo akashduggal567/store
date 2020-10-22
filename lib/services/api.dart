@@ -17,6 +17,7 @@ class ApiService{
   static const userendpoint = 'http://10.0.2.2:2003';
   static const endpoint = 'http://10.0.2.2:2004';
   static const addressendpoint = 'http://10.0.2.2:2005';
+  static const orderendpoint = 'http://10.0.2.2:2006';
   static const cartendpoint = 'http://10.0.2.2:2007';
   static const invoiceEndpoint = 'http://10.0.2.2:2008';
   static const wishlistendpoint = 'http://10.0.2.2:2011';
@@ -31,6 +32,7 @@ class ApiService{
 //  static const userendpoint = 'http://localhost:2003';
 //  static const endpoint = 'http://localhost:2004';
 //  static const addressendpoint = 'http://localhost:2005';
+//  static const orderendpoint = 'http://localhost:2006';
 //  static const cartendpoint = 'http://localhost:2007';
 //  static const invoiceEndpoint = 'http://localhost:2008';
 //  static const wishlistendpoint = 'http://localhost:2009';
@@ -309,23 +311,15 @@ class ApiService{
 
   }
 
+  Future<ApiResponse> getOrders() async{
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.get('$orderendpoint/api/order',);
+      print("Called getOrders api");
+      return ApiResponse(response);
+    });
+  }
 
-
-
-
-
-
-
-
-
-
-//  Future createUser(Info) async {
-//    print(json.encode(userInfo.toJson()));
-//    var response = await client.post('$endpoint/api/user/create',headers: {
-//      'Content-Type': 'application/json',
-//      'User-Agent': 'Dart'
-//    },body: json.encode(userInfo.toJson()));
-//    return json.decode(response.body);
-//  }
 
 }

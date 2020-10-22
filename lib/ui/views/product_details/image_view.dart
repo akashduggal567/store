@@ -13,13 +13,18 @@ class ImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
       child: Hero(
         tag: HEROID,
-        child: PhotoView(
-          imageProvider: CachedNetworkImageProvider(url),
-          maxScale: PhotoViewComputedScale.contained * 2.0,
-          minScale: PhotoViewComputedScale.contained * 0.6,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: PhotoView(
+            backgroundDecoration: BoxDecoration(
+              color: Colors.transparent
+            ),
+            imageProvider: CachedNetworkImageProvider(url),
+            maxScale: PhotoViewComputedScale.contained * 2.0,
+            minScale: PhotoViewComputedScale.contained * 0.6,
+          ),
         ),
       ),
     );

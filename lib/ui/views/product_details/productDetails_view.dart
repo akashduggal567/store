@@ -76,7 +76,7 @@ class ProductDetailsView extends StatelessWidget {
 
                                   GestureDetector(
                                     onTap: (){
-                                      print('clicked photo');
+                                      print(productDetails.images.length);
                                       model.navigateToFullScreenImageView(heroId: productDetails.id,url:productDetails.images[index]);
                                     },
                                     child: CachedNetworkImage(
