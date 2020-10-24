@@ -10,6 +10,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/services/cart_service.dart';
+import 'package:store/services/connectivity_service.dart';
 import 'package:store/services/push_notification_service.dart';
 import 'package:store/ui/views/dashboard/dashboard_view.dart';
 
@@ -32,7 +33,6 @@ class SplashScreenViewModel extends BaseViewModel {
   }
 
   Future handleStartUpLogic() async{
-    print(await _pushNotificationService.getDeviceToken());
     await _pushNotificationService.initialise();
     var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
 

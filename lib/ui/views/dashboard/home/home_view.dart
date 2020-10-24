@@ -48,7 +48,7 @@ class _HomeMobileLayoutState extends State<HomeMobileLayout> {
   Future<void> _handleRefresh() {
       return widget.model.refreshCategories();
   }
-  WebSocketChannel channel;
+//  WebSocketChannel channel;
 
   @override
   void initState() {

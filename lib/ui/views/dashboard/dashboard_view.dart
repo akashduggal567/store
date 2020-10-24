@@ -3,8 +3,11 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
+import 'package:store/app/locator.dart';
 import 'package:store/helpers/constants.dart';
+import 'package:store/helpers/enums/connectivity_status.dart';
 import 'package:store/models/user_location.dart';
+import 'package:store/services/connectivity_service.dart';
 import 'package:store/ui/views/dashboard/profie/profile_view.dart';
 import 'package:store/ui/views/dashboard/search/search_view.dart';
 import 'dashboard_viewModel.dart';
@@ -19,7 +22,6 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
 
   bool _allowExit = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class _DashboardViewState extends State<DashboardView> {
 
                 ],
               ),
-              body: PageTransitionSwitcher(
+              body: model.connectivityStatus == ConnectivityStatus.Offline ? model.showInternetDialog() : PageTransitionSwitcher(
                   duration: const Duration(milliseconds: 1500),
                   reverse: model.reverse,
                   transitionBuilder: (Widget child, Animation<double> animation, Animation<double> secondaryAnimation,){

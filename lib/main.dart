@@ -1,14 +1,14 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
 import 'package:store/app/router.gr.dart';
-import 'package:store/ui/views/login/login_view.dart';
-import 'package:store/ui/views/onboarding/onBoarding_view.dart';
+import 'package:store/services/connectivity_service.dart';
 import 'package:store/ui/views/splashScreen/splashScreen_view.dart';
-
 import 'app/setup_snackbar_ui.dart';
-import 'data/products_parser.dart';
 import 'helpers/constants.dart';
+import 'helpers/enums/connectivity_status.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +19,13 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+//  MultiProvider(
+//  providers: [
+//  StreamProvider<ConnectivityStatus>.value(
+//  value: ConnectivityService().connectionStatusController.stream,
+//  ),
+//  ],
+//  ConnectivityService _connectivityService = locator<ConnectivityService>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,6 +53,14 @@ class MyApp extends StatelessWidget {
           navigatorKey: locator<NavigationService>().navigatorKey,
     );
   }
+
+  @override
+  void dispose() {
+    print('I have been disposed in main!!');
+//    locator<ConnectivityService>().connectionStatusController?.close();
+//    super.dispose();
+  }
+
 }
 
 

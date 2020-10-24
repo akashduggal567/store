@@ -166,11 +166,11 @@ class CartService with ReactiveServiceMixin {
   }
 
   Future fetchUserCart() async {
-    _cartItems.clear();
+
 
     ApiResponse response = await _apiService.fetchUserCart();
     var fetchedCartItems = response.result.map((e) => DetailedCartItem.fromJson(e)).toList();
-
+    _cartItems.clear();
     var serialized =
        await fetchedCartItems.map((e) =>  _cartItems.add(serializeForCart(e))).toList();
     calcualteBillattributes();

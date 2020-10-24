@@ -27,6 +27,7 @@ import 'package:store/ui/views/addresses/addAddress/addAddress_view.dart';
 import 'package:store/ui/views/addresses/editAddress/editAddress_view.dart';
 import 'package:store/models/address.dart';
 import 'package:store/ui/views/addresses/orderAddress/orderAddress_view.dart';
+import 'package:store/ui/views/offline_view/offline_view.dart';
 
 abstract class Routes {
   static const onBoardingViewRoute = '/on-boarding-view-route';
@@ -46,6 +47,7 @@ abstract class Routes {
   static const addAddressViewRoute = '/add-address-view-route';
   static const editAddressViewRoute = '/edit-address-view-route';
   static const orderAddressViewRoute = '/order-address-view-route';
+  static const offlineViewRoute = '/offline-view-route';
   static const all = {
     onBoardingViewRoute,
     loginViewRoute,
@@ -64,6 +66,7 @@ abstract class Routes {
     addAddressViewRoute,
     editAddressViewRoute,
     orderAddressViewRoute,
+    offlineViewRoute,
   };
 }
 
@@ -215,6 +218,11 @@ class Router extends RouterBase {
           builder: (context) => OrderAddressView(
               totalAmountPayable: typedArgs.totalAmountPayable,
               orderDetails: typedArgs.orderDetails),
+          settings: settings,
+        );
+      case Routes.offlineViewRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => OfflineView(),
           settings: settings,
         );
       default:

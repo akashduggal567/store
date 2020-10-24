@@ -7,6 +7,7 @@
 import 'package:store/services/api.dart';
 import 'package:store/services/authentication_service.dart';
 import 'package:store/services/cart_service.dart';
+import 'package:store/services/connectivity_service.dart';
 import 'package:store/services/counter_service.dart';
 import 'package:store/services/custom_dialog_service.dart';
 import 'package:store/services/third_party_services_module.dart';
@@ -23,6 +24,7 @@ void $initGetIt(GetIt g, {String environment}) {
   final thirdPartyServicesModule = _$ThirdPartyServicesModule();
   g.registerLazySingleton<AuthenticationService>(() => AuthenticationService());
   g.registerLazySingleton<CartService>(() => CartService());
+  g.registerLazySingleton<ConnectivityService>(() => ConnectivityService());
   g.registerLazySingleton<CounterService>(() => CounterService());
   g.registerLazySingleton<CustomDialogService>(() => CustomDialogService());
   g.registerLazySingleton<DialogService>(

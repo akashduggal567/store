@@ -9,6 +9,7 @@ import 'package:store/ui/views/dashboard/dashboard_view.dart';
 import 'package:store/ui/views/login/login_view.dart';
 import 'package:store/ui/views/login/otp/otp_view.dart';
 import 'package:store/ui/views/map/map_view.dart';
+import 'package:store/ui/views/offline_view/offline_view.dart';
 import 'package:store/ui/views/onboarding/onBoarding_view.dart';
 import 'package:store/ui/views/product_details/image_view.dart';
 import 'package:store/ui/views/product_details/productDetails_view.dart';
@@ -37,4 +38,5 @@ class $Router {
   AddAddressView addAddressViewRoute;
   EditAddressView editAddressViewRoute;
   OrderAddressView orderAddressViewRoute;
+  OfflineView offlineViewRoute;
 }
