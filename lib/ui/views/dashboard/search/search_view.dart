@@ -23,54 +23,53 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<SearchViewModel>.reactive(
-        builder: (context, model, child)=>Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              color: Colors.black,
-              child: Theme(
-                data: ThemeData(primaryColor: Constants.tealColor),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    style: TextStyle(color: Constants.offWhiteColor),
-                    keyboardType: TextInputType.text,
-                    controller: controller ,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.search),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Constants.offWhiteColor, width: 0.5),
+        builder: (context, model, child) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  color: Colors.black,
+                  child: Theme(
+                    data: ThemeData(primaryColor: Constants.tealColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        style: TextStyle(color: Constants.offWhiteColor),
+                        keyboardType: TextInputType.text,
+                        controller: controller,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.search),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Constants.offWhiteColor, width: 0.5),
+                          ),
+                          counterText: '',
+                          border: OutlineInputBorder(),
+                          labelText: 'Search',
+                          labelStyle: TextStyle(color: Constants.offWhiteColor),
+                        ),
+                        onSubmitted: (String value) async {
+                          await model.fetchProducts(
+                              value.trim(), 1, model.limit);
+                        },
                       ),
-                      counterText: '',
-                      border: OutlineInputBorder(),
-                      labelText: 'Search',
-                      labelStyle: TextStyle(color: Constants.offWhiteColor),
                     ),
-                    onSubmitted: (String value) async {
-                        await model.fetchProducts(value.trim(), 1, model.limit);
-
-                    },
                   ),
                 ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              flex: 10,
-              child: Container(
-                color: Colors.black,
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 10,
+                  child: Container(
+                    color: Colors.black,
 //              height: MediaQuery.of(context).size.height*2.0,
-                child:  searchResult(model: model),
-              ),
-            )
-          ],
-        ),
-        viewModelBuilder: ()=> SearchViewModel());
+                    child: searchResult(model: model),
+                  ),
+                )
+              ],
+            ),
+        viewModelBuilder: () => SearchViewModel());
   }
 }
-
 
 class searchResult extends StatelessWidget {
   SearchViewModel model;
@@ -80,110 +79,273 @@ class searchResult extends StatelessWidget {
   ScrollController controller = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: model.isBusy ? GridView.builder(
-            itemCount: 6,
-            padding: const EdgeInsets.all(20),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 3 / 5),
-            itemBuilder: (context, int index) {
-              return Shimmer.fromColors(
-                  baseColor: Colors.black,
-                  highlightColor: Constants.lightBlackColor,
-                  enabled: true,
-                  child: Container(
-                    color: Colors.white,
-                  ));
-            }) : model.productsList.length == 0
-          ? Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: FadeIn(
-          duration: Duration(seconds: 1),
-          child: Column(
-            children: [
-              Expanded(
-                  flex: 4,
-                  child: SvgPicture.asset(
-                      "assets/images/not_found.svg")),
-              Expanded(
-                child: Text(
-                  "Sorry, No products found",
-                  style: TextStyle(
-                      color: Constants.offWhiteColor),
-                ),
-              )
-            ],
-          ),
-        ),
-      )
-          :  CustomScrollView(
-        controller: controller,
-        slivers: <Widget>[
-          SliverGrid(
-            gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 2.4 / 4),
-            delegate: SliverChildBuilderDelegate(
-                    (context, int index) {
-                  return VisibilityDetector(
-                    key: Key('$index'),
-                    onVisibilityChanged: (visibilityInfo) {
-                      print(visibilityInfo.size);
-                      model.itemBuildIndex = index;
-                    },
-                    child: CreationAwareListItem(
-                      itemCreated: () {
+      child: model.isBusy
+          ? GridView.builder(
+              itemCount: 6,
+              padding: const EdgeInsets.all(20),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 3 / 5),
+              itemBuilder: (context, int index) {
+                return Shimmer.fromColors(
+                    baseColor: Colors.black,
+                    highlightColor: Constants.lightBlackColor,
+                    enabled: true,
+                    child: Container(
+                      color: Colors.white,
+                    ));
+              })
+          : model.productsList.length == 0
+              ? Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: FadeIn(
+                    duration: Duration(seconds: 1),
+                    child: Column(
+                      children: [
+                        Expanded(
+                            flex: 4,
+                            child: SvgPicture.asset(
+                                "assets/images/not_found.svg")),
+                        Expanded(
+                          child: Text(
+                            "Sorry, No products found",
+                            style: TextStyle(color: Constants.offWhiteColor),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              : Stack(
+                  children: [
+                    CustomScrollView(
+                      controller: controller,
+                      slivers: <Widget>[
+                        SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: 2.4 / 4),
+                          delegate:
+                              SliverChildBuilderDelegate((context, int index) {
+                            return VisibilityDetector(
+                              key: Key('$index'),
+                              onVisibilityChanged: (visibilityInfo) {
+                                print(visibilityInfo.size);
+                                model.itemBuildIndex = index;
+                              },
+                              child: CreationAwareListItem(
+                                itemCreated: () {
 //                              print('Item created at $indexd');
-                        SchedulerBinding.instance
-                            .addPostFrameCallback((duration) =>
-                            model.handleItemCreated(index));
-                      },
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            color: Colors.black,
-                            child: Column(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 5,
-                                  child: InkWell(
-                                    onTap: (){
-                                      model.navigateToProductDetailsView(
-                                          productDetails:
-                                          model.productsList[index]);
-                                    },
-                                    child: Container(
+                                  SchedulerBinding.instance
+                                      .addPostFrameCallback((duration) =>
+                                          model.handleItemCreated(index));
+                                },
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      color: Colors.black,
                                       child: Column(
                                         children: <Widget>[
                                           Expanded(
-                                            flex: 3,
-                                            child: Hero(
-                                              transitionOnUserGestures:
-                                              true,
-                                              tag: model
-                                                  .productsList[
-                                              index]
-                                                  .id,
+                                            flex: 5,
+                                            child: InkWell(
+                                              onTap: () {
+                                                model
+                                                    .navigateToProductDetailsView(
+                                                        productDetails:
+                                                            model.productsList[
+                                                                index]);
+                                              },
                                               child: Container(
-                                                margin:
-                                                EdgeInsets.only(top: 2),
-                                                child:model.productsList[index].images?.length == 0 ? Padding(
-                                                  padding: const EdgeInsets.all(38.0),
-                                                  child: Center(child: SvgPicture.asset("assets/images/empty_photo_illustration.svg")),
-                                                ): CachedNetworkImage(
-                                                  fit: BoxFit.fill,
-                                                  imageUrl:  model
-                                                      .productsList[index]
-                                                      .images[0],
-                                                  placeholder: (context, url) => CupertinoActivityIndicator(radius: 40,),
-                                                  errorWidget: (context, url, error) => Icon(Icons.error,color: Colors.white,),
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      flex: 3,
+                                                      child: Hero(
+                                                        transitionOnUserGestures:
+                                                            true,
+                                                        tag: model
+                                                            .productsList[index]
+                                                            .id,
+                                                        child: Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 2),
+                                                          child: model
+                                                                      .productsList[
+                                                                          index]
+                                                                      .images
+                                                                      ?.length ==
+                                                                  0
+                                                              ? Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          38.0),
+                                                                  child: Center(
+                                                                      child: SvgPicture
+                                                                          .asset(
+                                                                              "assets/images/empty_photo_illustration.svg")),
+                                                                )
+                                                              : CachedNetworkImage(
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  imageUrl: model
+                                                                      .productsList[
+                                                                          index]
+                                                                      .images[0],
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      CupertinoActivityIndicator(
+                                                                    radius: 40,
+                                                                  ),
+                                                                  errorWidget:
+                                                                      (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          Icon(
+                                                                    Icons.error,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        color: Constants
+                                                            .darkBlackColor,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround,
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        4.0),
+                                                                child:
+                                                                    Container(
+                                                                  margin: const EdgeInsets
+                                                                          .only(
+                                                                      left: 4),
+//                                      color: Colors.blueAccent,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceAround,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Text(
+//                                                                            'config brand',
+                                                                        model.productsList[index].brand ??
+                                                                            "Unknown Brand",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                15,
+                                                                            color:
+                                                                                Color(0xffEEEEEE)),
+                                                                      ),
+                                                                      Text(
+                                                                        model
+                                                                            .productsList[index]
+                                                                            .title,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Color(0xffEEEEEE).withOpacity(0.7)),
+                                                                      ),
+                                                                      Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.baseline,
+                                                                        textBaseline:
+                                                                            TextBaseline.alphabetic,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        children: <
+                                                                            Widget>[
+                                                                          Row(
+                                                                            children: <Widget>[
+                                                                              Text(
+                                                                                "\u20B9",
+                                                                                style: TextStyle(color: Constants.offWhiteColor),
+                                                                              ),
+                                                                              Text(
+                                                                                model.productsList[index].salePrice,
+                                                                                style: TextStyle(fontSize: 15, color: Color(0xffEEEEEE)),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          Row(
+                                                                            children: <Widget>[
+                                                                              Text(
+                                                                                "\u20B9",
+                                                                                style: TextStyle(fontSize: 11, color: Constants.offWhiteColor),
+                                                                              ),
+                                                                              Text(
+                                                                                model.productsList[index].retailPrice,
+                                                                                style: TextStyle(fontSize: 11, decoration: TextDecoration.lineThrough, color: Color(0xffEEEEEE).withOpacity(0.7)),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            model
+                                                                        .productsList[
+                                                                            index]
+                                                                        .inventoryCount >
+                                                                    model
+                                                                        .productsList[
+                                                                            index]
+                                                                        .minInventoryCount
+                                                                ? Container()
+                                                                : Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Container(
+                                                                      child:
+                                                                          Text(
+                                                                        'Few Left',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.red.withOpacity(0.9)),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -191,204 +353,107 @@ class searchResult extends StatelessWidget {
                                           Expanded(
                                             flex: 1,
                                             child: Container(
-                                              color: Constants.darkBlackColor,
+                                              color: Color(0xff393E46),
                                               child: Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceAround,
-                                                children: <
-                                                    Widget>[
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: <Widget>[
                                                   Expanded(
                                                     flex: 2,
-                                                    child:
-                                                    Padding(
+                                                    child: Padding(
                                                       padding:
-                                                      const EdgeInsets.all(
-                                                          4.0),
-                                                      child:
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                            .only(
-                                                            left:
-                                                            4),
-//                                      color: Colors.blueAccent,
-                                                        child:
-                                                        Column(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.spaceAround,
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                          children: <
-                                                              Widget>[
-                                                            Text(
-//                                                                            'config brand',
-                                                              model
-                                                                  .productsList[
-                                                              index]
-                                                                  .brand ?? "Unknown Brand",
-                                                              style:
-                                                              TextStyle(fontSize: 15, color: Color(0xffEEEEEE)),
-                                                            ),
-                                                            Text(
-                                                              model.productsList[index].title,
-                                                              overflow:
-                                                              TextOverflow.ellipsis,
-                                                              style:
-                                                              TextStyle(fontSize: 12, color: Color(0xffEEEEEE).withOpacity(0.7)),
-                                                            ),
-                                                            Row(
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment.baseline,
-                                                              textBaseline:
-                                                              TextBaseline.alphabetic,
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment.start,
-                                                              children: <Widget>[
-                                                                Row(
-                                                                  children: <Widget>[
-                                                                    Text(
-                                                                      "\u20B9",
-                                                                      style: TextStyle(color: Constants.offWhiteColor),
-                                                                    ),
-                                                                    Text(
-                                                                      model.productsList[index].salePrice,
-                                                                      style: TextStyle(fontSize: 15, color: Color(0xffEEEEEE)),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Row(
-                                                                  children: <Widget>[
-                                                                    Text(
-                                                                      "\u20B9",
-                                                                      style: TextStyle(fontSize: 11, color: Constants.offWhiteColor),
-                                                                    ),
-                                                                    Text(
-                                                                      model.productsList[index].retailPrice,
-                                                                      style: TextStyle(fontSize: 11, decoration: TextDecoration.lineThrough, color: Color(0xffEEEEEE).withOpacity(0.7)),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Container(
+//                                            width: 120,
+                                                        child: model
+                                                                    .productsList[
+                                                                        index]
+                                                                    .inventoryCount ==
+                                                                0
+                                                            ? RaisedButton(
+                                                                color: Constants
+                                                                    .tealColor,
+                                                                disabledColor:
+                                                                    Constants
+                                                                        .darkBlackColor,
+                                                                onPressed: model
+                                                                            .productsList[
+                                                                                index]
+                                                                            .inventoryCount <=
+                                                                        model
+                                                                            .productsList[index]
+                                                                            .minInventoryCount
+                                                                    ? null
+                                                                    : () {
+//                                                                     model.addItemToCart(
+//                                                                        model.productsList[
+//                                                                        index]);
+                                                                        print(model.productsList[index].inventoryCount <
+                                                                            model.productsList[index].minInventoryCount);
+                                                                      },
+                                                                child: Text(
+                                                                    'Out Of Stock',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Color(
+                                                                            0xffEEEEEE))),
+                                                              )
+                                                            : RaisedButton(
+                                                                color: Constants
+                                                                    .tealColor,
+                                                                disabledColor:
+                                                                    Constants
+                                                                        .darkBlackColor,
+                                                                onPressed: () {
+                                                                  model.addItemToCart(
+                                                                      model.productsList[
+                                                                          index]);
+                                                                },
+                                                                child: Text(
+                                                                    'Add To Cart',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Color(
+                                                                            0xffEEEEEE))),
+                                                              ),
                                                       ),
                                                     ),
                                                   ),
-                                                  model.productsList[index].inventoryCount > model.productsList[index].minInventoryCount
-                                                      ? Container()
-                                                      : Expanded(
-                                                    flex: 1,
-                                                    child:
-                                                    Container(
-                                                      child:
-                                                      Text(
-                                                        'Few Left',
-                                                        style:
-                                                        TextStyle(fontSize: 14, color: Colors.red.withOpacity(0.9)),
+                                                  Flexible(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Container(
+                                                        width: 80,
+                                                        child: Icon(
+                                                          Icons.favorite_border,
+                                                          color:
+                                                              Color(0xff00ADB5),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ),
+                                          )
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    color: Color(0xff393E46),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .spaceEvenly,
-                                      children: <Widget>[
-                                        Expanded(
-                                          flex: 2,
-                                          child: Padding(
-                                            padding:
-                                            const EdgeInsets
-                                                .all(8.0),
-                                            child: Container(
-//                                            width: 120,
-                                              child:
-                                              model.productsList[index].inventoryCount==0 ? RaisedButton(
-                                                color: Constants.tealColor,
-                                                disabledColor:
-                                                Constants.darkBlackColor,
-                                                onPressed: model.productsList[index].inventoryCount <= model.productsList[index].minInventoryCount ? null :(){
-//                                                                     model.addItemToCart(
-//                                                                        model.productsList[
-//                                                                        index]);
-                                                  print(model.productsList[index].inventoryCount < model.productsList[index].minInventoryCount);
-                                                },
-                                                child: Text(
-                                                    'Out Of Stock',
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                        12,
-                                                        color:
-                                                        Color(0xffEEEEEE))),
-                                              ) :  RaisedButton(
-                                                color: Constants.tealColor,
-                                                disabledColor:
-                                                Constants.darkBlackColor,
-                                                onPressed: (){
-                                                  model.addItemToCart(
-                                                      model.productsList[
-                                                      index]);
-
-                                                },
-                                                child: Text(
-                                                    'Add To Cart',
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                        12,
-                                                        color:
-                                                        Color(0xffEEEEEE))),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: Padding(
-                                            padding:
-                                            const EdgeInsets
-                                                .all(8.0),
-                                            child: Container(
-                                              width: 80,
-                                              child: Icon(
-                                                Icons
-                                                    .favorite_border,
-                                                color: Color(
-                                                    0xff00ADB5),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Positioned(
+                                    Positioned(
 //                                left: MediaQuery.of(context).size.width *0.29,
-                            child: Container(
-                              alignment: Alignment.topRight,
-                              child: CustomPaint(
-                                painter: CurvePainter(),
-                                child: Container(
-                                  height: 160,
-                                  width: 60,
+                                      child: Container(
+                                        alignment: Alignment.topRight,
+                                        child: CustomPaint(
+                                          painter: CurvePainter(),
+                                          child: Container(
+                                            height: 160,
+                                            width: 60,
 //                                      decoration: BoxDecoration(
 //                                        gradient: LinearGradient(
 //                                          begin: Alignment.topLeft,
@@ -399,59 +464,75 @@ class searchResult extends StatelessWidget {
 //                                          ],
 //                                        ),
 //                                      ),
-                                  padding:
-                                  EdgeInsets.only(top: 10),
-                                  child: Container(
+                                            padding: EdgeInsets.only(top: 10),
+                                            child: Container(
 //                                        color: Colors.red,
-                                    margin: EdgeInsets.only(
-                                        left: 6),
-                                    child: Text(
-                                      model.productsList[index]
-                                          .discount +
-                                          "% OFF",
-                                      textAlign:
-                                      TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: MediaQuery.of(
-                                              context)
-                                              .size
-                                              .width /
-                                              MediaQuery.of(
-                                                  context)
-                                                  .size
-                                                  .width *
-                                              14.0,
-                                          fontWeight:
-                                          FontWeight.w900,
-                                          color: Constants
-                                              .offWhiteColor),
+                                              margin: EdgeInsets.only(left: 6),
+                                              child: Text(
+                                                model.productsList[index]
+                                                        .discount +
+                                                    "% OFF",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width /
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        14.0,
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Constants
+                                                        .offWhiteColor),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }, childCount: model.productsList.length),
+                        ),
+                        model.isLoadingMore
+                            ? new SliverToBoxAdapter(
+                                child: CupertinoActivityIndicator(
+                                  radius: 24,
+                                ),
+                              )
+                            : new SliverToBoxAdapter(
+                                child: Container(),
+                              ),
+                      ],
+                    ),
+                    model.itemBuildIndex > 6
+                        ? FlipInY(
+                          child: Align(
+                              alignment: Alignment.topCenter,
+                              child: RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Constants.tealColor)),
+                                disabledColor: Constants.tealColor.withOpacity(0.7),
+                                padding: const EdgeInsets.all(8.0),
+                                child: new Text(
+                                  (model.itemBuildIndex + 1).toString() +
+                                      ' / ' +
+                                      model.totalProducts.toString(),
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }, childCount: model.productsList.length),
-          ),
-          model.isLoadingMore
-              ? new SliverToBoxAdapter(
-            child: CupertinoActivityIndicator(
-              radius: 24,
-            ),
-          )
-              : new SliverToBoxAdapter(
-            child: Container(),
-          ),
-        ],
-      ),
+                        )
+                        : Container()
+                  ],
+                ),
     );
   }
 }
-
 
 //class UserSearchDelegate extends SearchDelegate {
 //  SearchViewModel model;
@@ -931,4 +1012,3 @@ class searchResult extends StatelessWidget {
 //    );
 //  }
 //}
-

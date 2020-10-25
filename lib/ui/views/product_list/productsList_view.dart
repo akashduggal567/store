@@ -75,7 +75,6 @@ class _ProductsListViewState extends State<ProductsListView> {
                         height: 40,
                         child: FloatingActionButton.extended(
                           onPressed: () {
-                            print("pressed");
                             controller.animateTo(0,
                                 duration: Duration(milliseconds: 500),
                                 curve: Curves.bounceIn);
