@@ -14,21 +14,21 @@ import 'local_storage_service.dart';
 class ApiService{
 
 
-//  static const userendpoint = 'http://10.0.2.2:2003';
-//  static const endpoint = 'http://10.0.2.2:2004';
-//  static const addressendpoint = 'http://10.0.2.2:2005';
-//  static const orderendpoint = 'http://10.0.2.2:2006';
-//  static const cartendpoint = 'http://10.0.2.2:2007';
-//  static const invoiceEndpoint = 'http://10.0.2.2:2008';
-//  static const wishlistendpoint = 'http://10.0.2.2:2011';
+  static const userendpoint = 'http://10.0.2.2:2003';
+  static const endpoint = 'http://10.0.2.2:2004';
+  static const addressendpoint = 'http://10.0.2.2:2005';
+  static const orderendpoint = 'http://10.0.2.2:2006';
+  static const cartendpoint = 'http://10.0.2.2:2007';
+  static const invoiceEndpoint = 'http://10.0.2.2:2008';
+  static const wishlistendpoint = 'http://10.0.2.2:2011';
 //
-    static const userendpoint = "http://1e5d33995994.ngrok.io";
-    static const endpoint = 'http://b71a9b24b1c4.ngrok.io';
-    static const addressendpoint = 'http://6ad01c2bed80.ngrok.io';
-    static const orderendpoint = 'http://c62f2575fbc8.ngrok.io';
-    static const cartendpoint = 'http://e4123429aed5.ngrok.io';
-    static const invoiceEndpoint = "http://612111b9e8c2.ngrok.io";
-    static const wishlistendpoint = 'http://3635cad79c41.ngrok.io';
+//    static const userendpoint = "http://1e5d33995994.ngrok.io";
+//    static const endpoint = 'http://b71a9b24b1c4.ngrok.io';
+//    static const addressendpoint = 'http://6ad01c2bed80.ngrok.io';
+//    static const orderendpoint = 'http://c62f2575fbc8.ngrok.io';
+//    static const cartendpoint = 'http://e4123429aed5.ngrok.io';
+//    static const invoiceEndpoint = "http://612111b9e8c2.ngrok.io";
+//    static const wishlistendpoint = 'http://3635cad79c41.ngrok.io';
 //
 //  static const userendpoint = 'http://localhost:2003';
 //  static const endpoint = 'http://localhost:2004';
@@ -318,6 +318,16 @@ class ApiService{
       dio.options.headers["user-id"] = value.user.id;
       Response response = await dio.get('$orderendpoint/api/order',);
       print("Called getOrders api");
+      return ApiResponse(response);
+    });
+  }
+
+  Future<ApiResponse>  searchProduct({@required query, page, limit}) {
+    Dio dio = new Dio();
+    return _localStorageService.then((value) async {
+      dio.options.headers["user-id"] = value.user.id;
+      Response response = await dio.get('$endpoint/api/product/search',queryParameters: {"querystring": query, "page": page, "limit": limit});
+      print("Called searchProduct api");
       return ApiResponse(response);
     });
   }
