@@ -5,6 +5,7 @@ import 'package:store/app/router.gr.dart';
 import 'package:store/models/address.dart';
 import 'package:store/services/api.dart';
 import 'package:store/services/local_storage_service.dart';
+import 'package:store/ui/views/buy/buy_view.dart';
 
 class OrderAddressViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
@@ -54,7 +55,8 @@ class OrderAddressViewModel extends BaseViewModel {
   }
 
   void navigateToPaymentOptionView(totalAmountPayable,cartItems) async{
-    await _navigationService.navigateTo(Routes.buyViewRoute, arguments: BuyViewArguments(totalAmountPayable: totalAmountPayable, orderDetails: {"addressId": selectedAddresId,"items": cartItems }));
+    await _navigationService.popRepeated(1);
+    await _navigationService.replaceWithTransition(BuyView(totalAmountPayable: totalAmountPayable,orderDetails: {"addressId": selectedAddresId,"items": cartItems }),transition: 'rightToLeft');
   }
 
 }

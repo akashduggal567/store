@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
+import 'package:store/app/router.gr.dart';
 import 'package:store/app/setup_snackbar_ui.dart';
 import 'package:store/helpers/ApiResponse.dart';
 import 'package:store/services/api.dart';
@@ -63,7 +64,9 @@ class BuyViewModel extends BaseViewModel {
        getFileFromUrl(response.result[0]["invoiceUrl"]).then((value) =>
        _navigationService.navigateWithTransition(PdfViewPage(path: value.path,fileUrl: response.result[0]["invoiceUrl"],),transition: "rightToLeft")
        );
-
+     }
+     if(!dialogResponse.confirmed){
+       await _navigationService.replaceWith(Routes.dashboardViewRoute);
      }
 
    }else{

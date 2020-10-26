@@ -169,19 +169,24 @@ class CartService with ReactiveServiceMixin {
 
 
     ApiResponse response = await _apiService.fetchUserCart();
-    var fetchedCartItems = response.result.map((e) => DetailedCartItem.fromJson(e)).toList();
-    _cartItems.clear();
-    var serialized =
-       await fetchedCartItems.map((e) =>  _cartItems.add(serializeForCart(e))).toList();
-    calcualteBillattributes();
 
-    List<int> mrp = _cartItems.map((item) {
-      return item.quantity.toInt();
-    }).toList();
+    if(response!=null){
+      if(response.result.length>0){
+        var fetchedCartItems = response.result.map((e) => DetailedCartItem.fromJson(e)).toList();
+        _cartItems.clear();
+        var serialized =
+        await fetchedCartItems.map((e) =>  _cartItems.add(serializeForCart(e))).toList();
+        calcualteBillattributes();
 
-    _totalItemCount = mrp.length == 0
-        ? RxValue(initial: 0)
-        : RxValue(initial: mrp.reduce((a, b) => a + b));
+        List<int> mrp = _cartItems.map((item) {
+          return item.quantity.toInt();
+        }).toList();
+
+        _totalItemCount = mrp.length == 0
+            ? RxValue(initial: 0)
+            : RxValue(initial: mrp.reduce((a, b) => a + b));
+      }
+    }
 //   _totalItemCount = mrp.fold(RxValue(initial: 0), (previousValue, element) => previousValue+element);
   }
 

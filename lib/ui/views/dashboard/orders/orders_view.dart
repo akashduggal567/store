@@ -150,44 +150,57 @@ Widget _buildOrderHistoryCard({OrdersViewModel model, int index}) {
                 Expanded(
                   child: Container(
                     height: double.infinity,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1.0, color: Constants.lightBlackColor)),
-                    child: RaisedButton(
-                      disabledColor: Colors.transparent,
-                      color: Constants.darkBlackColor,
-                      splashColor: Constants.lightBlackColor,
-                      elevation: 0,
-                      onPressed: () {
-                        model.openPdfView(
-                            pdfUrl: model.orders[index].invoiceUrl);
-                      },
-                      child: Text('View Invoice',
-                          style: TextStyle(
-                              fontSize: 16, color: Color(0xffEEEEEE))),
-                    ),
+                    child: model.orders[index].status ==
+                            Constants.ORDER_STATUS_DELIEVERED
+                        ? MaterialButton(
+                            color: Constants.lightBlackColor,
+                            splashColor: Constants.lightBlackColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(10))),
+                            elevation: 0,
+                            onPressed: () {
+                              model.openPdfView(
+                                  pdfUrl: model.orders[index].invoiceUrl);
+                            },
+                            child: Text('View Invoice',
+                                style: TextStyle(
+                                    fontSize: 16, color: Color(0xffEEEEEE))),
+                          )
+                        : MaterialButton(
+                            color: Constants.lightBlackColor,
+                            splashColor: Constants.lightBlackColor,
+                            elevation: 0,
+                            onPressed: () {
+                              model.openPdfView(
+                                  pdfUrl: model.orders[index].invoiceUrl);
+                            },
+                            child: Text('View Invoice',
+                                style: TextStyle(
+                                    fontSize: 16, color: Color(0xffEEEEEE))),
+                          ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1.0, color: Constants.lightBlackColor)),
-                    child: RaisedButton(
-                      disabledColor: Colors.transparent,
-                      color: Constants.darkBlackColor,
-                      splashColor: Constants.lightBlackColor,
-                      elevation: 0,
-                      onPressed: () {
-                        print("clicked");
-                      },
-                      child: Text('Order Details',
-                          style: TextStyle(
-                              fontSize: 16, color: Color(0xffEEEEEE))),
-                    ),
-                  ),
-                ),
+//                Expanded(
+//                  child: Container(
+//                    height: double.infinity,
+//                    decoration: BoxDecoration(
+//                        border: Border.all(
+//                            width: 1.0, color: Constants.lightBlackColor)),
+//                    child: RaisedButton(
+//                      disabledColor: Colors.transparent,
+//                      color: Constants.darkBlackColor,
+//                      splashColor: Constants.lightBlackColor,
+//                      elevation: 0,
+//                      onPressed: () {
+//                        print("clicked");
+//                      },
+//                      child: Text('Order Details',
+//                          style: TextStyle(
+//                              fontSize: 16, color: Color(0xffEEEEEE))),
+//                    ),
+//                  ),
+//                ),
               ],
             ),
           ),
