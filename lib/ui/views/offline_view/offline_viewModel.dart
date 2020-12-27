@@ -26,13 +26,13 @@ class OfflineViewModel extends BaseViewModel {
 
   navigateToDashboard() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _navigationService.popRepeated(1);
+      _navigationService.replaceWith(Routes.dashboardViewRoute);
     });
 }
 
   init() {
     subscription =  _connectivityService.listen((event) {
-      print("EVENT IN Offline Page");
+      print("EVENT IN Offline Page = "+ event.toString());
       _connectivityStatus = event;
       notifyListeners();
     });

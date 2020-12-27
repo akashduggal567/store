@@ -12,12 +12,12 @@ class OfflineView extends StatelessWidget {
         builder: (context, model,child)=>WillPopScope(
           onWillPop: () => Future.value(false),
           child: Scaffold(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.black,
             appBar: AppBar(
               title: Text("Sorry"),
               leading: Container(),
             ),
-            body: model.connectivityStatus == ConnectivityStatus.WiFi ? model.navigateToDashboard(): Text("No Internet Connection",style: TextStyle(color: Colors.white70),),
+            body: model.connectivityStatus == ConnectivityStatus.WiFi ? model.navigateToDashboard(): Center(child: Text("No Internet Connection",style: TextStyle(color: Colors.white70),)),
           ),
         ),
         viewModelBuilder: ()=> OfflineViewModel());

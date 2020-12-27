@@ -43,8 +43,7 @@ class ApiService {
 //  static const BASEURL =
 //      "http://ec2-3-7-65-217.ap-south-1.compute.amazonaws.com";
 
-  static const BASEURL =
-      "http://10.0.2.2";
+  static const BASEURL = "http://10.0.2.2";
 
   DialogService _dialogService = locator<DialogService>();
   SnackbarService _snackbarService = locator<SnackbarService>();
@@ -121,6 +120,12 @@ class ApiService {
           case DioErrorType.DEFAULT:
             {
               //statements;
+
+              if(e.response == null){
+                _dialogService.showDialog(
+                    title: "Internet is not Connected",
+                    description: "Internet is not Connected");
+              }
             }
             break;
           case DioErrorType.CANCEL:
@@ -136,6 +141,7 @@ class ApiService {
           default:
             {
               //statements;
+              print(e);
             }
             break;
         }
@@ -144,12 +150,11 @@ class ApiService {
     }
   }
 
-
   // ***************** START OF PRODUCT ENDPOINTS **************************
 
   Future<ApiResponse> fetchCategories() async {
     try {
-      Response response = await Dio().get('$BASEURL/api/product/category');
+      Response response = await client.get('$BASEURL/api/product/category');
       return Future.delayed(Duration(seconds: 0)).then((e) {
         return ApiResponse(response);
       });
@@ -160,7 +165,7 @@ class ApiService {
 
   Future<ApiResponse> fetchSubCategories(categoryName) async {
     try {
-      Response response = await Dio().get('$BASEURL/api/product/subcategory',
+      Response response = await client.get('$BASEURL/api/product/subcategory',
           queryParameters: {"categoryName": categoryName});
 
       return ApiResponse(response);
@@ -171,37 +176,24 @@ class ApiService {
 
   Future<ApiResponse> fetchProducts(
       {@required tagsArray, sortBy, sortOrder, page = 1, limit = 10}) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response =
-      await dio.get('$BASEURL/api/product/getByTag', queryParameters: {
-        "tags": tagsArray,
-        "sortBy": sortBy,
-        "sortOrder": sortOrder,
-        "page": page,
-        'limit': limit
-      });
-      print("updateAddressDetails  api" +
-          ApiResponse(response).result.toString());
-      return Future.delayed(Duration(seconds: 2))
-          .then((value) => ApiResponse(response));
+    Response response =
+        await client.get('$BASEURL/api/product/getByTag', queryParameters: {
+      "tags": tagsArray,
+      "sortBy": sortBy,
+      "sortOrder": sortOrder,
+      "page": page,
+      'limit': limit
     });
+
+    return Future.delayed(Duration(seconds: 2))
+        .then((value) => ApiResponse(response));
   }
 
-  Future<ApiResponse> searchProduct({@required query, page, limit}) {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio.get('$BASEURL/api/product/search',
-          queryParameters: {
-            "querystring": query,
-            "page": page,
-            "limit": limit
-          });
-      print("Called searchProduct api");
-      return ApiResponse(response);
-    });
+  Future<ApiResponse> searchProduct({@required query, page, limit}) async {
+    Response response = await client.get('$BASEURL/api/product/search',
+        queryParameters: {"querystring": query, "page": page, "limit": limit});
+
+    return ApiResponse(response);
   }
 
   // ***************** END OF PRODUCT ENDPOINTS **************************
@@ -210,6 +202,7 @@ class ApiService {
 
   Future<bool> checkIfUserAlreadyExists(
       {@required firebaseId, @required deviceToken}) async {
+    // NO NEED OF DEFAULT HEADERS
     Response response = await Dio().get(
       '$BASEURL/api/user',
       queryParameters: {"firebaseId": firebaseId, "deviceToken": deviceToken},
@@ -236,85 +229,50 @@ class ApiService {
   }
 
   Future<User> fetchUser({@required firebaseId, @required deviceToken}) async {
-    Response response = await Dio().get('$BASEURL/api/user',
-        queryParameters: {
-          "firebaseId": firebaseId,
-          "deviceToken": deviceToken
-        });
+    Response response = await Dio().get('$BASEURL/api/user', queryParameters: {
+      "firebaseId": firebaseId,
+      "deviceToken": deviceToken
+    });
 
     Map responseBody = response.data;
     return User.fromJson(responseBody["result"]);
   }
 
-
   Future<ApiResponse> setAddressAsDefault(userId, addressId) async {
-    Dio dio = new Dio();
-    dio.options.headers["user-id"] = userId.toString();
-    Response response = await dio
+    Response response = await client
         .put('$BASEURL/api/user', data: {"defaultAddress": addressId});
-    print(ApiResponse(response));
+
     return ApiResponse(response);
   }
 
   Future<ApiResponse> fetchDefaultAddressId() async {
-    BaseOptions options = new BaseOptions(
-        receiveDataWhenStatusError: true,
-        connectTimeout: 10 * 1000, // 60 seconds
-        receiveTimeout: 10 * 1000 // 60 seconds
-    );
-    Dio dio = new Dio(options);
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response =
-      await dio.get('$BASEURL/api/user/defaultAddress');
-      print("default address api" + ApiResponse(response).result.toString());
-      return ApiResponse(response);
-    });
+    Response response = await client.get('$BASEURL/api/user/defaultAddress');
+    return ApiResponse(response);
   }
 
   Future<ApiResponse> fetchUserCart() async {
-    return _localStorageService.then((value) async {
-      Response response;
-      try {
-        print(BASEURL);
-        response = await client.get('$BASEURL/api/user/cart/cartItems');
-        return ApiResponse(response);
-      } on DioError catch (e) {
-        return null;
-      }
-    });
+    Response response = await client.get('$BASEURL/api/user/cart/cartItems');
+    return ApiResponse(response);
   }
 
   Future<ApiResponse> fetchUserWishlist() async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response =
-      await dio.get('$BASEURL/api/user/wishlist/wishlistItems');
+    Response response =
+        await client.get('$BASEURL/api/user/wishlist/wishlistItems');
 
-      return ApiResponse(response);
-    });
+    return ApiResponse(response);
   }
 
   Future<ApiResponse> logout() async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio.put('$BASEURL/api/user/logout');
+    Response response = await client.put('$BASEURL/api/user/logout');
 
-      return ApiResponse(response);
-    });
+    return ApiResponse(response);
   }
 
   Future<ApiResponse> updateUserDeviceToken(deviceToken) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio
-          .put('$BASEURL/api/user', data: {"deviceToken": deviceToken});
+    Response response = await client
+        .put('$BASEURL/api/user', data: {"deviceToken": deviceToken});
 
-      return ApiResponse(response);
-    });
+    return ApiResponse(response);
   }
 
   // ***************** END OF USER ENDPOINTS **************************
@@ -322,66 +280,35 @@ class ApiService {
   // ***************** START OF ADDRESS ENDPOINTS **************************
 
   Future<ApiResponse> createNewAddress(address, userId) async {
-    Dio dio = new Dio();
-    dio.options.headers["user-id"] = userId.toString();
     Response response =
-        await dio.post('$BASEURL/api/address', data: address);
+        await client.post('$BASEURL/api/address', data: address);
     return ApiResponse(response);
   }
 
   Future<List<Address>> fetchAllAddresses() async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response = await client.get('$BASEURL/api/address');
-      Map responseBody = response.data;
-      var address_array_response_object = responseBody["result"];
+    Response response = await client.get('$BASEURL/api/address');
+    Map responseBody = response.data;
+    var address_array_response_object = responseBody["result"];
 
-      // converting list of response objects to model objects respectively
-      List<Address> addressObjectArray = (address_array_response_object as List)
-          .map((data) => new Address.fromJson(data))
-          .toList();
-      return Future.delayed(Duration(seconds: 3))
-          .then((value) => addressObjectArray);
-    });
+    // converting list of response objects to model objects respectively
+    List<Address> addressObjectArray = (address_array_response_object as List)
+        .map((data) => new Address.fromJson(data))
+        .toList();
+    return Future.delayed(Duration(seconds: 3))
+        .then((value) => addressObjectArray);
   }
 
   Future<ApiResponse> deleteUserAddress(userId, addressId) async {
-    BaseOptions options = new BaseOptions(
-        receiveDataWhenStatusError: true,
-        connectTimeout: 10 * 1000, // 60 seconds
-        receiveTimeout: 10 * 1000 // 60 seconds
-        );
-
-    Dio dio = new Dio(options);
-    try {
-      dio.options.headers["user-id"] = userId.toString();
-      Response response =
-          await dio.delete('$BASEURL/api/address/$addressId');
-      return ApiResponse(response);
-    } on DioError catch (ex) {
-      if (ex.type == DioErrorType.CONNECT_TIMEOUT) {
-//        throw Exception("Connection  Timeout Exception");
-        _dialogService.showDialog(
-            title: "Error",
-            buttonTitle: "OK",
-            description: "Connection  Timeout Exception");
-      }
-    }
+    Response response = await client.delete('$BASEURL/api/address/$addressId');
+    return ApiResponse(response);
   }
-
 
   Future<ApiResponse> updateAddressDetails(
       {@required addressId, @required updatedFields}) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.toString();
-      Response response = await dio
-          .put('$BASEURL/api/address/$addressId', data: updatedFields);
-      print("updateAddressDetails  api" +
-          ApiResponse(response).result.toString());
-      return ApiResponse(response);
-    });
+    Response response = await client.put('$BASEURL/api/address/$addressId',
+        data: updatedFields);
+
+    return ApiResponse(response);
   }
 
   // ***************** END OF ADDRESS ENDPOINTS **************************
@@ -389,93 +316,61 @@ class ApiService {
   // ***************** START OF CART ENDPOINTS **************************
 
   Future<ApiResponse> addToCart(CartItem cartItem) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response =
-          await dio.put('$BASEURL/api/cart/addItem', data: cartItem);
-      print("addToCart  api" + ApiResponse(response).toString());
-      return Future.delayed(Duration(seconds: 0))
-          .then((value) => ApiResponse(response));
+    Response response =
+        await client.put('$BASEURL/api/cart/addItem', data: cartItem);
 
-    });
+    return Future.delayed(Duration(seconds: 0))
+        .then((value) => ApiResponse(response));
   }
 
   Future<ApiResponse> removeItemfromCart(CartItem cartItem) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response =
-      await dio.delete('$BASEURL/api/cart/removeItem', data: cartItem);
-      print("removeItemfromCart  api : " + ApiResponse(response).toString());
-      return Future.delayed(Duration(seconds: 0))
-          .then((value) => ApiResponse(response));
+    Response response =
+        await client.delete('$BASEURL/api/cart/removeItem', data: cartItem);
 
-    });
+    return Future.delayed(Duration(seconds: 0))
+        .then((value) => ApiResponse(response));
   }
 
   // ***************** END OF CART ENDPOINTS *******************************
   // ***************** START OF WISHLIST ENDPOINTS **************************
 
-
   Future<ApiResponse> addToWishlist(String productId) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio.put(
-          '$BASEURL/api/wishlist/addItem',
-          data: {'productId': productId});
-      print("addToWishlist  api" + ApiResponse(response).toString());
-      return Future.delayed(Duration(seconds: 0))
-          .then((value) => ApiResponse(response));
-//   return ApiResponse(response);
-    });
+    Response response = await client
+        .put('$BASEURL/api/wishlist/addItem', data: {'productId': productId});
+    print("addToWishlist  api" + ApiResponse(response).toString());
+    return Future.delayed(Duration(seconds: 0))
+        .then((value) => ApiResponse(response));
   }
-
 
   Future<ApiResponse> removeItemFromWishlist(CartItem cartItem) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio
-          .delete('$BASEURL/api/wishlist/removeItem', data: cartItem);
-      print("removeItemfromCart  api : " + ApiResponse(response).toString());
-      return Future.delayed(Duration(seconds: 0))
-          .then((value) => ApiResponse(response));
-    });
+    Response response =
+        await client.delete('$BASEURL/api/wishlist/removeItem', data: cartItem);
+    print("removeItemfromCart  api : " + ApiResponse(response).toString());
+    return Future.delayed(Duration(seconds: 0))
+        .then((value) => ApiResponse(response));
   }
-
 
   // ***************** END OF WISHLIST ENDPOINTS *******************************
   // ***************** START OF INVOICE ENDPOINTS **************************
 
   Future<ApiResponse> createOrder({@required orderDetails}) async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response =
-          await dio.put('$BASEURL/api/invoice', data: orderDetails);
+    Response response =
+        await client.put('$BASEURL/api/invoice', data: orderDetails);
 
-      return ApiResponse(response);
-    });
+    return ApiResponse(response);
   }
 
   // ***************** END OF INVOICE ENDPOINTS **************************
   // ***************** START OF ORDER ENDPOINTS **************************
 
   Future<ApiResponse> getOrders() async {
-    Dio dio = new Dio();
-    return _localStorageService.then((value) async {
-      dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio.get(
-        '$BASEURL/api/order',
-      );
-      print("Called getOrders api");
-      return ApiResponse(response);
-    });
+    Response response = await client.get(
+      '$BASEURL/api/order',
+    );
+
+    return ApiResponse(response);
   }
 
 // ***************** END OF ORDER ENDPOINTS **************************
-
 
 }

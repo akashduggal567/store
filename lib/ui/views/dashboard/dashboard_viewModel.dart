@@ -40,7 +40,7 @@ class DashboardViewModel extends IndexTrackingViewModel {
 
 
     _connectivityService.listen((event) {
-      print("EVENT IN DASHBOARD");
+      print("EVENT IN DASHBOARD = " + event.toString());
       _connectivityStatus = event;
       notifyListeners();
     });
@@ -51,7 +51,7 @@ class DashboardViewModel extends IndexTrackingViewModel {
   showInternetDialog() {
       int counter = 0 ;
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        _navigationService.navigateTo(Routes.offlineViewRoute);
+        _navigationService.replaceWith(Routes.offlineViewRoute);
       });
 
 //     _snackbarService.showCustomSnackBar(variant: SnackbarType.blackAndWhite, message: (counter+1).toString(), title: "Internet", duration: Duration(seconds: 4));
