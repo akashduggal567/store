@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -100,7 +101,7 @@ class ProductDetailsView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             Expanded(
-                              flex: 4,
+                              flex: 6,
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Column(
@@ -117,30 +118,43 @@ class ProductDetailsView extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          Text(
-                                            productDetails.brand.title ?? "Unknown Brand",
-//                                          "config brand",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 18,
-                                                color: Color(0xffEEEEEE)),
+                                          Flexible(
+                                            flex:1,
+                                            child: Container(
+                                              child: AutoSizeText(
+                                                productDetails.brand.title?? "Unknown Brand",
+                                         overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 18,
+                                                    color: Color(0xffEEEEEE)),
+                                              ),
+                                            ),
                                           ),
                                           SizedBox(
                                             width: 18,
                                           ),
-                                          Flexible(
-                                            child: Text(
-                                              productDetails.title,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Color(0xffEEEEEE)
-                                                      .withOpacity(0.7)),
+                                          Expanded(
+                                            flex:2,
+                                            child: Container(
+
+                                              child: AutoSizeText(
+                                                productDetails.title+productDetails.title,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 15, fontWeight:
+                                                FontWeight.w400,
+                                                    color: Color(0xffEEEEEE)
+                                                        .withOpacity(0.7)),
+                                                maxLines: productDetails.inventoryCount > productDetails.minInventoryCount? 3 : 3,
+                                              ),
                                             ),
                                           ),
+
                                         ],
                                       ),
                                     ),
+                                    SizedBox(height: 6,),
                                     Container(
                                       margin: const EdgeInsets.only(left: 4),
                                       child: Row(
@@ -150,23 +164,39 @@ class ProductDetailsView extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: <Widget>[
-                                          Text(
-                                            productDetails.salePrice,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xffEEEEEE)),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "\u20B9",
+                                                style: TextStyle(fontSize: 14, color: Constants.offWhiteColor),
+                                              ),
+                                              Text(
+                                                productDetails.salePrice,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Color(0xffEEEEEE)),
+                                              ),
+                                            ],
                                           ),
                                           SizedBox(
                                             width: 14,
                                           ),
-                                          Text(
-                                            productDetails.retailPrice,
-                                            style: TextStyle(
-                                                fontSize: 11,
-                                                decoration: TextDecoration
-                                                    .lineThrough,
-                                                color: Color(0xffEEEEEE)
-                                                    .withOpacity(0.7)),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "\u20B9",
+                                                style: TextStyle(fontSize: 11, color: Constants.offWhiteColor),
+                                              ),
+                                              Text(
+                                                productDetails.retailPrice,
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    color: Color(0xffEEEEEE)
+                                                        .withOpacity(0.7)),
+                                              ),
+                                            ],
                                           ),
                                           SizedBox(
                                             width: 14,
@@ -187,13 +217,12 @@ class ProductDetailsView extends StatelessWidget {
                               ),
                             ),
                             productDetails.inventoryCount > productDetails.minInventoryCount? Container() :
-                            Flexible(
-                              flex: 1,
+                            Expanded(
                               child: Container(
-                                margin: EdgeInsets.only(right: 8),
                                 padding: EdgeInsets.all(4.0),
-                                child:       Text(
+                                child:  AutoSizeText(
                                   'Few Left',
+                                  maxLines: 1,
                                   style:
                                   TextStyle(fontSize: 14, color: Colors.red.withOpacity(0.9)),
                                 ),

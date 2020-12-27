@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -572,79 +573,89 @@ Widget _cartItem(CartViewModel model,int index, Product productDetails) {
                                       crossAxisAlignment:
                                       CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(
-                                          "config brand",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color(0xffEEEEEE)),
+                                        Expanded(
+                                          child: Container(
+                                            child: Text(
+                                             productDetails.brand.title,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Color(0xffEEEEEE)),
+                                            ),
+                                          ),
                                         ),
                                         SizedBox(
-                                          width: 8,
+                                          height: 2,
                                         ),
-                                        Text(
-                                          productDetails.title,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight:
-                                              FontWeight.w400,
-                                              color: Color(0xffEEEEEE)
-                                                  .withOpacity(0.7)),
+                                        Expanded(
+                                          flex:3,
+                                          child: AutoSizeText(
+                                            productDetails.title,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 15, fontWeight:
+                                                FontWeight.w400,
+                                                color: Color(0xffEEEEEE)
+                                                    .withOpacity(0.7)),
+                                            maxLines: 3,
+                                          )
                                         ),
                                         SizedBox(
-                                          height: 16,
+                                          height: 2,
                                         ),
-                                        Container(
-                                          child: Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .baseline,
-                                            textBaseline:
-                                            TextBaseline.alphabetic,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                "\u20B9",
-                                                style: TextStyle(color: Constants.offWhiteColor),
-                                              ),
-                                              Text(
-                                                productDetails.salePrice,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Color(
-                                                        0xffEEEEEE)),
-                                              ),
-                                              SizedBox(
-                                                width: 4,
-                                              ),
-                                              Text(
-                                                "\u20B9",
-                                                style: TextStyle(color: Constants.offWhiteColor, fontSize: 11),
-                                              ),
-                                              Text(
-                                                productDetails.retailPrice,
-                                                style: TextStyle(
-                                                    fontSize: 11,
-                                                    decoration:
-                                                    TextDecoration
-                                                        .lineThrough,
-                                                    color: Color(
-                                                        0xffEEEEEE)
-                                                        .withOpacity(
-                                                        0.7)),
-                                              ),
-                                              SizedBox(
-                                                width: 14,
-                                              ),
-                                              Container(
-                                                child: Text(
-                                                  productDetails.discount +"% OFF",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.red[400],)
+                                        Expanded(
+                                          flex:1,
+                                          child: Container(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .baseline,
+                                              textBaseline:
+                                              TextBaseline.alphabetic,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  "\u20B9",
+                                                  style: TextStyle(color: Constants.offWhiteColor),
                                                 ),
-                                              ),
-                                            ],
+                                                Text(
+                                                  productDetails.salePrice,
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Color(
+                                                          0xffEEEEEE)),
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                  "\u20B9",
+                                                  style: TextStyle(color: Constants.offWhiteColor, fontSize: 11),
+                                                ),
+                                                Text(
+                                                  productDetails.retailPrice,
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      decoration:
+                                                      TextDecoration
+                                                          .lineThrough,
+                                                      color: Color(
+                                                          0xffEEEEEE)
+                                                          .withOpacity(
+                                                          0.7)),
+                                                ),
+                                                SizedBox(
+                                                  width: 14,
+                                                ),
+                                                Container(
+                                                  child: Text(
+                                                    productDetails.discount +"% OFF",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.red[400],)
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
 

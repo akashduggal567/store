@@ -253,7 +253,7 @@ class searchResult extends StatelessWidget {
                                                                         Widget>[
                                                                       Text(
 //                                                                            'config brand',
-                                                                        model.productsList[index].brand ??
+                                                                        model.productsList[index].brand.title ??
                                                                             "Unknown Brand",
                                                                         style: TextStyle(
                                                                             fontSize:
