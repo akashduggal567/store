@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:store/app/locator.dart';
+import 'package:store/app/router.gr.dart';
 import 'package:store/app/setup_snackbar_ui.dart';
 import 'package:store/helpers/ApiResponse.dart';
 import 'package:store/helpers/ApiResponseError.dart';
@@ -47,6 +48,7 @@ class ApiService {
 
   DialogService _dialogService = locator<DialogService>();
   SnackbarService _snackbarService = locator<SnackbarService>();
+  NavigationService _navigationService = locator<NavigationService>();
   Future<LocalStorageService> _localStorageService =
       LocalStorageService.getInstance();
 
@@ -122,9 +124,8 @@ class ApiService {
               //statements;
 
               if(e.response == null){
-                _dialogService.showDialog(
-                    title: "Internet is not Connected",
-                    description: "Internet is not Connected");
+                //NEED TO ADD CHECK IN OFFLINE PAGE IF USER IS LOGGED IN OR NOT
+                _navigationService.replaceWith(Routes.offlineViewRoute);
               }
             }
             break;
