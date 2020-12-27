@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:961808611877:android:f3cf186744dcf02f671dcc",
+        "mobilesdk_app_id": "1:961808611877:android:a88b927e1db989de671dcc",
         "android_client_info": {
-          "package_name": "com.example.store"
+          "package_name": "com.store.duggalstore"
         }
       },
       "oauth_client": [
         {
-          "client_id": "961808611877-n5ek9kqfre7dpubhl8oe351jjarj1npu.apps.googleusercontent.com",
+          "client_id": "961808611877-iblj78acfk9alk0s1mkopl26eoc48m7b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.store",
+            "package_name": "com.store.duggalstore",
             "certificate_hash": "827dde09b881f1961d189b32a00b3156c88a2e35"
           }
         },

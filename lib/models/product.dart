@@ -125,7 +125,7 @@ class Product {
 
   String id;
   String title;
-  String brand;
+  Brand brand;
   String description;
   String barcode;
   List<dynamic> tags;
@@ -140,7 +140,7 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) => Product(
     id: json["_id"],
     title: json["title"],
-    brand: json["brand"],
+    brand: Brand.fromJson(json["brand"]),
     description: json["description"] == null ? null  : json["description"],
     barcode: json["barcode"],
     tags: List<dynamic>.from(json["tags"].map((x) => x)),
@@ -156,7 +156,7 @@ class Product {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "title": title,
-    "brand": brand,
+    "brand": brand.toJson(),
     "description": description == null  ? "" : description,
     "barcode": barcode,
     "tags": List<dynamic>.from(tags.map((x) => x)),
@@ -167,6 +167,38 @@ class Product {
     "inventory_count": inventoryCount,
     "min_inventory_count": minInventoryCount,
     "quantity": quantity == null ? 1 : quantity,
+  };
+}
+
+class Brand {
+  Brand({
+    this.id,
+    this.title,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  String id;
+  String title;
+  DateTime createdAt;
+  DateTime updatedAt;
+  int v;
+
+  factory Brand.fromJson(Map<String, dynamic> json) => Brand(
+    id: json["_id"] == null ? null : json["_id"],
+    title: json["title"] == null ? null : json["title"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    v: json["__v"] == null ? null : json["__v"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id == null ? null : id,
+    "title": title == null ? null : title,
+    "createdAt": createdAt == null ? null : createdAt.toIso8601String(),
+    "updatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+    "__v": v == null ? null : v,
   };
 }
 

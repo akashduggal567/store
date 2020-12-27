@@ -118,7 +118,7 @@ class ProductDetailsView extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            productDetails.brand ?? "Unknown Brand",
+                                            productDetails.brand.title ?? "Unknown Brand",
 //                                          "config brand",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,

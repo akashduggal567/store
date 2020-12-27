@@ -40,8 +40,11 @@ class ApiService {
 //  static const invoiceEndpoint = 'http://localhost:2008';
 //  static const wishlistendpoint = 'http://localhost:2009';
 
+//  static const BASEURL =
+//      "http://ec2-3-7-65-217.ap-south-1.compute.amazonaws.com";
+
   static const BASEURL =
-      "http://ec2-3-7-65-217.ap-south-1.compute.amazonaws.com";
+      "http://10.0.2.2";
 
   DialogService _dialogService = locator<DialogService>();
   SnackbarService _snackbarService = locator<SnackbarService>();
@@ -273,6 +276,7 @@ class ApiService {
     return _localStorageService.then((value) async {
       Response response;
       try {
+        print(BASEURL);
         response = await client.get('$BASEURL/api/user/cart/cartItems');
         return ApiResponse(response);
       } on DioError catch (e) {
@@ -329,7 +333,7 @@ class ApiService {
     Dio dio = new Dio();
     return _localStorageService.then((value) async {
       dio.options.headers["user-id"] = value.user.id;
-      Response response = await dio.get('$BASEURL/api/address');
+      Response response = await client.get('$BASEURL/api/address');
       Map responseBody = response.data;
       var address_array_response_object = responseBody["result"];
 

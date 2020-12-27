@@ -324,7 +324,7 @@ class _ProductsListViewState extends State<ProductsListView> {
                                                                 model
                                                                     .productsList[
                                                                         index]
-                                                                    .brand ?? "Unknown Brand",
+                                                                    .brand.title ?? "Unknown Brand",
                                                                             style:
                                                                                 TextStyle(fontSize: 15, color: Color(0xffEEEEEE)),
                                                                           ),
